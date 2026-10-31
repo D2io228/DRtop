@@ -1,0 +1,33 @@
+/* contents */
+.toc { }
+.toc-row { display: grid; grid-template-columns: 9mm 46mm 1fr 12mm 9mm; align-items: baseline; padding: 1.2mm 0; border-bottom: .2mm solid var(--rule); }
+.toc-row .n { font: 900 13pt/1 var(--grot); letter-spacing: -.04em; color: var(--c, var(--acc)); }
+.toc-row.sec .n { font: 600 7pt var(--mono); color: var(--acc); letter-spacing: .1em; }
+.toc-row .t { font: 800 15pt/1 var(--cond); text-transform: uppercase; letter-spacing: .01em; }
+.toc-row .s { font: italic 500 10.2pt/1.15 var(--serif); color: var(--mute); padding-right: 3mm; }
+.toc-row .d { color: var(--mute); text-align: right; }
+.toc-row .pg { text-align: right; color: var(--fg); }
+.toc-ch { display: flex; justify-content: space-between; color: var(--acc); padding: 2.6mm 0 .6mm; border-bottom: .3mm solid var(--fg); }
+.tl { height: 9mm; position: absolute; }
+.tl .seg { position: absolute; top: 0; height: 5mm; border-right: .5mm solid var(--bg); }
+.tl .seg span { position: absolute; left: 1mm; top: 5.8mm; font-size: 5.4pt; color: var(--mute); letter-spacing: .05em; }
+.tl-a, .tl-b { position: absolute; top: -4mm; font-size: 5.4pt; color: var(--mute); }
+.tl-a { left: 0; } .tl-b { right: 0; }
+.contents sup.fnx { font: 600 5.6pt var(--mono); color: var(--acc); position: relative; top: -.8em; }
+
+/* sticker */
+.sticker { background: #fbfbf9; padding: 2.6mm 3mm 2.8mm; box-shadow: 0 .3mm .9mm rgba(0,0,0,.18), 0 0 0 .15mm rgba(0,0,0,.06); }
+
+/* chapter */
+.chword { font: 900 25pt/1 var(--grot); letter-spacing: .12em; color: #fff; }
+
+/* sources */
+.srcs { column-count: 2; column-gap: 8mm; }
+.src { display: grid; grid-template-columns: 6mm 1fr; break-inside: avoid; padding: 1.3mm 0; border-top: .2mm solid var(--rule); }
+.src .sn { color: var(--acc); font-weight: 600; }
+.src .st { font: 500 9.6pt/1.22 var(--serif); }
+.src .su { font-size: 5.2pt; letter-spacing: .04em; color: var(--mute); text-transform: none; }
+.colo .cbody { margin-top: 2mm; font: italic 500 9.6pt/1.4 var(--serif); color: var(--mute); max-width: 150mm; }
+
+.trk .metaGrid { font-size: 6pt; }
+.op-ink .metaGrid span { color: #1a1816; }

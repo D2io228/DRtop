@@ -1,0 +1,128 @@
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 300;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5rDDOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd58jDOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 500;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDDOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 600;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5LDfOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_qE6GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_s06GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_iE9GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url(fonts/cormorantgaramond_co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_hg9GnM.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: block;
+  src: url(fonts/ibmplexmono_-F6pfjptAgt5VM-kVkqdyU8n1ioq0g.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: block;
+  src: url(fonts/ibmplexmono_-F6qfjptAgt5VM-kVkqdyU8n3oQI8lc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(fonts/ibmplexmono_-F63fjptAgt5VM-kVkqdyU8n5ig.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url(fonts/ibmplexmono_-F6qfjptAgt5VM-kVkqdyU8n3twJ8lc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url(fonts/ibmplexmono_-F6qfjptAgt5VM-kVkqdyU8n3vAO8lc.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Alumni Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: block;
+  src: url(fonts/alumnisans_nwpHtKqkOwdO2aOIwhWudEWpx_zq_Xna-Xd9Zu9QqA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Alumni Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url(fonts/alumnisans_nwpHtKqkOwdO2aOIwhWudEWpx_zq_Xna-Xd95uhQqA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Alumni Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: block;
+  src: url(fonts/alumnisans_nwpHtKqkOwdO2aOIwhWudEWpx_zq_Xna-Xd9uOhQqA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Alumni Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url(fonts/alumnisans_nwpHtKqkOwdO2aOIwhWudEWpx_zq_Xna-Xd9kehQqA.ttf) format('truetype');
+}
