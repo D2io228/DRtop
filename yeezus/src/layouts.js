@@ -28,6 +28,16 @@ function trackOpener(t, o) {
 }
 window.TRACK_LAYOUT = { default: t => trackOpener(t) };
 window.OPENER_TXT = {
+  albummap: () => H('left:22mm;top:20mm', 'Альбом целиком', 'mono acc') + H('right:20mm;top:20mm;color:var(--mute);text-align:right', '10 треков · 40:01 · 5 глав', 'mono')
+    + H('left:20mm;right:14mm;top:28mm;font-size:62pt;color:var(--fg)', 'Карта напряжения', 'ttitle')
+    + H('left:22mm;width:150mm;top:50mm;font-size:13.5pt;color:var(--mute)', 'Где альбом давит, а где впускает нежность', 'tsub')
+    + H('left:22mm;right:20mm;top:252mm;display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;row-gap:1.2mm;color:var(--mute)', `<div><b style="color:#E8C27A">A</b> <span style="color:var(--fg)">Хор «Sermon»</span> — обрыв посреди атаки</div><div><b style="color:var(--acc)">B</b> <span style="color:var(--fg)">Марш и дыхание</span> — тело в мобилизации</div><div><b style="color:var(--acc)">C</b> <span style="color:var(--fg)">Крик</span> — всемогущество трескается</div><div><b style="color:#E8C27A">D</b> <span style="color:var(--fg)">Кода ≈ 75 с</span> — Frank Ocean + Omega</div><div><b style="color:#E8C27A">E</b> <span style="color:var(--fg)">Соло Mike Dean</span> — гитара держит печаль</div><div><b style="color:#E8C27A">F</b> <span style="color:var(--fg)">Нина Симон</span> — фортепиано до меди</div><div><b style="color:var(--acc)">G</b> <span style="color:var(--fg)">Медь ≈ на 1:00</span> — кульминация давления</div><div><b style="color:#E8C27A">H</b> <span style="color:var(--fg)">Kid Cudi</span> — обида без каламбуров</div><div><b style="color:#E8C27A">I</b> <span style="color:var(--fg)">«Memories»</span> — память громче клуба</div><div><b style="color:#E8C27A">J</b> <span style="color:var(--fg)">Соул целиком</span> — окно открыто</div>`, 'mono')
+    + H('left:22mm;right:20mm;bottom:9mm;display:grid;grid-template-columns:62mm 1fr;gap:6mm;color:var(--mute);font-size:5.6pt', `<span style="white-space:nowrap"><span style="display:inline-block;width:5mm;height:1.4mm;background:var(--acc);vertical-align:middle;margin-right:1.6mm"></span>давление<span style="display:inline-block;width:5mm;height:1.4mm;background:#E8C27A;vertical-align:middle;margin:0 1.6mm 0 4mm"></span>нежность</span><span>Схема — интерпретация, а не измерение. Сектор = длительность трека; I–V — главы книги</span>`, 'mono'),
+  stage: () => H('left:22mm;top:20mm;color:#ff5a4a', 'Yeezus Tour · 2013–2014', 'mono') + H('right:20mm;top:20mm;color:#8a96a3', 'Схема сцены · масштаб 1 м = 6 мм', 'mono')
+    + H('left:20mm;right:14mm;top:28mm;font-size:52pt;color:#E8EDF2', 'Гора, экран, пять актов', 'ttitle')
+    + H('left:22mm;width:150mm;top:47mm;font-size:13pt;color:#8a96a3', 'Почему главы этой книги называются так', 'tsub')
+    + H('left:22mm;right:18mm;top:262mm;display:grid;grid-template-columns:repeat(5,1fr);gap:3mm', CHAPTERS.map((c, i) => `<div class="mono" style="color:#DCE3EA;border-top:.3mm solid ${i === 4 ? '#fff' : '#ff5a4a'};padding-top:1.6mm"><b style="color:#ff5a4a">${c.n}</b> ${c.en}<br><span style="color:#8a96a3">${c.ru}<br>${['маска в стразах', 'чёрная с шипами', 'белая плитка', 'зеркальная', 'маски нет'][i]}</span></div>`).join(''))
+    + H('left:110mm;right:18mm;top:228mm;font:italic 500 9.6pt/1.35 var(--serif);color:#aab4bf', 'Сцена — Es Devlin; сценография и хореография — Vanessa Beecroft; маски и костюмы — Maison Margiela. Отправная точка — «Святая гора» Ходоровского (1973). В финале Белый Иисус снимает с Канье зеркальную маску.<sup class="fnx" data-s="tour"></sup>'),
   personnel: () => '', packaging: () => '', coda: () => '', back: () => '',
 };
 
@@ -80,10 +90,10 @@ const DARKTXT = 'color:#1a1816';
 Object.assign(window.TRACK_LAYOUT, {
   t1: t => trackOpener(t, {
     num: 'left:20mm;top:26mm;font-size:96pt;color:var(--acc)',
-    vibe: 'left:136mm;width:60mm;top:203mm;font-size:11pt;line-height:1.28;color:#1a1816',
+    vibe: 'left:136mm;width:60mm;top:203mm;font-size:11pt;line-height:1.28;color:#F3E6CF',
     title: 'left:19mm;right:14mm;top:136mm;font-size:124pt;color:#fff;text-shadow:1mm 0 0 rgba(224,32,27,.9)',
     sub: 'left:22mm;width:150mm;top:176mm;font-size:16pt;color:#fff',
-    meta: 'left:22mm;width:106mm;top:203mm;color:#1a1816',
+    meta: 'left:22mm;width:106mm;top:203mm;color:#F3E6CF',
   }),
   t2: t => trackOpener(t, {
     num: 'left:20mm;top:26mm;font-size:96pt;color:var(--acc)',
@@ -100,11 +110,12 @@ Object.assign(window.TRACK_LAYOUT, {
     meta: 'left:124mm;right:14mm;top:262mm;color:var(--fg)',
   }),
   t4: t => trackOpener(t, {
-    num: 'left:20mm;top:26mm;font-size:54pt;color:var(--acc)',
-    title: 'left:18mm;width:100mm;top:106mm;font-size:96pt;color:var(--fg)', titleHTML: 'New<br>Slaves',
-    sub: 'left:21mm;width:92mm;top:162mm;font-size:15pt;line-height:1.12;color:var(--fg)',
-    vibe: 'left:21mm;width:90mm;top:184mm;font-size:12.5pt;color:var(--fg)',
-    meta: 'left:21mm;width:92mm;top:224mm;color:var(--fg)',
+    top: `<div class="over mono" style="left:24mm;top:24mm;color:#EDE7DD">Трек 04 / 10 — Глава II · Восхождение</div><div class="over mono" style="right:20mm;top:18mm;color:#bdb6aa">4:16</div>`,
+    num: 'left:174mm;top:106mm;font-size:54pt;color:var(--acc)',
+    title: 'left:18mm;width:100mm;top:106mm;font-size:96pt;color:#F3EEE6;text-shadow:0 0 6mm rgba(0,0,0,.5)', titleHTML: 'New<br>Slaves',
+    sub: 'left:21mm;width:92mm;top:162mm;font-size:15pt;line-height:1.12;color:#F3EEE6',
+    vibe: 'left:21mm;width:90mm;top:184mm;font-size:12.5pt;color:#F3EEE6;text-shadow:0 0 3mm rgba(0,0,0,.6)',
+    meta: 'left:21mm;width:92mm;top:224mm;color:#F3EEE6;text-shadow:0 0 2mm rgba(0,0,0,.7)',
   }),
   t5: t => trackOpener(t, {
     num: 'right:20mm;top:46mm;font-size:66pt;color:var(--acc)',

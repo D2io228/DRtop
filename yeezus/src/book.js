@@ -72,6 +72,14 @@ const SOURCES = {
   'lw-siu': ['LyricsWeb — «Send It Up»', 'lyricsweb.com/song/kanye-west/kanye-west-send-it-up'],
   'ohhla-b2': ['OHHLA — текст «Bound 2»', 'ohhla.com/anonymous/kan_west/yeezus/bound_2.wst.txt'],
   'tour': ['Wikipedia — The Yeezus Tour: сцена, маски, пять глав шоу', 'en.wikipedia.org/wiki/The_Yeezus_Tour'],
+  'bs-wiki': ['Wikipedia — «Black Skinhead»: барабаны, клип Ника Найта, SNL', 'en.wikipedia.org/wiki/Black_Skinhead'],
+  'god-wiki': ['Wikipedia — «I Am a God»: feat. God, крик', 'en.wikipedia.org/wiki/I_Am_a_God'],
+  'ns-wiki': ['Wikipedia — «New Slaves»: проекции, SNL, Omega', 'en.wikipedia.org/wiki/New_Slaves'],
+  'hml-wiki': ['Wikipedia — «Hold My Liquor»', 'en.wikipedia.org/wiki/Hold_My_Liquor'],
+  'blood-wiki': ['Wikipedia — «Blood on the Leaves»: VMA 2013, медь', 'en.wikipedia.org/wiki/Blood_on_the_Leaves'],
+  'gt-wiki': ['Wikipedia — «Guilt Trip»: семплы', 'en.wikipedia.org/wiki/Guilt_Trip_(song)'],
+  'siu-wiki': ['Wikipedia — «Send It Up»: King Louie, Beenie Man', 'en.wikipedia.org/wiki/Send_It_Up'],
+  'b2-wiki': ['Wikipedia — «Bound 2»: семплы, клип', 'en.wikipedia.org/wiki/Bound_2'],
 };
 const SECTIONS = {
   prologue: { label: 'Пролог', title: 'Неисправность', theme: 'dark', mini: 'prologue', hdrR: 'Пролог · 0:00' },
@@ -105,6 +113,7 @@ function tapeHTML(seed) { return `<div class="tape"><svg viewBox="0 0 8.4 44" pr
 function flowPage(conf, idx) {
   const { theme, vars, hdrL, hdrR, mini, rail, head } = conf;
   const p = addPage(`theme-${theme} flow`, `
+      <div class="txbg" style="background-image:url(../assets/tx-${conf.id}.jpg)"></div>
       <div class="grain"></div>
       ${tapeHTML(idx * 31 + conf.seed)}
       <div class="hdr mono"><span class="l">${hdrL}</span><span class="r">${hdrR}</span></div>
@@ -206,10 +215,10 @@ function runFlow(conf) {
   pages.forEach((pg, i) => {
     const rail = $('.rail', pg);
     if (i === 0 && conf.railMeta) rail.insertAdjacentHTML('beforeend', conf.railMeta);
-    if (conf.play) {
-      const t0 = i / pages.length, t1 = (i + 1) / pages.length;
-      const H = 46; const y = H * t1;
-      rail.insertAdjacentHTML('beforeend', `<div class="play"><div class="line"></div><div class="done" style="height:${(H * t1).toFixed(1)}mm"></div><div class="dot" style="top:${(y - 1.35).toFixed(1)}mm"></div><div class="t0 mono">0:00</div><div class="t1 mono">${conf.play}</div></div>`);
+    if (conf.play !== undefined) {
+      const t1 = (i + 1) / pages.length;
+      pg.querySelector('.hdr').insertAdjacentHTML('beforeend', `<div class="prog"><div class="pdone" style="width:${(t1 * 100).toFixed(1)}%"></div><div class="pdot" style="left:${(t1 * 100).toFixed(1)}%"></div></div>`);
+      if (conf.play) pg.querySelector('.hdr .r').insertAdjacentHTML('afterbegin', `<span class="ptime">${conf.play}</span>`);
     }
   });
   return pages;
@@ -268,8 +277,8 @@ function pageContents() {
   addPage('theme-bone contents', `<div class="grain"></div>${tapeHTML(5)}
     <div class="over mono acc" style="left:27mm;top:22mm">Содержание / Tracklist</div>
     <div class="over" style="left:27mm;top:30mm;font:900 54pt/.86 var(--cond);text-transform:uppercase;color:var(--fg)">Сорок минут<br>и одна секунда</div>
-    <div class="over tl" style="left:27mm;right:18mm;top:66mm;">${bar}<div class="tl-a mono">0:00</div><div class="tl-b mono">40:01</div></div>
-    <div class="over toc" style="left:27mm;right:18mm;top:82mm;">${rows.join('')}</div>
+    <div class="over tl" style="left:27mm;right:18mm;top:64mm;height:12mm">${A.albumWave(165, 9)}<div class="tl-a mono">0:00</div><div class="tl-b mono">40:01</div><div class="tl-c mono">${['01','02','03','04','05','06','07','08','09','10'].map((n,i)=>`<span style="left:${(DUR.slice(0,i).reduce((a,b)=>a+b,0)/2401*100).toFixed(2)}%">${n}</span>`).join('')}</div></div>
+    <div class="over toc" style="left:27mm;right:18mm;top:84mm;">${rows.join('')}</div>
     <div class="over" style="left:27mm;right:18mm;bottom:15mm;font:italic 500 9.6pt/1.4 var(--serif);color:var(--mute)">Главы книги названы по пяти актам тура Yeezus 2013–2014 годов — Fighting, Rising, Falling, Searching, Finding.<sup class="fnx" data-s="tour"></sup> Распределение песен по главам — интерпретация, а не авторский замысел.</div>
   `, { anchor: 'contents' });
 }
@@ -324,20 +333,21 @@ async function build() {
   pageCover();
   pageTitle();
   pageContents();
-  document.querySelectorAll('sup.fnx[data-s]').forEach(s => s.textContent = num[s.dataset.s]);
 
   const flowConf = (id, extra) => {
     const s = SECTIONS[id];
     return Object.assign({ id, seed: id.length * 7, theme: s.theme, vars: s.vars, hdrL: s.label, hdrR: s.hdrR, mini: s.mini, accHex: s.theme === 'dark' ? '#E0201B' : '#D61E17', fgHex: s.theme === 'dark' ? '#E6E0D5' : '#141210' }, extra || {});
   };
   pageOpenerSection('prologue');
-  runFlow(flowConf('prologue', { end: '<span class="sq"></span><span>Дальше → I · После вершины</span>' }));
+  runFlow(flowConf('prologue', { play: '', end: '<span class="sq"></span><span>Дальше → I · После вершины</span>' }));
   pageOpenerSection('context');
-  runFlow(flowConf('context', { end: '<span class="sq"></span><span>Дальше → люди внутри машины</span>' }));
+  runFlow(flowConf('context', { play: '', end: '<span class="sq"></span><span>Дальше → люди внутри машины</span>' }));
   if (A.personnelArt) { addPage('theme-dark personnel', `${art('personnelArt')}<div class="grain"></div>${window.OPENER_TXT.personnel()}`, { anchor: 'personnel', style: '--bg:#101010' }); }
   pageOpenerSection('sound');
-  runFlow(flowConf('sound', { vars: SECTIONS.sound.vars, end: '<span class="sq"></span><span>Дальше → открытый гроб</span>' }));
+  runFlow(flowConf('sound', { play: '', vars: SECTIONS.sound.vars, end: '<span class="sq"></span><span>Дальше → открытый гроб</span>' }));
   if (A.packagingArt) { addPage('theme-bone packaging', `${art('packagingArt')}<div class="grain"></div>${window.OPENER_TXT.packaging()}`, { anchor: 'packaging', style: '--bg:#F0F0EE' }); }
+  addPage('theme-dark albummap', `${art('albumMap')}<div class="grain"></div>${window.OPENER_TXT.albummap()}`, { anchor: 'albummap', notape: true });
+  addPage('theme-dark stage', `${art('stageArt')}<div class="grain"></div>${window.OPENER_TXT.stage()}`, { anchor: 'stage', notape: true, style: '--bg:#0A0D11' });
 
   CHAPTERS.forEach((c, ci) => {
     pageChapter(c, ci);
@@ -349,12 +359,13 @@ async function build() {
     });
   });
   pageOpenerSection('whole');
-  runFlow(flowConf('whole', { end: '<span class="sq"></span><span>Дальше → Предел</span>' }));
-  runFlow(flowConf('limit', { head: { lab: 'Предел', title: 'Выразительность<br>и правота', sub: SECTIONS.limit.sub }, anchor: 'limit', end: '<span class="sq"></span><span>Дальше → Кода</span>' }));
+  runFlow(flowConf('whole', { play: '', end: '<span class="sq"></span><span>Дальше → Предел</span>' }));
+  runFlow(flowConf('limit', { play: '', head: { lab: 'Предел', title: 'Выразительность<br>и правота', sub: SECTIONS.limit.sub }, anchor: 'limit', end: '<span class="sq"></span><span>Дальше → Кода</span>' }));
   if (A.codaArt) addPage('theme-dark coda', `${art('codaArt')}<div class="grain"></div>${window.OPENER_TXT.coda()}`, { anchor: 'coda' });
   pageSources();
   addPage('back', `${art('back')}<div class="grain" style="--grain:url(../assets/grain-dark.png);--gop:.35"></div>${window.OPENER_TXT.back()}`, { notape: true });
 
+  document.querySelectorAll('sup.fnx[data-s]').forEach(s => s.textContent = num[s.dataset.s]);
   // page numbers
   const pages = [...document.querySelectorAll('.page')];
   pages.forEach((p, i) => { const pn = p.querySelector('.tape .pn'); if (pn) pn.textContent = String(i + 1).padStart(2, '0'); const fr = p.querySelector('.ftr .fr'); if (fr) fr.textContent = `${String(i + 1).padStart(2, '0')} / ${pages.length}`; });

@@ -6,18 +6,14 @@ const T = (x, y, txt, o = {}) => `<text x="${n2(x)}" y="${n2(y)}" font-family="$
 
 /* ---------------- title page ---------------- */
 A.titleArt = function () {
-  let s = `<rect width="210" height="297" fill="#0A0A0A"/>`;
-  const cx = 178, cy = 52, r = 96; const R = rnd(5);
-  for (let rr = 30; rr < r; rr += 1.1) s += `<circle cx="${cx}" cy="${cy}" r="${n2(rr)}" fill="none" stroke="#fff" stroke-opacity="${n2(R.r(.015, .06))}" stroke-width=".2"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".25"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="11" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width=".25"/>`;
+  let s = IMG('title-bg.jpg');
   s += `<g transform="translate(22 186) rotate(-90)">${A.tape(9, 70, 12)}</g>`;
   return svgWrap(s);
 };
 
 /* ---------------- prologue: malfunction ---------------- */
 A.prologueArt = function () {
-  const R = rnd(101); let s = `<rect width="210" height="297" fill="#0A0A0A"/>`;
+  const R = rnd(101); let s = IMG('prologue-bg.jpg');
   const y0 = 58, y1 = 170, yc = 114;
   for (let x = 5; x <= 205; x += 10) s += `<line x1="${x}" x2="${x}" y1="${y0}" y2="${y1}" stroke="#fff" stroke-opacity="${(x - 5) % 50 ? .035 : .08}" stroke-width=".15"/>`;
   for (let y = y0; y <= y1 + .1; y += 11.2) s += `<line x1="0" x2="210" y1="${n2(y)}" y2="${n2(y)}" stroke="#fff" stroke-opacity=".04" stroke-width=".15"/>`;
@@ -62,10 +58,10 @@ A.prologueArt = function () {
 
 /* ---------------- context: palace vs lamp ---------------- */
 A.contextArt = function () {
-  const ink = '#26221E'; const st = `stroke="${ink}" fill="none"`; let s = `<rect width="210" height="297" fill="#ECE7DF"/>`;
+  const ink = '#26221E'; const st = `stroke="${ink}" fill="none"`; let s = IMG('context-bg.jpg');
   const g = 202; // ground
   // ground line
-  s += `<line x1="14" x2="196" y1="${g}" y2="${g}" stroke="${ink}" stroke-width=".3"/>`;
+  s += `<line x1="14" x2="100" y1="${g}" y2="${g}" stroke="${ink}" stroke-width=".3"/><line x1="108" x2="196" y1="${g}" y2="${g}" stroke="#E6DCCB" stroke-opacity=".35" stroke-width=".3"/>`;
   // ---- palace (left) x 18..98
   const L = 18, Rr = 98, cxp = 58;
   for (let i = 0; i < 4; i++) s += `<rect x="${L + i * 1.6}" y="${g - (i + 1) * 3}" width="${Rr - L - i * 3.2}" height="3" ${st} stroke-width=".22"/>`;
@@ -103,23 +99,17 @@ A.contextArt = function () {
   // ---- divider
   s += `<line x1="105" x2="105" y1="84" y2="${g + 12}" stroke="${ink}" stroke-opacity=".35" stroke-width=".2" stroke-dasharray="1 1.2"/>`;
   s += T(0, 0, 'WATCH THE THRONE · 2011', { s: 1.9, c: ink, op: .6, tr: `translate(103.2 ${g - 4}) rotate(-90)` });
-  // ---- lamp (right) wall lamp, Le Corbusier-esque
-  const wx = 186, wy = 112;
-  s += `<rect x="${wx}" y="${wy - 7}" width="3.4" height="14" ${st} stroke-width=".25"/>`;
-  const jx = 139, jy = 101;
-  s += `<path d="M${wx} ${wy - 1}L${jx} ${jy}M${wx} ${wy + .6}L${jx} ${jy + 1.6}" ${st} stroke-width=".22"/>`;
-  s += `<circle cx="${jx}" cy="${jy + .8}" r="1.5" fill="#ECE7DF" stroke="${ink}" stroke-width=".25"/>`;
-  // shade: cone pointing down-left
-  const sh = `M${jx - 1.4} ${jy + 2}L${jx + 1.6} ${jy + 2.6}L${jx + 4.6} ${jy + 15}L${jx - 9.6} ${jy + 12}Z`;
-  s += `<path d="${sh}" fill="${ink}" stroke="${ink}" stroke-width=".2"/>`;
-  const lid = uid('lg');
-  s += `<defs><linearGradient id="${lid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-    <radialGradient id="${lid}f" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-  s += `<path d="M${jx - 9.6} ${jy + 12}L${jx + 4.6} ${jy + 15}L${jx + 34} ${g}L${jx - 44} ${g}Z" fill="url(#${lid})" opacity=".85"/>`;
-  s += `<ellipse cx="${jx - 5}" cy="${g}" rx="40" ry="3.4" fill="url(#${lid}f)"/>`;
-  s += `<path d="M${wx + 4} ${g + 6}h-74M${wx + 4} ${g + 4.5}v3M${wx - 70} ${g + 4.5}v3" stroke="${ink}" stroke-width=".18" fill="none"/>`;
-  s += T(150, g + 11, 'YEEZUS · 2013 · 10 ТРЕКОВ · 40:01', { a: 'middle', s: 2.1, c: ink });
-  s += T(150, 74 + 20, 'ОДНА ЛАМПА', { a: 'middle', s: 2.4, c: RED, w: 600, ls: 1.2 });
+  // ---- lamp (right) wall lamp at night, Le Corbusier-esque
+  const lc = '#E9DFCF'; const wx = 189, wy = 112, jx = 152, jy = 101;
+  s += `<rect x="${wx}" y="${wy - 7}" width="3.4" height="14" fill="none" stroke="${lc}" stroke-opacity=".7" stroke-width=".25"/>`;
+  s += `<path d="M${wx} ${wy - 1}L${jx} ${jy}M${wx} ${wy + .6}L${jx} ${jy + 1.6}" fill="none" stroke="${lc}" stroke-opacity=".8" stroke-width=".22"/>`;
+  s += `<circle cx="${jx}" cy="${jy + .8}" r="1.5" fill="#0E0D0C" stroke="${lc}" stroke-width=".25"/>`;
+  s += `<path d="M${jx - 1.4} ${jy + 2}L${jx + 1.6} ${jy + 2.6}L${jx + 4.6} ${jy + 15}L${jx - 9.6} ${jy + 12}Z" fill="#1a1714" stroke="${lc}" stroke-opacity=".8" stroke-width=".22"/>`;
+  s += `<path d="M${jx - 9.6} ${jy + 12}L${jx + 4.6} ${jy + 15}" stroke="#FFE7C2" stroke-width=".6"/>`;
+  s += `<path d="M${wx - 1} ${g + 6}h-76M${wx - 1} ${g + 4.5}v3M${wx - 77} ${g + 4.5}v3" stroke="${lc}" stroke-opacity=".6" stroke-width=".18" fill="none"/>`;
+  s += T(151, g + 11, 'YEEZUS · 2013 · 10 ТРЕКОВ · 40:01', { a: 'middle', s: 2.1, c: lc, op: .85 });
+  s += T(151, 76, 'ОДНА ЛАМПА', { a: 'middle', s: 2.4, c: RED, w: 600, ls: 1.2 });
+  s += T(112, 70.5, 'НОЧЬ · ПАРИЖ · ЛОФТ', { s: 1.7, c: lc, op: .55 });
   return svgWrap(s);
 };
 
@@ -130,7 +120,7 @@ A.PERSONNEL = [
   ['C', 'Семплы', [['«Sermon»', 'On Sight · интерп.', .48], ['Omega', 'New Slaves', .6], ['Nina Simone', 'Blood on the Leaves', .9], ['TNGHT', 'Blood on the Leaves', .84], ['Beenie Man', 'Send It Up', .5], ['Ponderosa Twins', 'Bound 2', .72], ['Brenda Lee', 'Bound 2', .44]]],
 ];
 A.personnelArt = function () {
-  const R = rnd(77); let s = `<rect width="210" height="297" fill="#101010"/>`;
+  const R = rnd(77); const gid = uid('pl'); let s = `<defs><radialGradient id="${gid}" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#2a2622"/><stop offset="1" stop-color="#0c0c0c"/></radialGradient><radialGradient id="${gid}l" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff3b2e" stop-opacity=".55"/><stop offset="1" stop-color="#ff3b2e" stop-opacity="0"/></radialGradient><radialGradient id="${gid}w" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9c8" stop-opacity=".35"/><stop offset="1" stop-color="#ffe9c8" stop-opacity="0"/></radialGradient></defs><rect width="210" height="297" fill="url(#${gid})"/>`;
   const x0 = 25, sw = 22.2, gap = 1.6, sh = 64; const rows = [64, 138, 212];
   A.PERSONNEL.forEach(([bank, name, list], ri) => {
     const y = rows[ri];
@@ -148,7 +138,7 @@ A.personnelArt = function () {
       });
       // meter
       const segs = 14, my0 = y + 25, my1 = y + 51; const lit = Math.round(lvl * segs);
-      for (let k = 0; k < segs; k++) { const yy = my1 - (k + 1) * (my1 - my0) / segs; const on = k < lit; const hot = k >= segs - 3; s += `<rect x="${n2(x + 3)}" y="${n2(yy + .2)}" width="3.2" height="${n2((my1 - my0) / segs - .55)}" fill="${on ? (hot ? RED : '#E6E0D5') : '#262626'}" fill-opacity="${on ? (hot ? 1 : .85) : 1}"/>`; }
+      for (let k = 0; k < segs; k++) { const yy = my1 - (k + 1) * (my1 - my0) / segs; const on = k < lit; const hot = k >= segs - 3; s += `<rect x="${n2(x + 3)}" y="${n2(yy + .2)}" width="3.2" height="${n2((my1 - my0) / segs - .55)}" fill="${on ? (hot ? RED : '#E6E0D5') : '#262626'}" fill-opacity="${on ? (hot ? 1 : .85) : 1}"/>` + (on ? `<circle cx="${n2(x + 4.6)}" cy="${n2(yy + 1)}" r="${hot ? 3.2 : 2.2}" fill="url(#${gid}${hot ? 'l' : 'w'})"/>` : ''); }
       // fader
       const fx = x + 14.5; s += `<rect x="${n2(fx - .5)}" y="${my0}" width="1" height="${my1 - my0}" fill="#050505"/>`;
       for (let k = 0; k <= 10; k++) s += `<line x1="${n2(fx + 2.4)}" x2="${n2(fx + 3.8)}" y1="${n2(my0 + k * (my1 - my0) / 10)}" y2="${n2(my0 + k * (my1 - my0) / 10)}" stroke="#E6E0D5" stroke-opacity=".25" stroke-width=".12"/>`;
@@ -167,33 +157,21 @@ A.personnelArt = function () {
 
 /* ---------------- sound: anatomy of a cut ---------------- */
 A.soundArt = function () {
-  const R = rnd(303); const ink = '#151413'; let s = `<rect width="210" height="297" fill="#E4E2DE"/>`;
-  const yc = 140, A1 = 34; const x0 = 18, xa = 96, xb = 136, x1 = 192;
-  // axis
-  s += `<line x1="${x0}" x2="${x1}" y1="${yc}" y2="${yc}" stroke="${ink}" stroke-opacity=".25" stroke-width=".15"/>`;
-  // aggressive bars
-  const bars = (a, b, hollow) => { let out = ''; for (let x = a; x < b; x += .9) { let h = Math.min(A1, Math.abs(R.g()) * 16 + 14 + 8 * Math.sin(x * .7)); if (R() < .25) h = A1; out += hollow ? `<rect x="${n2(x)}" y="${n2(yc - h)}" width=".5" height="${n2(h * 2)}" fill="none" stroke="${ink}" stroke-width=".12"/>` : `<rect x="${n2(x)}" y="${n2(yc - h)}" width=".55" height="${n2(h * 2)}" fill="${h >= A1 ? RED : ink}"/>`; } return out; };
-  s += bars(x0, xa - 1, false);
-  s += bars(xb + 1, x1, true);
-  // clip lines
-  s += `<line x1="${x0}" x2="${xa}" y1="${yc - A1}" y2="${yc - A1}" stroke="${RED}" stroke-width=".25" stroke-dasharray="1 .8"/><line x1="${x0}" x2="${xa}" y1="${yc + A1}" y2="${yc + A1}" stroke="${RED}" stroke-width=".25" stroke-dasharray="1 .8"/>`;
-  // gospel window
-  const gid = uid('gw');
-  s += `<defs><radialGradient id="${gid}" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity=".0"/></radialGradient></defs>`;
-  s += `<rect x="${xa}" y="${yc - 52}" width="${xb - xa}" height="104" fill="#fff" fill-opacity=".9"/>`;
-  s += `<ellipse cx="${(xa + xb) / 2}" cy="${yc}" rx="40" ry="60" fill="url(#${gid})" opacity=".6"/>`;
-  for (let k = 0; k < 4; k++) { const pts = []; for (let x = xa + 2; x <= xb - 2; x += .4) pts.push([x, yc + Math.sin((x - xa) * .16 + k * .9) * (9 - k * 1.6) * Math.sin(Math.PI * (x - xa) / (xb - xa))]); s += `<path d="${P(pts)}" fill="none" stroke="#B88A3A" stroke-opacity="${.9 - k * .18}" stroke-width="${.35 - k * .05}"/>`; }
-  // cuts
-  [xa, xb].forEach(x => s += `<line x1="${x}" x2="${x}" y1="${yc - 60}" y2="${yc + 60}" stroke="${RED}" stroke-width=".5"/>`);
-  // annotations
-  const ann = (x, y, tx, ty, lines, col = ink) => { let o = `<path d="M${x} ${y}L${tx} ${ty}" stroke="${col}" stroke-width=".15" fill="none"/><circle cx="${x}" cy="${y}" r=".7" fill="${col}"/>`; lines.forEach((l, i) => o += T(tx, ty + 3 + i * 3, l, { s: i ? 1.9 : 2.1, w: i ? 400 : 600, c: i ? '#555' : col })); return o; };
-  s += ann(30, yc - A1 - 1, 18, yc - 66, ['ДАВЛЕНИЕ', 'тембр вместо гармонии', 'сигнал без разрешения']);
-  s += ann(70, yc - A1, 60, yc - 66, ['ИСКАЖЕНИЕ', 'звук как поверхность:', 'можно порезаться'], RED);
-  s += ann(xa, yc + 58, xa - 2, yc + 66, ['ОБРЫВ'], RED);
-  s += ann((xa + xb) / 2, yc - 12, 102, yc - 66, ['ГОСПЕЛ', 'другое пространство:', 'герой в нём не остаётся'], '#8A6420');
-  s += ann(165, yc + A1, 150, yc + 66, ['ТА ЖЕ ЖЕСТОКОСТЬ', 'звучит уже иначе —', 'мы знаем, что есть выход']);
-  // timecode ruler
-  for (let x = x0; x <= x1; x += 2) s += `<line x1="${x}" x2="${x}" y1="${yc + 52}" y2="${yc + (x % 10 === 8 ? 49 : 50.6)}" stroke="${ink}" stroke-opacity=".4" stroke-width=".12"/>`;
+  const ink = '#151413'; let s = IMG('tx-sound.jpg');
+  const x0 = 18, x1 = 192, y0 = 90, y1 = 190, xa = 96.3, xb = 136.3, yc = 140, A1 = 34;
+  s += `<rect x="${x0 - .6}" y="${y0 - .6}" width="${x1 - x0 + 1.2}" height="${y1 - y0 + 1.2}" fill="#0a0a0a"/>`;
+  s += IMG('sound-spec.jpg', x0, y0, x1 - x0, y1 - y0);
+  // frequency axis (log)
+  [['20 кГц', 0], ['2 кГц', .33], ['200 Гц', .66], ['20 Гц', 1]].forEach(([l, t]) => { const y = y0 + t * (y1 - y0); s += `<line x1="${x0 - 2.2}" x2="${x0}" y1="${n2(y)}" y2="${n2(y)}" stroke="${ink}" stroke-width=".2"/>` + T(x0 - 3, y + .7, l, { a: 'end', s: 1.6, c: '#555' }); });
+  for (let x = x0; x <= x1; x += 2) s += `<line x1="${x}" x2="${x}" y1="${y1 + 1}" y2="${y1 + (x % 10 === 8 ? 4 : 2.4)}" stroke="${ink}" stroke-opacity=".45" stroke-width=".12"/>`;
+  s += T(x0, y1 + 8, 'ВРЕМЯ →', { s: 1.7, c: '#555' }) + T(x1, y1 + 8, 'СХЕМА, НЕ ЗАПИСЬ', { a: 'end', s: 1.7, c: '#555' });
+  [xa, xb].forEach(x => s += `<line x1="${x}" x2="${x}" y1="${y0 - 8}" y2="${y1 + 10}" stroke="${RED}" stroke-width=".5"/>`);
+  const ann = (x, y, tx, ty, lines, col = ink) => { let o = `<path d="M${x} ${y}L${tx} ${ty}" stroke="${col}" stroke-width=".15" fill="none"/><circle cx="${x}" cy="${y}" r=".8" fill="${col}" stroke="#fff" stroke-width=".2"/>`; lines.forEach((l, i) => o += T(tx, ty + 3 + i * 3, l, { s: i ? 1.9 : 2.1, w: i ? 400 : 600, c: i ? '#555' : col })); return o; };
+  s += ann(30, 104, 18, 70, ['ДАВЛЕНИЕ', 'тембр вместо гармонии', 'сигнал без разрешения']);
+  s += ann(70, 120, 60, 70, ['ИСКАЖЕНИЕ', 'звук как поверхность:', 'можно порезаться'], RED);
+  s += ann(116, 150, 102, 70, ['ГОСПЕЛ', 'другое пространство:', 'герой в нём не остаётся'], '#8A6420');
+  s += ann(xa, y1 + 10, xa - 2, y1 + 12, ['ОБРЫВ'], RED);
+  s += ann(165, 170, 150, 200, ['ТА ЖЕ ЖЕСТОКОСТЬ', 'звучит уже иначе —', 'мы знаем, что есть выход']);
   // voice glyphs
   const gy = 246; const glyph = (x, title, sub, fn) => { const pts = []; for (let t = 0; t <= 44; t += .3) pts.push([x + t, gy + fn(t)]); return `<path d="${P(pts)}" fill="none" stroke="${ink}" stroke-width=".35"/>` + T(x, gy + 13, title, { s: 2.1, w: 600, c: RED }) + T(x, gy + 16.2, sub, { s: 1.8, c: '#555' }); };
   s += T(18, gy - 15, 'ГОЛОС: ТРИ СОСТОЯНИЯ', { s: 2.1, w: 600, c: ink, ls: .8 });
@@ -205,7 +183,7 @@ A.soundArt = function () {
 
 /* ---------------- packaging: exploded isometric ---------------- */
 A.packagingArt = function () {
-  const ink = '#151413'; let s = `<rect width="210" height="297" fill="#F0F0EE"/>`;
+  const ink = '#151413'; let s = IMG('tx-t3.jpg');
   const S = 60, cx = 96, cy = 150; const c30 = Math.cos(deg(30)), s30 = .5;
   const iso = (x, y, z) => [cx + (x - y) * c30, cy + (x + y) * s30 - z];
   const quad = (z, x0 = 0, y0 = 0, x1 = S, y1 = S) => PC([iso(x0, y0, z), iso(x1, y0, z), iso(x1, y1, z), iso(x0, y1, z)]);
@@ -256,86 +234,52 @@ A.packagingArt = function () {
 /* ---------------- chapter dividers ---------------- */
 A.maskShape = (cx, cy, rx, ry) => `M${cx} ${cy - ry}C${cx + rx * 1.05} ${cy - ry} ${cx + rx * 1.02} ${cy + ry * .35} ${cx + rx * .62} ${cy + ry * .78}C${cx + rx * .35} ${cy + ry * 1.02} ${cx - rx * .35} ${cy + ry * 1.02} ${cx - rx * .62} ${cy + ry * .78}C${cx - rx * 1.02} ${cy + ry * .35} ${cx - rx * 1.05} ${cy - ry} ${cx} ${cy - ry}Z`;
 A.chapterArt = function (i) {
-  const R = rnd(900 + i * 17); let s = `<rect width="210" height="297" fill="#080808"/>`;
+  const R = rnd(900 + i * 17); let s = IMG(`ch${i}-bg.jpg`);
   const cx = 105, cy = 106, r = 72; const id = uid('ch');
   s += `<defs>
-    <radialGradient id="${id}sc" cx=".5" cy=".45" r=".55"><stop offset="0" stop-color="${['#2a1410', '#151515', '#2a0d08', '#141c24', '#3a3a38'][i]}"/><stop offset="1" stop-color="#0c0c0c"/></radialGradient>
-    <pattern id="${id}px" width="1.2" height="1.2" patternUnits="userSpaceOnUse"><rect width=".55" height=".55" fill="#fff" fill-opacity=".06"/></pattern>
+    <pattern id="${id}px" width="1.1" height="1.1" patternUnits="userSpaceOnUse"><rect width=".5" height=".5" fill="#fff" fill-opacity=".07"/></pattern>
     <clipPath id="${id}cc"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
     <clipPath id="${id}mk"><path d="${A.maskShape(cx, cy - 6, 31, 42)}"/></clipPath>
     <radialGradient id="${id}stud" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#9a9a9a"/><stop offset="1" stop-color="#222"/></radialGradient>
     <radialGradient id="${id}glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".4" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-    <radialGradient id="${id}lava" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#ff5a1f"/><stop offset=".5" stop-color="#b3140f" stop-opacity=".6"/><stop offset="1" stop-color="#b3140f" stop-opacity="0"/></radialGradient>
-    <linearGradient id="${id}mt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${i === 3 ? '#c9d4de' : '#1d1d1d'}"/><stop offset="1" stop-color="${i === 3 ? '#4d5966' : '#0a0a0a'}"/></linearGradient>
+    <radialGradient id="${id}shade" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+    <filter id="${id}sh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.4"/></filter>
   </defs>`;
-  // beams behind (i==0 lasers, i==1 up-lights)
-  if (i === 0) for (let k = 0; k < 16; k++) { const a = deg(-170 + k * (160 / 15)); s += `<line x1="105" y1="226" x2="${n2(105 + Math.cos(a) * 320)}" y2="${n2(226 + Math.sin(a) * 320)}" stroke="${RED}" stroke-opacity="${n2(R.r(.25, .75))}" stroke-width="${n2(R.r(.15, .45))}"/>`; }
-  if (i === 1) for (let k = 0; k < 7; k++) { const a = deg(-90 + (k - 3) * 9); s += `<path d="M105 205L${n2(105 + Math.cos(a - .05) * 260)} ${n2(205 + Math.sin(a - .05) * 260)}L${n2(105 + Math.cos(a + .05) * 260)} ${n2(205 + Math.sin(a + .05) * 260)}Z" fill="#fff" fill-opacity=".05"/>`; }
-  if (i === 4) s += `<ellipse cx="105" cy="40" rx="140" ry="120" fill="url(#${id}glow)" opacity=".35"/>`;
-  // screen
-  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#${id}sc)"/>`;
+  if (i === 0) for (let k = 0; k < 16; k++) { const a = deg(-170 + k * (160 / 15)); s += `<line x1="105" y1="226" x2="${n2(105 + Math.cos(a) * 320)}" y2="${n2(226 + Math.sin(a) * 320)}" stroke="#ff6a5a" stroke-opacity="${n2(R.r(.3, .7))}" stroke-width=".18"/>`; }
   s += `<g clip-path="url(#${id}cc)">`;
-  // mask content
   const mk = A.maskShape(cx, cy - 6, 31, 42);
   if (i < 4) {
+    s += `<path d="${mk}" transform="translate(2.5 4)" fill="#000" fill-opacity=".8" filter="url(#${id}sh)"/>`;
     const base = ['#3b2116', '#0d0d0d', '#0b0b0b', '#8a9097'][i];
-    s += `<path d="${mk}" fill="${base}"/>`;
-    s += `<g clip-path="url(#${id}mk)">`;
-    if (i === 0) { // jewelled luchador
-      for (let y = cy - 50; y < cy + 40; y += 2.1) for (let x = cx - 34; x < cx + 34; x += 2.1) { const ox = (Math.round((y - cy) / 2.1) % 2) * 1.05; const c = R.pick(['#c9a24a', '#e8d18a', '#8a3a1c', '#d23a1f', '#f3e6c2', '#6b2a14']); s += `<circle cx="${n2(x + ox)}" cy="${n2(y)}" r="${n2(R.r(.55, .95))}" fill="${c}"/><circle cx="${n2(x + ox - .3)}" cy="${n2(y - .3)}" r=".22" fill="#fff" fill-opacity=".8"/>`; }
-      // graffiti-like strokes
+    s += `<path d="${mk}" fill="${base}"/><g clip-path="url(#${id}mk)">`;
+    if (i === 0) {
+      for (let y = cy - 50; y < cy + 40; y += 2.1) for (let x = cx - 34; x < cx + 34; x += 2.1) { const ox = (Math.round((y - cy) / 2.1) % 2) * 1.05; const c = R.pick(['#c9a24a', '#e8d18a', '#8a3a1c', '#d23a1f', '#f3e6c2', '#6b2a14']); s += `<circle cx="${n2(x + ox)}" cy="${n2(y)}" r="${n2(R.r(.55, .95))}" fill="${c}"/><circle cx="${n2(x + ox - .3)}" cy="${n2(y - .3)}" r=".22" fill="#fff" fill-opacity=".85"/>`; }
       for (let k = 0; k < 5; k++) { const pts = []; let x = cx - 30 + R.r(0, 10), y = cy - 40 + k * 16; for (let t = 0; t < 12; t++) { pts.push([x, y]); x += R.r(3, 6); y += R.r(-3, 3); } s += `<path d="${P(pts)}" fill="none" stroke="#111" stroke-opacity=".55" stroke-width=".8" stroke-linecap="round"/>`; }
     }
     if (i === 1) for (let y = cy - 50; y < cy + 40; y += 4.2) for (let x = cx - 34; x < cx + 34; x += 4.2) { const ox = (Math.round((y - cy) / 4.2) % 2) * 2.1; s += `<circle cx="${n2(x + ox)}" cy="${n2(y)}" r="1.25" fill="url(#${id}stud)"/>`; }
     if (i === 2) for (let y = cy - 50; y < cy + 40; y += 3.1) for (let x = cx - 34; x < cx + 34; x += 3.1) { if (R() < .9) s += `<rect x="${n2(x + R.r(-.2, .2))}" y="${n2(y + R.r(-.2, .2))}" width="2.2" height="2.2" fill="#f2efe8" fill-opacity="${n2(R.r(.65, 1))}" transform="rotate(${n2(R.r(-6, 6))} ${n2(x + 1.1)} ${n2(y + 1.1)})"/>`; }
     if (i === 3) for (let y = cy - 50; y < cy + 40; y += 2.6) for (let x = cx - 34; x < cx + 34; x += 2.6) { const v = R(); const l = v > .93 ? 100 : 30 + v * 55; s += `<rect x="${n2(x)}" y="${n2(y)}" width="2.45" height="2.45" fill="${hsl(210, 8, l)}"/>`; }
-    s += `</g>`;
-    s += `<path d="${mk}" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".3"/>`;
-    if (i === 0) { // eye holes
+    s += `<path d="${mk}" fill="url(#${id}shade)"/></g>`;
+    s += `<path d="${mk}" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width=".3"/>`;
+    if (i === 0) {
       [-1, 1].forEach(sg => s += `<path d="M${cx + sg * 4} ${cy - 12}Q${cx + sg * 12} ${cy - 20} ${cx + sg * 20} ${cy - 13}Q${cx + sg * 12} ${cy - 7} ${cx + sg * 4} ${cy - 12}Z" fill="#080808" stroke="${RED}" stroke-width=".6"/>`);
       s += `<path d="M${cx - 7} ${cy + 15}Q${cx} ${cy + 20} ${cx + 7} ${cy + 15}Q${cx} ${cy + 17.5} ${cx - 7} ${cy + 15}Z" fill="#080808" stroke="${RED}" stroke-width=".5"/>`;
     }
-    // mirror reflections spread over the screen
-    if (i === 3) for (let k = 0; k < 70; k++) { const a = R.r(0, 6.28), d = R.r(36, 80); s += `<rect x="${n2(cx + Math.cos(a) * d)}" y="${n2(cy + Math.sin(a) * d)}" width="${n2(R.r(.5, 1.6))}" height="${n2(R.r(.5, 1.6))}" fill="#fff" fill-opacity="${n2(R.r(.2, .9))}"/>`; }
+    if (i === 3) for (let k = 0; k < 90; k++) { const a = R.r(0, 6.28), d = R.r(36, 80); s += `<rect x="${n2(cx + Math.cos(a) * d)}" y="${n2(cy + Math.sin(a) * d)}" width="${n2(R.r(.5, 1.6))}" height="${n2(R.r(.5, 1.6))}" fill="#fff" fill-opacity="${n2(R.r(.2, .95))}"/>`; }
   } else {
-    s += `<circle cx="${cx}" cy="${cy - 6}" r="44" fill="url(#${id}glow)"/>`;
-    s += `<path d="${mk}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width=".35" stroke-dasharray="1.2 1.6"/>`;
+    s += `<circle cx="${cx}" cy="${cy - 6}" r="46" fill="url(#${id}glow)"/>`;
+    s += `<path d="${mk}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".35" stroke-dasharray="1.2 1.6"/>`;
   }
-  s += `<rect x="0" y="0" width="210" height="297" fill="url(#${id}px)"/>`;
-  s += `</g>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width=".35"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${r + 2.2}" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width=".25"/>`;
-  // title band inside screen
-  s += `<rect x="${cx - 60}" y="${cy + 45}" width="120" height="13" fill="#000" fill-opacity=".72"/>`;
-  // mountain
-  const peakY = [228, 214, 232, 222, 226][i];
-  const mpts = [[-6, 297], [-6, 286]]; let x = -6, y = 286;
-  while (x < 105) { x += R.r(4, 9); y = lerp(286, peakY, Math.min(1, (x + 6) / 111)) + R.r(-3, 3); mpts.push([Math.min(x, 105 - (i === 2 ? 8 : 0)), y]); }
-  if (i === 2) { mpts.push([97, peakY + 2], [113, peakY + 2]); x = 113; } else { mpts.push([105, peakY]); x = 105; }
-  while (x < 216) { x += R.r(4, 9); y = lerp(peakY, 288, Math.min(1, (x - 105) / 111)) + R.r(-3, 3); mpts.push([x, y]); }
-  mpts.push([216, 297]);
-  s += `<path d="${PC(mpts)}" fill="url(#${id}mt)" stroke="#fff" stroke-opacity="${i === 3 ? .5 : .12}" stroke-width=".3"/>`;
-  // ridges
-  for (let k = 0; k < 9; k++) { const sx = 105 + R.r(-6, 6); const pts = [[sx, peakY + 3]]; let px = sx, py = peakY + 3; const dir = k % 2 ? 1 : -1; for (let t = 0; t < 6; t++) { px += dir * R.r(4, 11); py += R.r(5, 10); pts.push([px, py]); } s += `<path d="${P(pts)}" fill="none" stroke="${i === 3 ? '#fff' : '#fff'}" stroke-opacity="${i === 3 ? .5 : .07}" stroke-width=".25"/>`; }
-  if (i === 2) { // volcano lava + sparks + snow
-    s += `<ellipse cx="105" cy="${peakY + 2}" rx="9" ry="2" fill="#ff5a1f"/>`;
-    for (let k = 0; k < 9; k++) { const pts = []; let px = 98 + k * 1.8, py = peakY + 2; for (let t = 0; t < 14; t++) { pts.push([px, py]); px += (k < 4 ? -1 : 1) * R.r(1, 4); py += R.r(2, 5); } s += `<path d="${P(pts)}" fill="none" stroke="${k % 3 ? '#e2321a' : '#ff8a3a'}" stroke-opacity="${n2(R.r(.5, .95))}" stroke-width="${n2(R.r(.3, .9))}" stroke-linecap="round"/>`; }
-    for (let k = 0; k < 60; k++) s += `<circle cx="${n2(105 + R.g() * 14)}" cy="${n2(peakY - R.r(2, 60))}" r="${n2(R.r(.2, .6))}" fill="#ff7a2a" fill-opacity="${n2(R.r(.4, 1))}"/>`;
-    for (let k = 0; k < 140; k++) s += `<circle cx="${n2(R.r(0, 210))}" cy="${n2(R.r(0, 297))}" r="${n2(R.r(.15, .45))}" fill="#fff" fill-opacity="${n2(R.r(.15, .6))}"/>`;
-  }
-  if (i === 3) { // zigzag path + fog
-    const zz = [[60, 290], [88, 276], [70, 262], [98, 250], [84, 238], [104, 223]]; s += `<path d="${P(zz)}" fill="none" stroke="#111" stroke-width=".35" stroke-dasharray="1.2 1"/>`;
-    for (let k = 0; k < 4; k++) s += `<rect x="0" y="${268 - k * 9}" width="210" height="14" fill="#cfd8e2" fill-opacity="${.05 + k * .015}"/>`;
-  }
-  if (i === 0 || i === 1) s += `<circle cx="105" cy="${peakY - 1.6}" r="1" fill="#fff"/><rect x="104.5" y="${peakY - 1}" width="1" height="2.2" fill="#fff"/>`;
-  if (i === 4) { for (let k = 0; k < 90; k++) { const t = R(); const side = R() < .5 ? -1 : 1; const px = 105 + side * t * 110; const py = lerp(peakY, 290, t) + R.r(0, 10); s += `<circle cx="${n2(px)}" cy="${n2(py)}" r=".35" fill="#fff" fill-opacity="${n2(R.r(.4, 1))}"/>`; }
-    for (let k = 0; k < 9; k++) { const a = deg(60 + k * 7.5); s += `<path d="M105 0L${n2(105 + Math.cos(a - .02) * 330)} ${n2(Math.sin(a - .02) * 330)}L${n2(105 + Math.cos(a + .02) * 330)} ${n2(Math.sin(a + .02) * 330)}Z" fill="#fff" fill-opacity=".035"/>`; } }
+  s += `<rect x="0" y="0" width="210" height="297" fill="url(#${id}px)"/></g>`;
+  s += `<rect x="${cx - 60}" y="${cy + 45}" width="120" height="13" fill="#000" fill-opacity=".7"/>`;
+  if (i === 2) { const pk = 232; for (let k = 0; k < 9; k++) { const pts = []; let px = 98 + k * 1.8, py = pk + 2; for (let t = 0; t < 12; t++) { pts.push([px, py]); px += (k < 4 ? -1 : 1) * R.r(1.2, 4); py += R.r(2, 4.5); } s += `<path d="${P(pts)}" fill="none" stroke="${k % 3 ? '#e2321a' : '#ffb070'}" stroke-opacity="${n2(R.r(.55, .95))}" stroke-width="${n2(R.r(.3, .8))}" stroke-linecap="round"/>`; } }
+  if (i === 3) { const zz = [[62, 292], [88, 278], [72, 264], [98, 252], [86, 240], [105, 222]]; s += `<path d="${P(zz)}" fill="none" stroke="#1b2733" stroke-width=".4" stroke-dasharray="1.2 1"/>`; }
   return svgWrap(s);
 };
 
 /* ---------------- whole: three motifs + voice path ---------------- */
 A.wholeArt = function () {
-  const ink = '#141210'; let s = `<rect width="210" height="297" fill="#ECE7DF"/>`;
+  const ink = '#141210'; let s = IMG('tx-whole.jpg');
   const R = rnd(55);
   // faint disc behind
   for (let r = 20; r < 120; r += 1.6) s += `<circle cx="196" cy="40" r="${r}" fill="none" stroke="${ink}" stroke-opacity="${n2(R.r(.02, .06))}" stroke-width=".18"/>`;
@@ -370,10 +314,7 @@ A.wholeArt = function () {
 
 /* ---------------- coda ---------------- */
 A.codaArt = function () {
-  const R = rnd(4001); let s = `<rect width="210" height="297" fill="#090909"/>`;
-  const gid = uid('cg');
-  s += `<defs><radialGradient id="${gid}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#F6E7CF" stop-opacity=".55"/><stop offset=".5" stop-color="#F6E7CF" stop-opacity=".08"/><stop offset="1" stop-color="#F6E7CF" stop-opacity="0"/></radialGradient></defs>`;
-  s += `<circle cx="168" cy="250" r="120" fill="url(#${gid})"/>`;
+  const R = rnd(4001); let s = IMG('coda-bg.jpg');
   for (let r = 30; r < 104; r += 1.15) s += `<circle cx="168" cy="250" r="${n2(r)}" fill="none" stroke="#fff" stroke-opacity="${n2(R.r(.02, .07))}" stroke-width=".2"/>`;
   s += `<circle cx="168" cy="250" r="14" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".25"/><circle cx="168" cy="250" r="5" fill="#090909" stroke="#fff" stroke-opacity=".4" stroke-width=".25"/>`;
   s += `<g transform="translate(24 20)">${A.tape(9, 40, 7, { tornTop: true })}</g>`;

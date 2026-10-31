@@ -19,6 +19,7 @@ const P = pts => 'M' + pts.map(p => n2(p[0]) + ' ' + n2(p[1])).join('L');
 const PC = pts => P(pts) + 'Z';
 const svgWrap = (inner, w = 210, h = 297, cls = 'art', extra = '') =>
   `<svg class="${cls}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" ${extra}>${inner}</svg>`;
+const IMG = (name, x = 0, y = 0, w = 210, h = 297, extra = '') => `<image href="../assets/${name}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${extra}/>`;
 let __uid = 0; const uid = p => (p || 'u') + (++__uid);
 const deg = a => a * Math.PI / 180;
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -113,7 +114,7 @@ A.jewelCase = function (x0, y0, w, h, seed, opts = {}) {
     </linearGradient>
     <filter id="${id}sh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter>
   </defs>
-  <rect x="${x0 + 3}" y="${y0 + 7}" width="${w}" height="${h}" fill="#000" fill-opacity=".22" filter="url(#${id}sh)"/>
+  ${opts.noShadow ? '' : `<rect x="${x0 + 3}" y="${y0 + 7}" width="${w}" height="${h}" fill="#000" fill-opacity=".22" filter="url(#${id}sh)"/>`}
   <rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="${opts.back || '#dcdcd9'}" fill-opacity=".55"/>
   <rect x="${trayX}" y="${y0 + 2.4}" width="${trayW}" height="${h - 4.8}" fill="#fff" fill-opacity=".08" stroke="#000" stroke-opacity=".10" stroke-width=".2"/>
   ${A.hub(cx, cy, r * .125 - .2)}
@@ -152,20 +153,15 @@ A.mini = function (key, acc, fg) {
 /* ---------------- cover ---------------- */
 A.cover = function () {
   const x0 = 31, y0 = 50, w = 148, h = 131;
-  const gid = uid('bg');
-  return svgWrap(`<defs>
-     <radialGradient id="${gid}" cx=".46" cy=".34" r=".85"><stop offset="0" stop-color="#F3F2EF"/><stop offset=".6" stop-color="#E4E3DF"/><stop offset="1" stop-color="#CFCECA"/></radialGradient>
-   </defs>
-   <rect width="210" height="297" fill="url(#${gid})"/>
-   ${A.jewelCase(x0, y0, w, h, 2013, { rot: 8 })}
+  return svgWrap(`${IMG('cover-bg.jpg')}
+   ${A.jewelCase(x0, y0, w, h, 2013, { rot: 8, noShadow: true })}
    <g transform="translate(${x0 - 2.5} ${y0 - 7}) rotate(-1.2)">${A.tape(12.5, 66, 44)}</g>`);
 };
 
 A.back = function () {
-  const x0 = 31, y0 = 50, w = 148, h = 131; const gid = uid('bg');
-  return svgWrap(`<defs><radialGradient id="${gid}" cx=".54" cy=".34" r=".85"><stop offset="0" stop-color="#F3F2EF"/><stop offset=".6" stop-color="#E4E3DF"/><stop offset="1" stop-color="#CFCECA"/></radialGradient></defs>
-   <rect width="210" height="297" fill="url(#${gid})"/>
-   ${A.jewelCase(x0, y0, w, h, 77, { flip: true, rot: 200 })}
+  const x0 = 31, y0 = 50, w = 148, h = 131;
+  return svgWrap(`${IMG('back-bg.jpg')}
+   ${A.jewelCase(x0, y0, w, h, 77, { flip: true, rot: 200, noShadow: true })}
    <g transform="translate(${x0 + w - 10} ${y0 + h - 58}) rotate(1.4)">${A.tape(12.5, 66, 91)}</g>`);
 };
 

@@ -1,87 +1,69 @@
 /* ===================================================================
    Track art — one world per song
    =================================================================== */
-const IMG = (name, x = 0, y = 0, w = 210, h = 297, extra = '') => `<image href="../assets/${name}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${extra}/>`;
 
 /* 01 — ON SIGHT: signal, tear, choir */
 A.t1 = function () {
   const R = rnd(11); const cut = 196; const id = uid('t1');
-  let s = `<rect width="210" height="297" fill="#0A0A0A"/>`;
-  s += `<defs><clipPath id="${id}top"><path d="${(() => { const pts = [[0, 0], [210, 0]]; for (let x = 210; x >= 0; x -= R.r(1.2, 3.2)) pts.push([x, cut + R.r(-2.2, 2.2)]); pts.push([0, cut]); return PC(pts); })()}"/></clipPath>
-    <radialGradient id="${id}halo" cx=".5" cy=".55" r=".55"><stop offset="0" stop-color="#F7D9A0" stop-opacity=".85"/><stop offset=".5" stop-color="#F7E6C6" stop-opacity=".35"/><stop offset="1" stop-color="#F2EEE6" stop-opacity="0"/></radialGradient></defs>`;
-  // lower world: light
-  s += `<rect y="${cut - 6}" width="210" height="${303 - cut}" fill="#F2EEE6"/>`;
-  s += `<ellipse cx="105" cy="268" rx="120" ry="58" fill="url(#${id}halo)"/>`;
-  // rays from above the choir
-  for (let k = 0; k < 13; k++) { const x = 20 + k * 14; s += `<path d="M${x} ${cut}L${x + 5} ${cut}L${x + 12} 297L${x - 4} 297Z" fill="#fff" fill-opacity=".22"/>`; }
-  // choir
-  const rows = [[244, .62, 21, '#5d5750'], [254, .74, 18, '#3d3833'], [266, .88, 15, '#24201c'], [280, 1.05, 12, '#141210']];
-  rows.forEach(([y, sc, n, col], ri) => {
+  let s = IMG('t1-church.jpg');
+  const tear = (() => { const pts = [[0, 0], [210, 0]]; const e = []; for (let x = 210; x >= 0; x -= R.r(1.2, 3.2)) e.push([x, cut + R.r(-2.2, 2.2)]); return { clip: PC(pts.concat(e, [[0, cut]])), edge: P(e) }; })();
+  s += `<defs><clipPath id="${id}top"><path d="${tear.clip}"/></clipPath>
+    <linearGradient id="${id}robe" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#bdb3a4"/><stop offset=".45" stop-color="#FFF8EC"/><stop offset="1" stop-color="#d9cfbf"/></linearGradient></defs>`;
+  // choir in white robes, lit from above
+  const rows = [[244, .62, 21, .55], [254, .74, 18, .7], [266, .88, 15, .85], [280, 1.05, 12, 1]];
+  rows.forEach(([y, sc, n, op], ri) => {
     const span = 176 * (0.8 + ri * .07); const x0 = 105 - span / 2;
     for (let i = 0; i < n; i++) {
       const x = x0 + (i + .5) * span / n + (ri % 2 ? 2 : 0) + R.r(-.6, .6);
-      const h = 9 * sc, w = 6.2 * sc, hr = 1.55 * sc;
-      s += `<path d="M${n2(x - w * .28)} ${n2(y - h + hr * 1.6)}Q${n2(x - w * .62)} ${n2(y - h * .4)} ${n2(x - w / 2)} ${n2(y)}L${n2(x + w / 2)} ${n2(y)}Q${n2(x + w * .62)} ${n2(y - h * .4)} ${n2(x + w * .28)} ${n2(y - h + hr * 1.6)}Z" fill="${col}"/>`;
-      s += `<circle cx="${n2(x)}" cy="${n2(y - h + hr * .3)}" r="${n2(hr)}" fill="${col}"/>`;
-      if (ri === 3 && i % 3 === 1) s += `<rect x="${n2(x - w * .2)}" y="${n2(y - h * .55)}" width="${n2(w * .4)}" height="${n2(h * .18)}" fill="#F2EEE6" fill-opacity=".85"/>`;
+      const h = 10.5 * sc, w = 5.4 * sc, hr = 1.25 * sc; const sway = R.r(-.6, .6) * sc;
+      s += `<ellipse cx="${n2(x)}" cy="${n2(y + .4)}" rx="${n2(w * .6)}" ry="${n2(.7 * sc)}" fill="#000" fill-opacity=".5"/>`;
+      s += `<path d="M${n2(x - w * .2)} ${n2(y - h + hr * 1.7)}C${n2(x - w * .42)} ${n2(y - h * .78)} ${n2(x - w * .5)} ${n2(y - h * .55)} ${n2(x - w * .34)} ${n2(y - h * .48)}C${n2(x - w * .4)} ${n2(y - h * .25)} ${n2(x - w * .62 + sway)} ${n2(y - h * .1)} ${n2(x - w * .58 + sway)} ${n2(y)}L${n2(x + w * .58 + sway)} ${n2(y)}C${n2(x + w * .62 + sway)} ${n2(y - h * .1)} ${n2(x + w * .4)} ${n2(y - h * .25)} ${n2(x + w * .34)} ${n2(y - h * .48)}C${n2(x + w * .5)} ${n2(y - h * .55)} ${n2(x + w * .42)} ${n2(y - h * .78)} ${n2(x + w * .2)} ${n2(y - h + hr * 1.7)}Z" fill="url(#${id}robe)" fill-opacity="${op}"/>`;
+      s += `<path d="M${n2(x - w * .3)} ${n2(y - h * .5)}Q${n2(x)} ${n2(y - h * .42)} ${n2(x + w * .3)} ${n2(y - h * .5)}" fill="none" stroke="#8d8273" stroke-opacity="${n2(op * .5)}" stroke-width=".15"/>`;
+      s += `<path d="M${n2(x - w * .12)} ${n2(y - h * .62)}Q${n2(x - w * .2)} ${n2(y - h * .3)} ${n2(x - w * .24)} ${n2(y)}" fill="none" stroke="#8d8273" stroke-opacity="${n2(op * .6)}" stroke-width=".18"/>`;
+      s += `<ellipse cx="${n2(x)}" cy="${n2(y - h + hr * .45)}" rx="${n2(hr * .92)}" ry="${n2(hr * 1.12)}" fill="#F3EDE2" fill-opacity="${op}"/>`;
     }
   });
-  // upper world: static + acid wave, clipped by torn edge
-  s += `<g clip-path="url(#${id}top)">${IMG('t1-static.jpg', 0, 0, 210, 297)}`;
-  // grid
+  // upper world
+  s += `<g clip-path="url(#${id}top)">${IMG('t1-top.jpg')}`;
   for (let x = 0; x <= 210; x += 15) s += `<line x1="${x}" x2="${x}" y1="0" y2="${cut}" stroke="#fff" stroke-opacity=".05" stroke-width=".15"/>`;
-  // resonant saw (303-like) — clean iconic line
   const pts = []; const yc = 96, per = 27;
   for (let x = -4; x <= 214; x += .25) { const ph = ((x + 6) % per) / per; let v = (1 - ph) * 2 - 1; v += Math.exp(-ph * 9) * Math.sin(ph * 70) * .55; pts.push([x, yc - v * 30]); }
   const d = P(pts);
   s += `<path d="${d}" fill="none" stroke="#000" stroke-opacity=".55" stroke-width="3.2"/>`;
   s += `<path d="${d}" fill="none" stroke="${RED}" stroke-width="1.2" transform="translate(1.4 .6)"/>`;
   s += `<path d="${d}" fill="none" stroke="#fff" stroke-width=".7"/>`;
-  // cutoff/resonance readouts
   [['CUTOFF', .78], ['RESO', .93], ['ENV', .64], ['DIST', 1]].forEach(([l, v], i) => { const x = 140 + i * 15, y = 30; s += `<circle cx="${x}" cy="${y}" r="4.2" fill="#0A0A0A" fill-opacity=".7" stroke="#fff" stroke-opacity=".5" stroke-width=".25"/><line x1="${x}" y1="${y}" x2="${n2(x + Math.cos(deg(-225 + v * 270)) * 3.4)}" y2="${n2(y + Math.sin(deg(-225 + v * 270)) * 3.4)}" stroke="${RED}" stroke-width=".5"/>` + T(x, y + 8, l, { a: 'middle', s: 1.7, c: '#fff', op: .7 }); });
   s += `</g>`;
-  // torn edge shadow line
-  s += T(196, cut + 34, 'СТОП ▮▮ → ХОР', { a: 'end', s: 1.9, c: '#7a7268', w: 600 });
+  s += `<path d="${tear.edge}" fill="none" stroke="#FFE8C4" stroke-opacity=".75" stroke-width=".35"/>`;
+  s += T(196, cut + 34, 'СТОП ▮▮ → ХОР', { a: 'end', s: 1.9, c: '#E8D2AE', w: 600 });
   return svgWrap(s);
 };
 
 /* 02 — BLACK SKINHEAD: tower, searchlights, viewfinder */
 A.t2 = function () {
-  const R = rnd(22); const id = uid('t2');
-  let s = `<rect width="210" height="297" fill="#070707"/>`;
-  const tx = 146, topY = 60;
-  // beams
-  s += `<defs>`;
-  const beams = [[-30, 297, -3], [40, 330, 2], [250, 320, -2], [190, 340, 3], [-20, 200, 5]];
-  beams.forEach((b, i) => s += `<linearGradient id="${id}b${i}" gradientUnits="userSpaceOnUse" x1="${b[0]}" y1="${b[1]}" x2="${tx}" y2="${topY}"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity=".04"/></linearGradient>`);
-  s += `<radialGradient id="${id}spot" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-  beams.forEach((b, i) => { const ang = Math.atan2(topY - b[1], tx - b[0]); const nx = -Math.sin(ang), ny = Math.cos(ang); const wS = 2, wE = 9 + b[2]; s += `<path d="M${n2(b[0] + nx * wS)} ${n2(b[1] + ny * wS)}L${n2(tx + nx * wE)} ${n2(topY + ny * wE)}L${n2(tx - nx * wE)} ${n2(topY - ny * wE)}L${n2(b[0] - nx * wS)} ${n2(b[1] - ny * wS)}Z" fill="url(#${id}b${i})"/>`; });
-  s += `<circle cx="${tx}" cy="${topY}" r="22" fill="url(#${id}spot)"/>`;
-  // tower (stepped)
-  const steps = [[297, 64], [214, 64], [214, 52], [172, 52], [172, 40], [134, 40], [134, 30], [108, 30], [108, 20], [92, 20], [92, 13], [81, 13], [81, 7], [72, 7], [72, 2.4], [56, 2.4], [56, .7], [44, .7]];
-  const left = [], right = [];
-  steps.forEach(([y, w]) => { left.push([tx - w / 2, y]); right.unshift([tx + w / 2, y]); });
-  s += `<path d="${PC(left.concat(right))}" fill="#111" stroke="#2a2a2a" stroke-width=".25"/>`;
-  // windows
-  for (let i = 0; i < steps.length - 6; i += 2) {
-    const yB = steps[i][0], yT = steps[i + 1 < steps.length ? i + 2 : i][0] || yB - 10, w = steps[i + 1][1];
-    for (let y = yT + 2; y < yB - 1.5; y += 2.3) for (let x = tx - w / 2 + 1.6; x < tx + w / 2 - 1.6; x += 1.9) {
-      const v = R(); if (v < .2) s += `<rect x="${n2(x)}" y="${n2(y)}" width=".55" height="1.1" fill="${v < .02 ? RED : '#fff'}" fill-opacity="${n2(v < .02 ? .9 : R.r(.12, .45))}"/>`;
-    }
-  }
-  // figure at top + crosshair
-  const fx = tx, fy = topY - 1.8;
-  s += `<rect x="${fx - .7}" y="${fy - 1.2}" width="1.4" height="2.6" fill="${RED}"/><circle cx="${fx}" cy="${fy - 2}" r=".75" fill="${RED}"/>`;
-  s += `<circle cx="${fx}" cy="${fy}" r="9" fill="none" stroke="${RED}" stroke-width=".3"/><circle cx="${fx}" cy="${fy}" r="13" fill="none" stroke="${RED}" stroke-opacity=".45" stroke-width=".2" stroke-dasharray="1 1.2"/>`;
-  [[0, -1], [0, 1], [-1, 0], [1, 0]].forEach(([dx, dy]) => s += `<line x1="${fx + dx * 5}" y1="${fy + dy * 5}" x2="${fx + dx * 16}" y2="${fy + dy * 16}" stroke="${RED}" stroke-width=".3"/>`);
-  s += T(fx + 15, fy - 9, 'TARGET', { s: 1.9, c: RED, w: 600 }) + T(fx + 15, fy - 6.4, 'H 381 M · KONG', { s: 1.7, c: '#fff', op: .6 });
+  const id = uid('t2'); let s = IMG('t2-body.jpg');
+  const bx = 138, sc = 205 / 1.78, gy = 262; const Y = h => gy - h * sc;
   // viewfinder
   const m = 12, L = 9; [[m, m, 1, 1], [210 - m, m, -1, 1], [m, 297 - m, 1, -1], [210 - m, 297 - m, -1, -1]].forEach(([x, y, sx, sy]) => s += `<path d="M${x} ${y + sy * L}V${y}H${x + sx * L}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".35"/>`);
   s += `<circle cx="170" cy="22.3" r="1.3" fill="${RED}"/>` + T(173, 23, 'REC', { s: 2.2, c: '#fff', w: 600 }) + T(184, 23, '03:08', { s: 2.2, c: '#fff', op: .7 });
+  // head target
+  const hy = Y(1.655); s += `<circle cx="${bx}" cy="${n2(hy)}" r="13" fill="none" stroke="${RED}" stroke-width=".35"/><circle cx="${bx}" cy="${n2(hy)}" r="17" fill="none" stroke="${RED}" stroke-opacity=".45" stroke-width=".2" stroke-dasharray="1 1.2"/>`;
+  [[0, -1], [0, 1], [-1, 0], [1, 0]].forEach(([dx, dy]) => s += `<line x1="${bx + dx * 9}" y1="${n2(hy + dy * 9)}" x2="${bx + dx * 20}" y2="${n2(hy + dy * 20)}" stroke="${RED}" stroke-width=".3"/>`);
+  // height ruler
+  for (let h = 0; h <= 1.8001; h += .05) { const y = Y(h); const big = Math.abs(h * 10 - Math.round(h * 10)) < .01; s += `<line x1="186" x2="${big ? 191 : 189}" y1="${n2(y)}" y2="${n2(y)}" stroke="#fff" stroke-opacity=".5" stroke-width=".15"/>`; if (Math.abs(h * 2 - Math.round(h * 2)) < .01) s += T(192.5, y + .7, h.toFixed(1), { s: 1.6, c: '#fff', op: .6 }); }
+  s += T(186, Y(1.82), 'М', { s: 1.6, c: '#fff', op: .6 });
+  // scan readout
+  const scy = Y(1.30); s += T(14, scy - 1.2, 'SCAN 1.30 М', { s: 1.9, c: RED, w: 600 }) + T(14, scy + 2.2, 'ПРОХОД 07 / 12', { s: 1.6, c: '#fff', op: .55 });
+  // classification labels — the public assigns meaning to the body
+  const lab = (px, py, tx, ty, t1, t2) => `<path d="M${px} ${py}L${tx} ${ty}H${tx + (tx < px ? -2 : 2)}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".15"/><rect x="${px - .8}" y="${py - .8}" width="1.6" height="1.6" fill="none" stroke="${RED}" stroke-width=".3"/>` + T(tx + (tx < px ? -3 : 3), ty + .8, t1, { a: tx < px ? 'end' : 'start', s: 2, c: '#fff', w: 600 }) + T(tx + (tx < px ? -3 : 3), ty + 3.8, t2, { a: tx < px ? 'end' : 'start', s: 1.6, c: '#fff', op: .55 });
+  s += lab(bx - 4, Y(1.62), 102, 52, 'УГРОЗА?', 'класс назначен заранее');
+  s += lab(bx + 16, Y(1.36), 172, 98, 'ЗРЕЛИЩЕ?', 'знаменитость');
+  s += lab(bx - 14, Y(1.05), 98, 128, 'ЧУДОВИЩЕ?', 'кинг-конг на вершине');
+  s += lab(bx + 8, Y(.6), 172, 160, 'ТОВАР?', 'цена не указана');
   // step sequencer HUD
   const hits = [1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0];
   hits.forEach((h, i) => s += `<rect x="${n2(146 + i * 3.4)}" y="31" width="2.4" height="2.4" fill="${h ? RED : 'none'}" stroke="#fff" stroke-opacity="${h ? 0 : .3}" stroke-width=".15"/>`);
-  s += T(146, 38, 'STOMP · CLAP · BREATH', { s: 1.6, c: '#fff', op: .5 });
+  s += T(146, 38, 'STOMP · BREATH · CHANT', { s: 1.6, c: '#fff', op: .5 });
   return svgWrap(s);
 };
 
@@ -102,11 +84,10 @@ A.croissant = function (cx, cy, sc, ink) {
 };
 A.t3 = function () {
   const R = rnd(33); const ink = '#111214'; const id = uid('t3');
-  let s = `<rect width="210" height="297" fill="#F1F1EE"/>`;
+  let s = IMG('t3-cold.jpg');
   const cx = 105, cy = 124, r = 60;
   s += `<defs><radialGradient id="${id}g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#F7F7F5"/><stop offset="1" stop-color="#F1F1EE" stop-opacity="0"/></radialGradient>
     <linearGradient id="${id}ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9aa0a8"/><stop offset=".45" stop-color="#ffffff"/><stop offset=".55" stop-color="#c9cdd2"/><stop offset="1" stop-color="#6c727a"/></linearGradient></defs>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${r + 30}" fill="url(#${id}g)"/>`;
   // halo body: metallic ring
   s += `<circle cx="${cx}" cy="${cy}" r="${r - 3}" fill="none" stroke="url(#${id}ring)" stroke-width="5.2"/>`;
   s += `<circle cx="${cx}" cy="${cy}" r="${r - .2}" fill="none" stroke="${ink}" stroke-width=".25"/><circle cx="${cx}" cy="${cy}" r="${r - 5.8}" fill="none" stroke="${ink}" stroke-width=".25"/>`;
@@ -135,45 +116,33 @@ A.t3 = function () {
 /* 04 — NEW SLAVES: price tag → bars → horizon */
 A.t4 = function () {
   const R = rnd(44); const ink = '#141311'; const id = uid('t4');
-  let s = `<rect width="210" height="297" fill="#DCD8D1"/>`;
-  s += `<defs><linearGradient id="${id}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCD8D1"/><stop offset=".45" stop-color="#E9DCC0"/><stop offset=".78" stop-color="#F3C88A"/><stop offset="1" stop-color="#F7B46A"/></linearGradient>
-    <radialGradient id="${id}sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF4DC"/><stop offset=".55" stop-color="#FBD9A0"/><stop offset="1" stop-color="#F7B46A" stop-opacity="0"/></radialGradient>
-    <linearGradient id="${id}bar" x1="0" x2="1"><stop offset="0" stop-color="#2a2724"/><stop offset=".35" stop-color="#6b665f"/><stop offset=".6" stop-color="#1a1816"/><stop offset="1" stop-color="#0e0d0c"/></linearGradient>
-    <linearGradient id="${id}proj" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".0"/></linearGradient></defs>`;
-  // concrete facade grid
-  for (let y = 8; y < 150; y += 14) for (let x = 6; x < 210; x += 12) s += `<rect x="${x}" y="${y}" width="8" height="9" fill="none" stroke="${ink}" stroke-opacity=".07" stroke-width=".25"/>`;
-  // horizon world
-  const hz = 262;
-  s += `<rect x="0" y="150" width="210" height="${hz - 150}" fill="url(#${id}sky)"/>`;
-  s += `<circle cx="132" cy="${hz}" r="34" fill="url(#${id}sun)"/><circle cx="132" cy="${hz}" r="11" fill="#FFF1D6"/>`;
-  s += `<rect x="0" y="${hz}" width="210" height="${297 - hz}" fill="#8b7a63"/>`;
-  for (let k = 0; k < 8; k++) s += `<rect x="0" y="${hz + 1 + k * 4.2}" width="210" height=".25" fill="#FFE2B0" fill-opacity="${n2(.5 - k * .05)}"/>`;
-  s += `<rect x="0" y="150" width="210" height="18" fill="#DCD8D1" fill-opacity=".85"/>`;
-  // projection keystone behind tag
-  s += `<path d="M40 22L170 26L176 104L34 100Z" fill="url(#${id}proj)"/>`;
-  // price tag
+  let s = IMG('t4-night.jpg');
+  s += `<defs><linearGradient id="${id}bar" x1="0" x2="1"><stop offset="0" stop-color="#0c0b0a"/><stop offset=".35" stop-color="#5c5750"/><stop offset=".6" stop-color="#161412"/><stop offset="1" stop-color="#080707"/></linearGradient>
+    <radialGradient id="${id}glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
+  s += `<path d="M40 22L170 26L176 104L34 100Z" fill="#fff" fill-opacity=".05"/>`;
+  s += `<ellipse cx="108" cy="66" rx="80" ry="46" fill="url(#${id}glow)"/>`;
   const tg = `M62 36H170V96H62L46 66Z`;
-  s += `<path d="${tg}" transform="translate(1.6 2.4)" fill="#000" fill-opacity=".12"/><path d="${tg}" fill="#FBFAF7" stroke="${ink}" stroke-width=".3"/>`;
-  s += `<circle cx="58" cy="66" r="2.6" fill="#DCD8D1" stroke="${ink}" stroke-width=".3"/>`;
-  s += `<path d="M58 66C40 60 26 44 14 18" fill="none" stroke="${ink}" stroke-width=".35"/>`;
-  // barcode in tag; collect bar x positions
+  s += `<path d="${tg}" fill="#F7F3EA" fill-opacity=".93"/><path d="${tg}" fill="none" stroke="#fff" stroke-width=".3"/>`;
+  s += `<circle cx="58" cy="66" r="2.6" fill="#1a1918" stroke="#ccc" stroke-width=".3"/>`;
+  s += `<path d="M58 66C40 60 26 44 14 18" fill="none" stroke="#d8d2c6" stroke-opacity=".6" stroke-width=".35"/>`;
   let x = 78; const barXs = []; while (x < 160) { const w = R.pick([.5, .5, .9, 1.3, 1.8]); s += `<rect x="${n2(x)}" y="44" width="${w}" height="38" fill="${ink}"/>`; barXs.push([x, w]); x += w + R.pick([.5, .9, 1.2]); }
   s += T(118, 89, '0  13  2013  0618  4  00', { a: 'middle', s: 2.4, c: ink, ls: .6 });
   s += T(68, 46, 'ЦЕНА', { s: 1.8, c: RED, w: 600 });
-  // prison bars descending from selected bars
+  // NOT FOR SALE stamp (SNL, May 2013)
+  s += `<g transform="translate(132 76) rotate(-9)"><rect x="-21" y="-6" width="42" height="11" fill="none" stroke="${RED}" stroke-width=".7"/><rect x="-19.6" y="-4.6" width="39.2" height="8.2" fill="none" stroke="${RED}" stroke-width=".25"/>` + T(0, 1.6, 'NOT FOR SALE', { a: 'middle', s: 3.6, c: RED, w: 600, ls: .6 }) + `</g>`;
   const bars = []; for (let bx = 122; bx <= 196; bx += 9.2) bars.push(bx);
-  bars.forEach(bx => s += `<rect x="${bx}" y="100" width="2.6" height="197" fill="url(#${id}bar)"/>`);
-  [176, 236].forEach(y => s += `<rect x="118" y="${y}" width="92" height="3" fill="#1a1816"/><rect x="118" y="${y}" width="92" height=".7" fill="#7a746b"/>`);
-  // connectors from barcode to bars (dashed)
-  bars.forEach((bx, i) => { const src = barXs[Math.min(barXs.length - 1, Math.floor(i * barXs.length / bars.length))]; s += `<path d="M${n2(src[0] + src[1] / 2)} 82L${bx + 1.3} 100" stroke="${ink}" stroke-opacity=".35" stroke-width=".15"/>`; });
-  s += T(196, 270, 'ОMEGA · GYÖNGYHAJÚ LÁNY', { a: 'end', s: 1.8, c: '#3d3326', w: 600 });
+  bars.forEach((bx, i) => { const src = barXs[Math.min(barXs.length - 1, Math.floor(i * barXs.length / bars.length))]; s += `<path d="M${n2(src[0] + src[1] / 2)} 82L${bx + 1.3} 100" stroke="#ddd" stroke-opacity=".35" stroke-width=".15"/>`; });
+  bars.forEach(bx => s += `<rect x="${bx}" y="100" width="2.6" height="197" fill="url(#${id}bar)"/><rect x="${bx + .9}" y="100" width=".35" height="197" fill="#FFD9A0" fill-opacity=".35"/>`);
+  [176, 236].forEach(y => s += `<rect x="118" y="${y}" width="92" height="3" fill="#0e0d0c"/><rect x="118" y="${y}" width="92" height=".6" fill="#FFD9A0" fill-opacity=".45"/>`);
+  s += T(196, 270, 'OMEGA · GYÖNGYHAJÚ LÁNY · 1969', { a: 'end', s: 1.8, c: '#FFE2B0', w: 600 });
+  s += T(14, 20, '17.05.2013 · ПРОЕКЦИЯ · 66 ЗДАНИЙ', { s: 1.8, c: '#EDE7DD', op: .7 });
   return svgWrap(s);
 };
 
 /* 05 — HOLD MY LIQUOR: tilted glass, loop, guitar string */
 A.t5 = function () {
   const R = rnd(55); const id = uid('t5'); const am = '#E0962F', bone = '#EADFCC';
-  let s = IMG('t5-smoke.jpg');
+  let s = IMG('t5-bar.jpg');
   const gx = 104, gy = 150, rot = -13;
   const glass = `M-28 -34L28 -34L23 30Q22 36 16 36L-16 36Q-22 36 -23 30Z`;
   const inner = `M-26 -33L26 -33L21.3 24L-21.3 24Z`;
@@ -206,7 +175,7 @@ A.t5 = function () {
 
 /* 06 — I'M IN IT: nested rooms vortex */
 A.t6 = function () {
-  const id = uid('t6'); let s = IMG('t6-heat.jpg');
+  const id = uid('t6'); let s = IMG('t6-tunnel.jpg');
   const cx = 108, cy = 196; let w = 230, h = 300;
   s += `<defs><radialGradient id="${id}c" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#FF8A70" stop-opacity=".8"/><stop offset="1" stop-color="#FF3B2E" stop-opacity="0"/></radialGradient></defs>`;
   const N = 34;
@@ -214,16 +183,17 @@ A.t6 = function () {
     const t = i / N; const sc = Math.pow(.88, i); const ww = w * sc, hh = h * sc; const x = lerp(105, cx, t), y = lerp(150, cy - 20, t);
     s += `<rect x="${n2(x - ww / 2)}" y="${n2(y - hh / 2)}" width="${n2(ww)}" height="${n2(hh)}" fill="none" stroke="${i % 5 === 0 ? '#FFD0C4' : '#FF3B2E'}" stroke-opacity="${n2(.25 + t * .75)}" stroke-width="${n2(.9 - t * .6)}" transform="rotate(${n2(i * 3.4)} ${n2(x)} ${n2(y)})"/>`;
   }
-  s += `<circle cx="${cx}" cy="${cy - 20}" r="12" fill="url(#${id}c)"/>`;
+  
   // breath bands
   for (let k = 0; k < 4; k++) { const p = []; const by = 240 + k * 7; for (let x = 0; x <= 210; x += .6) p.push([x, by + Math.sin(x * .07 + k) * 3 * Math.sin(x * .013 + k * .5)]); s += `<path d="${P(p)}" fill="none" stroke="#FFC2B6" stroke-opacity="${n2(.28 - k * .05)}" stroke-width=".35"/>`; }
-  s += T(cx, cy - 4, 'ВЫ ЗДЕСЬ', { a: 'middle', s: 1.7, c: '#FFD8CE', w: 600, op: .85 });
+  const fx = cx, fy = cy - 13.5; s += `<circle cx="${fx}" cy="${fy - 5.6}" r=".9" fill="#1a0202"/><path d="M${fx - 1.1} ${fy - 4.6}L${fx + 1.1} ${fy - 4.6}L${fx + 1.3} ${fy - 1.2}L${fx + .7} ${fy - 1.2}L${fx + .55} ${fy + 1.8}L${fx + .1} ${fy + 1.8}L${fx} ${fy - .6}L${fx - .1} ${fy + 1.8}L${fx - .55} ${fy + 1.8}L${fx - .7} ${fy - 1.2}L${fx - 1.3} ${fy - 1.2}Z" fill="#1a0202"/>`;
+  s += T(cx, cy - 3, 'ВЫ ЗДЕСЬ', { a: 'middle', s: 1.6, c: '#FFE6DE', w: 600, op: .9 });
   return svgWrap(s);
 };
 
 /* 07 — BLOOD ON THE LEAVES: branches, leaves, brass shockwave, piano */
 A.t7 = function () {
-  const R = rnd(77); const bone = '#E8E1D6', cr = '#B3141A'; let s = `<rect width="210" height="297" fill="#070505"/>`;
+  const R = rnd(77); const bone = '#E8E1D6', cr = '#B3141A'; let s = IMG('t7-night.jpg');
   // brass shockwave from below
   for (let k = 0; k < 16; k++) { const r = 70 + k * 15 + k * k * .6; s += `<circle cx="105" cy="372" r="${n2(r)}" fill="none" stroke="${cr}" stroke-opacity="${n2(Math.max(.05, .75 - k * .05))}" stroke-width="${n2(Math.max(.2, 2.6 - k * .17))}"/>`; }
   // branches
@@ -252,8 +222,8 @@ A.t7 = function () {
 /* 08 — GUILT TRIP: Leo dissolving, mist, road */
 A.t8 = function () {
   const R = rnd(88); const pale = '#8FB0EA', fg = '#DCE3F0'; const id = uid('t8');
-  let s = IMG('t8-mist.jpg');
-  s += `<defs><radialGradient id="${id}st" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#cfe0ff" stop-opacity=".6"/><stop offset="1" stop-color="#8FB0EA" stop-opacity="0"/></radialGradient></defs>`;
+  let s = IMG('t8-road.jpg');
+  s += `<defs><radialGradient id="${id}tl" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff3030" stop-opacity=".9"/><stop offset="1" stop-color="#ff3030" stop-opacity="0"/></radialGradient><radialGradient id="${id}st" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#cfe0ff" stop-opacity=".6"/><stop offset="1" stop-color="#8FB0EA" stop-opacity="0"/></radialGradient></defs>`;
   for (let k = 0; k < 420; k++) { const y = Math.pow(R(), 1.4) * 230; s += `<circle cx="${n2(R.r(0, 210))}" cy="${n2(y)}" r="${n2(R.r(.08, .38))}" fill="#fff" fill-opacity="${n2(R.r(.15, .85) * (1 - y / 260))}"/>`; }
   // Leo
   const ox = 36, oy = 46, sc = 1.22;
@@ -267,8 +237,9 @@ A.t8 = function () {
   const lab = (k, txt, dx2, dy2) => { const [x, y] = p(k); return T(x + dx2, y + dy2, txt, { s: 1.8, c: pale, w: 600 }); };
   s += lab('reg', 'LEOS', -4, 9) + lab('zos', 'TRIOS', 3, -4) + lab('den', 'RIO', 4, -3) + T(ox, oy - 6, 'LEO · СОЗВЕЗДИЕ, КОТОРОЕ НЕ СКЛАДЫВАЕТСЯ', { s: 1.7, c: fg, op: .55 });
   // road
-  const hz = 236; s += `<rect y="${hz}" width="210" height="${297 - hz}" fill="#050810" fill-opacity=".72"/>`;
-  s += `<path d="M104 ${hz}L106 ${hz}L176 297L34 297Z" fill="#0b1222"/>`;
+  const hz = 236; s += `<rect y="${hz}" width="210" height="${297 - hz}" fill="#050810" fill-opacity=".45"/>`;
+  s += `<path d="M104 ${hz}L106 ${hz}L176 297L34 297Z" fill="#0b1222" fill-opacity=".75"/>`;
+  [104.2, 105.8].forEach(x => s += `<circle cx="${x}" cy="243" r="2.4" fill="url(#${id}tl)"/><circle cx="${x}" cy="243" r=".32" fill="#ff5a4a"/>`);
   for (let k = 0; k < 9; k++) { const t0 = Math.pow(k / 9, 1.8), t1 = Math.pow((k + .45) / 9, 1.8); const y0 = lerp(hz, 297, t0), y1 = lerp(hz, 297, t1); const w0 = lerp(.2, 1.6, t0), w1 = lerp(.2, 1.6, t1); s += `<path d="M${n2(105 - w0 / 2)} ${n2(y0)}L${n2(105 + w0 / 2)} ${n2(y0)}L${n2(105 + w1 / 2)} ${n2(y1)}L${n2(105 - w1 / 2)} ${n2(y1)}Z" fill="${fg}" fill-opacity=".6"/>`; }
   s += `<line x1="0" x2="210" y1="${hz}" y2="${hz}" stroke="${pale}" stroke-opacity=".35" stroke-width=".2"/>`;
   return svgWrap(s);
@@ -276,7 +247,7 @@ A.t8 = function () {
 
 /* 09 — SEND IT UP: siren, crowd, velvet rope, memories */
 A.t9 = function () {
-  const R = rnd(99); const id = uid('t9'); let s = `<rect width="210" height="297" fill="#090909"/>`;
+  const R = rnd(99); const id = uid('t9'); let s = IMG('t9-haze.jpg');
   const bx = 105, by = 50;
   s += `<defs>
     <linearGradient id="${id}r1" gradientUnits="userSpaceOnUse" x1="${bx}" y1="${by}" x2="${bx - 200}" y2="${by + 70}"><stop offset="0" stop-color="#FF2A1F" stop-opacity=".7"/><stop offset="1" stop-color="#FF2A1F" stop-opacity="0"/></linearGradient>
@@ -286,15 +257,13 @@ A.t9 = function () {
     <linearGradient id="${id}post" x1="0" x2="1"><stop offset="0" stop-color="#5a5650"/><stop offset=".4" stop-color="#E9E3D6"/><stop offset=".7" stop-color="#8a857c"/><stop offset="1" stop-color="#3a3733"/></linearGradient>
     <linearGradient id="${id}rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2453c"/><stop offset=".5" stop-color="#9b0f14"/><stop offset="1" stop-color="#4a0508"/></linearGradient></defs>`;
   for (let k = 1; k < 16; k++) s += `<circle cx="${bx}" cy="${by}" r="${n2(k * 12 + k * k * .4)}" fill="none" stroke="#FF2A1F" stroke-opacity="${n2(Math.max(.04, .5 - k * .03))}" stroke-width="${k % 3 === 0 ? .5 : .2}"/>`;
-  s += `<path d="M${bx} ${by}L${bx - 230} ${by + 20}L${bx - 200} ${by + 120}Z" fill="url(#${id}r1)"/>`;
-  s += `<path d="M${bx} ${by}L${bx + 230} ${by - 70}L${bx + 220} ${by + 10}Z" fill="url(#${id}r2)"/>`;
-  s += `<circle cx="${bx}" cy="${by}" r="40" fill="url(#${id}glow)"/>`;
+
   s += `<rect x="${bx - 11}" y="${by + 6}" width="22" height="5" rx="1" fill="#1d1d1d" stroke="#444" stroke-width=".25"/>`;
   s += `<path d="M${bx - 9} ${by + 6}V${by - 2}A9 9 0 0 1 ${bx + 9} ${by - 2}V${by + 6}Z" fill="url(#${id}dome)"/>`;
   for (let k = 0; k < 5; k++) s += `<line x1="${bx - 9}" x2="${bx + 9}" y1="${by - 1 + k * 1.6}" y2="${by - 1 + k * 1.6}" stroke="#fff" stroke-opacity=".18" stroke-width=".2"/>`;
   // crowd
-  for (let row = 0; row < 7; row++) { const y = 196 + row * 6.5; const sz = 1.6 + row * .45; for (let x = R.r(-4, 2); x < 214; x += sz * 2.2 + R.r(0, 1.4)) { const yy = y + R.r(-1.2, 1.2); s += `<circle cx="${n2(x)}" cy="${n2(yy)}" r="${n2(sz)}" fill="${row < 2 ? '#1b1010' : '#120c0c'}"/><path d="M${n2(x - sz * 1.9)} ${n2(yy + sz * 3.6)}Q${n2(x)} ${n2(yy + sz * .7)} ${n2(x + sz * 1.9)} ${n2(yy + sz * 3.6)}Z" fill="${row < 2 ? '#1b1010' : '#120c0c'}"/>`; if (R() < .25) s += `<path d="M${n2(x - sz * .9)} ${n2(yy - sz * .6)}A${n2(sz)} ${n2(sz)} 0 0 1 ${n2(x + sz * .2)} ${n2(yy - sz)}" fill="none" stroke="#FF2A1F" stroke-opacity=".7" stroke-width=".3"/>`; } }
-  s += `<rect x="0" y="236" width="210" height="61" fill="#090909"/>`;
+  for (let row = 0; row < 7; row++) { const y = 196 + row * 6.5; const sz = 1.6 + row * .45; for (let x = R.r(-4, 2); x < 214; x += sz * 2.2 + R.r(0, 1.4)) { const yy = y + R.r(-1.2, 1.2); s += `<circle cx="${n2(x)}" cy="${n2(yy)}" r="${n2(sz)}" fill="${row < 2 ? '#1a0b0b' : '#0b0606'}"/><path d="M${n2(x - sz * 1.9)} ${n2(yy + sz * 3.6)}Q${n2(x)} ${n2(yy + sz * .7)} ${n2(x + sz * 1.9)} ${n2(yy + sz * 3.6)}Z" fill="${row < 2 ? '#1a0b0b' : '#0b0606'}"/>`; if (R() < .25) s += `<path d="M${n2(x - sz * .9)} ${n2(yy - sz * .6)}A${n2(sz)} ${n2(sz)} 0 0 1 ${n2(x + sz * .2)} ${n2(yy - sz)}" fill="none" stroke="#FF2A1F" stroke-opacity=".7" stroke-width=".3"/>`; } }
+  s += `<defs><linearGradient id="${id}fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090909" stop-opacity=".6"/><stop offset=".25" stop-color="#090909" stop-opacity=".95"/><stop offset="1" stop-color="#090909"/></linearGradient></defs><rect x="0" y="236" width="210" height="61" fill="url(#${id}fl)"/>`;
   // memories echo
   for (let k = 0; k < 6; k++) s += T(105, 250 + k * 6.6, 'M E M O R I E S', { a: 'middle', s: 4.6 - k * .2, c: '#FF2A1F', op: n2(.55 - k * .085), w: 600, ls: 1.4 });
   // stanchions + rope
@@ -307,42 +276,25 @@ A.t9 = function () {
 };
 
 /* 10 — BOUND 2: arched window, sunset, cross of light on the floor */
+A.horse = function (x, y, sc, flip, col) {
+  const d = 'M9 7C14 5 24 5 28 7L33 1L35 0L35.5 1.5C38 2.5 40 4 40.5 6L38.5 7C36 6 34 6 31 9.5C31 11 30 13 29 13.5L34 17L37 19.5L36 20.5L32.5 18L28 15.5L26 18L25 21.5L24 21.5L24.5 17.5L25 14.5C20 15 15 15 12 14L13 17L15 21L14 21.5L11 17.5L9.5 15.5L5 18L1.5 19.5L1 18.5L4.5 16.5L7 13C5 12 3 13 0 15C2 11 5 9 9 7Z';
+  return `<path d="${d}" fill="${col}" transform="translate(${x} ${y}) scale(${flip ? -sc : sc} ${sc}) translate(${flip ? -40 : 0} 0)"/>`;
+};
 A.t10 = function () {
   const R = rnd(1010); const id = uid('t10'); const warm = '#2A1A12';
-  let s = `<rect width="210" height="297" fill="#F3E8D8"/>`;
+  let s = IMG('t10-room.jpg');
   const x0 = 46, x1 = 164, ytop = 32, ybot = 196; const rA = (x1 - x0) / 2, cxw = (x0 + x1) / 2, ya = ytop + rA;
   const win = (inset) => `M${x0 + inset} ${ybot - inset}V${ya}A${rA - inset} ${rA - inset} 0 0 1 ${x1 - inset} ${ya}V${ybot - inset}Z`;
-  s += `<defs><clipPath id="${id}w"><path d="${win(5)}"/></clipPath>
-    <linearGradient id="${id}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F9D9B2"/><stop offset=".35" stop-color="#F6A877"/><stop offset=".62" stop-color="#EE7448"/><stop offset=".8" stop-color="#D2552C"/><stop offset="1" stop-color="#9B3B26"/></linearGradient>
-    <radialGradient id="${id}sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF3D6"/><stop offset=".45" stop-color="#FFD597"/><stop offset="1" stop-color="#F7A060" stop-opacity="0"/></radialGradient>
-    <linearGradient id="${id}floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE6C2" stop-opacity=".95"/><stop offset="1" stop-color="#FFD9A8" stop-opacity=".25"/></linearGradient></defs>`;
-  // wall shading
-  s += `<rect width="210" height="297" fill="#EBDDC8" fill-opacity=".5"/>`;
-  // light patch on floor (skewed window)
-  const fy0 = 214; const sk = (x, y) => [x + (y - fy0) * .9 + 18, y];
-  const patch = []; for (let a = 180; a <= 360; a += 6) { const xx = cxw + Math.cos(deg(a)) * (rA - 5), yy = fy0 + (Math.sin(deg(a)) + 1) * 14; patch.push(sk(xx, yy)); }
-  patch.push(sk(x1 - 5, 286), sk(x0 + 5, 286));
-  s += `<path d="${PC(patch)}" fill="url(#${id}floor)"/>`;
-  s += `<path d="${PC([sk(cxw - 1.5, fy0), sk(cxw + 1.5, fy0), sk(cxw + 1.5, 286), sk(cxw - 1.5, 286)])}" fill="#EBDDC8"/>`;
-  s += `<path d="${PC([sk(x0 + 5, 248), sk(x1 - 5, 248), sk(x1 - 5, 251), sk(x0 + 5, 251)])}" fill="#EBDDC8"/>`;
-  s += `<line x1="0" x2="210" y1="206" y2="206" stroke="${warm}" stroke-opacity=".18" stroke-width=".3"/>`;
-  // view
-  s += `<g clip-path="url(#${id}w)"><rect x="${x0}" y="${ytop}" width="${x1 - x0}" height="${ybot - ytop}" fill="url(#${id}sky)"/>`;
-  for (let k = 0; k < 7; k++) { const y = 70 + k * 9 + R.r(-3, 3); const x = R.r(x0 - 10, x1 - 40); s += `<rect x="${n2(x)}" y="${n2(y)}" width="${n2(R.r(30, 70))}" height="${n2(R.r(.8, 2.2))}" rx="1" fill="#FFE9D2" fill-opacity="${n2(R.r(.3, .6))}"/>`; }
-  s += `<circle cx="120" cy="160" r="30" fill="url(#${id}sun)"/><circle cx="120" cy="160" r="11" fill="#FFF0D0"/>`;
-  // mesas
-  const mesa = (pts, fill) => `<path d="${PC(pts)}" fill="${fill}"/>`;
-  s += mesa([[x0, 170], [60, 170], [64, 150], [70, 148], [84, 148], [88, 152], [92, 170], [124, 170], [128, 158], [131, 156], [138, 156], [141, 162], [146, 170], [x1, 170], [x1, 200], [x0, 200]], '#B25B40');
-  s += mesa([[x0, 178], [74, 178], [78, 160], [80, 132], [86, 130], [92, 131], [96, 158], [100, 178], [140, 178], [143, 166], [150, 164], [154, 178], [x1, 178], [x1, 200], [x0, 200]], '#7A3022');
-  s += mesa([[x0, 186], [x1, 183], [x1, 200], [x0, 200]], '#4B1C14');
-  s += `</g>`;
-  // frame + mullions (cross)
+  s += `<defs><clipPath id="${id}w"><path d="${win(5)}"/></clipPath><filter id="${id}sh" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>`;
+  // phony horses moving in contrasting directions
+  s += `<g clip-path="url(#${id}w)">${A.horse(60, 180.5, .26, false, '#3a160f')}${A.horse(70, 182, .2, false, '#3a160f')}${A.horse(128, 181, .24, true, '#3a160f')}${A.horse(141, 183.5, .18, false, '#3a160f')}</g>`;
+  s += `<path d="${win(0)}" transform="translate(3 4)" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="10" filter="url(#${id}sh)"/>`;
   s += `<path d="${win(0)}" fill="none" stroke="#FBF5EC" stroke-width="10"/>`;
   s += `<path d="${win(-5)}" fill="none" stroke="${warm}" stroke-opacity=".25" stroke-width=".3"/><path d="${win(5)}" fill="none" stroke="${warm}" stroke-opacity=".35" stroke-width=".3"/>`;
   s += `<rect x="${cxw - 1.6}" y="${ytop + 4}" width="3.2" height="${ybot - ytop - 8}" fill="#FBF5EC"/><rect x="${x0 + 4}" y="128" width="${x1 - x0 - 8}" height="3.2" fill="#FBF5EC"/>`;
   s += `<rect x="${x0 - 9}" y="${ybot}" width="${x1 - x0 + 18}" height="5" fill="#FBF5EC" stroke="${warm}" stroke-opacity=".2" stroke-width=".25"/>`;
-  // a single drop on the glass
-  s += `<path d="M138 104q1.6 3.4 0 5.2q-1.6 -1.8 0 -5.2z" fill="#fff" fill-opacity=".85"/><line x1="138" y1="110" x2="138.2" y2="121" stroke="#fff" stroke-opacity=".45" stroke-width=".3"/>`;
+  s += `<path d="M138 104q1.6 3.4 0 5.2q-1.6 -1.8 0 -5.2z" fill="#fff" fill-opacity=".9"/><line x1="138" y1="110" x2="138.2" y2="121" stroke="#fff" stroke-opacity=".5" stroke-width=".3"/>`;
   s += T(cxw, ybot + 12, 'JESUS WEPT · ИН. 11:35', { a: 'middle', s: 1.9, c: warm, op: .6, w: 600 });
+  s += T(x1 + 4, 60, '«AS PHONY', { s: 1.7, c: warm, op: .55, w: 600 }) + T(x1 + 4, 63.2, 'AS POSSIBLE»', { s: 1.7, c: warm, op: .55, w: 600 });
   return svgWrap(s);
 };

@@ -13,7 +13,7 @@
 .tl .seg span { position: absolute; left: 1mm; top: 5.8mm; font-size: 5.4pt; color: var(--mute); letter-spacing: .05em; }
 .tl-a, .tl-b { position: absolute; top: -4mm; font-size: 5.4pt; color: var(--mute); }
 .tl-a { left: 0; } .tl-b { right: 0; }
-.contents sup.fnx { font: 600 5.6pt var(--mono); color: var(--acc); position: relative; top: -.8em; }
+.page sup.fnx { font: 600 5.6pt var(--mono); color: var(--acc); position: relative; top: -.8em; }
 
 /* sticker */
 .sticker { background: #fbfbf9; padding: 2.6mm 3mm 2.8mm; box-shadow: 0 .3mm .9mm rgba(0,0,0,.18), 0 0 0 .15mm rgba(0,0,0,.06); }
@@ -31,3 +31,6 @@
 
 .trk .metaGrid { font-size: 6pt; }
 .op-ink .metaGrid span { color: #1a1816; }
+
+.tl-c { position: absolute; left: 0; right: 0; top: 10.6mm; height: 3mm; }
+.tl-c span { position: absolute; font: 5.2pt var(--mono); color: var(--mute); letter-spacing: .04em; }
