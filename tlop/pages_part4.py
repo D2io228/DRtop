@@ -19,33 +19,41 @@ def part4():
     def X(y):
         return X0 + (y - y0) / (y1 - y0) * W
 
-    rh = 6.3
-    H = len(rows) * rh + 22
+    rh = 8.4
+    H = len(rows) * rh + 18
     s = [f'<svg width="210mm" height="{H:.0f}mm" viewBox="0 0 210 {H:.0f}">']
     for yy in range(1970, 2021, 10):
-        s.append(f'<line x1="{X(yy):.1f}" y1="6" x2="{X(yy):.1f}" y2="{H - 12:.1f}" stroke="#15110e" stroke-width=".15" opacity=".45"/>')
-        s.append(f'<text x="{X(yy):.1f}" y="{H - 7:.1f}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.9">{yy}</text>')
+        s.append(f'<line x1="{X(yy):.1f}" y1="6" x2="{X(yy):.1f}" y2="{H - 10:.1f}" stroke="#15110e" stroke-width=".15" opacity=".45"/>')
+        s.append(f'<text x="{X(yy):.1f}" y="{H - 5:.1f}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.9">{yy}</text>')
     xt = X(2016)
-    s.append(f'<rect x="{xt - .5:.1f}" y="2" width="1" height="{H - 14:.1f}" fill="#15110e"/>')
+    s.append(f'<rect x="{xt - .5:.1f}" y="2" width="1" height="{H - 12:.1f}" fill="#15110e"/>')
     s.append(f'<text x="{xt + 1.5:.1f}" y="5" font-family="Arimo" font-weight="700" font-size="3" letter-spacing=".5">TLOP · 2016</text>')
+    slots = [-1.5, 4.2, -4.3, 7.0]   # label baselines relative to the row line
     for i, tr in enumerate(rows):
-        y = 10 + i * rh
+        y = 11 + i * rh
         s.append(f'<text x="0" y="{y + 1.1:.1f}" font-family="Arimo" font-weight="700" font-size="2.7">{tr["n"]:02d} {esc(tr["t"].replace(" (Charlie Heat Version)", "").replace("Father Stretch My Hands ", ""))}</text>')
         s.append(f'<line x1="{X0}" y1="{y}" x2="{xt:.1f}" y2="{y}" stroke="#15110e" stroke-width=".12" opacity=".35"/>')
-        used = []
-        for a, t, yr in tr["samples"]:
-            if not yr:
-                continue
-            x = X(yr)
-            k = sum(1 for u in used if abs(u - x) < 9)
-            used.append(x)
+        placed = []  # (slot, x0, x1)
+        items = sorted([(X(yr), a, yr) for a, t, yr in tr["samples"] if yr], key=lambda v: v[0])
+        for x, a, yr in items:
             if a.startswith("Father"):
                 s.append(f'<line x1="{x:.1f}" y1="{y}" x2="{X(2011):.1f}" y2="{y}" stroke="#15110e" stroke-width=".6" stroke-dasharray="1 .8"/>')
                 s.append(f'<circle cx="{X(2011):.1f}" cy="{y}" r="1.1" fill="#f28a55" stroke="#15110e" stroke-width=".4"/>')
-                s.append(f'<text x="{X(2011) + 1.6:.1f}" y="{y - 1.3:.1f}" font-family="EB Garamond" font-style="italic" font-size="2.6">издано лишь в 2011</text>')
+                s.append(f'<text x="{X(2011) - 1.6:.1f}" y="{y + 4.2:.1f}" text-anchor="end" font-family="EB Garamond" font-style="italic" font-size="2.6">издано лишь в 2011</text>')
+                placed.append((1, X(2011) - 26, X(2011)))
             s.append(f'<circle cx="{x:.1f}" cy="{y}" r="1.45" fill="#15110e"/>')
-            lab = f'{a} · {yr}'
-            s.append(f'<text x="{x + 2:.1f}" y="{y - 1.4 - k * 2.6:.1f}" font-family="EB Garamond" font-style="italic" font-size="2.75">{esc(lab)}</text>')
+            lab = f"{a} · {yr}"
+            w = len(lab) * 1.12
+            lx0, lx1 = x + 1.8, x + 1.8 + w
+            anchor = "start"
+            if lx1 > xt - 1:
+                lx0, lx1, anchor = x - 1.8 - w, x - 1.8, "end"
+            for si, off in enumerate(slots):
+                if all(not (si == ps and lx0 < p1 + 1 and lx1 > p0 - 1) for ps, p0, p1 in placed):
+                    break
+            placed.append((si, lx0, lx1))
+            tx = x + 1.8 if anchor == "start" else x - 1.8
+            s.append(f'<text x="{tx:.1f}" y="{y + slots[si]:.1f}" text-anchor="{anchor}" font-family="EB Garamond" font-style="italic" font-size="2.62">{esc(lab)}</text>')
     s.append("</svg>")
     lst = "".join(
         f'<div class="it"><span>{n:02d}</span><b>{esc(T[n]["t"].replace(" Intermission", ""))}</b><em>{fmt_dur(T[n]["sec"])}</em></div>'
@@ -56,21 +64,21 @@ def part4():
 #part4 .num{position:absolute;left:16mm;top:20mm;font:900 110pt/1 'Playfair';letter-spacing:-.02em}
 #part4 h2{position:absolute;left:96mm;top:26mm;margin:0;font:italic 300 40pt/1 'Cormorant Garamond'}
 #part4 .lead{position:absolute;left:97mm;top:62mm;width:132mm;font:italic 400 12pt/1.3 'EB Garamond'}
-#part4 .ck{position:absolute;left:20mm;top:84mm;font:700 6pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase}
-#part4 .chart{position:absolute;left:20mm;top:89mm}
-#part4 .list{position:absolute;left:20mm;top:197mm;width:110mm}
-#part4 .it{display:flex;gap:3mm;align-items:baseline;border-top:.3mm solid #15110e;padding:1.2mm 0;font:400 7.6pt/1.2 'Arimo'}
+#part4 .ck{position:absolute;left:20mm;top:80mm;font:700 6pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase}
+#part4 .chart{position:absolute;left:20mm;top:84mm}
+#part4 .list{position:absolute;left:20mm;top:207mm;width:110mm}
+#part4 .it{display:flex;gap:3mm;align-items:baseline;border-top:.3mm solid #15110e;padding:.9mm 0;font:400 7.4pt/1.2 'Arimo'}
 #part4 .it span{font-weight:700;width:6mm}
 #part4 .it b{flex:1;font-weight:700}
 #part4 .it em{font-style:normal}
-#part4 .epi{position:absolute;left:142mm;top:198mm;width:88mm;font-size:11.4pt;line-height:1.24}
+#part4 .epi{position:absolute;left:142mm;top:208mm;width:88mm;font-size:11.4pt;line-height:1.24}
 """
     body = (
         '<div class="k kicker">Часть четвёртая</div>'
         + '<div class="num">IV</div>'
         + '<h2>Запись ещё идёт</h2>'
         + '<div class="lead">' + typo("Альбом как архив разных времён, собранных в одном настоящем: от записи Нины Симон 1968 года до «Panda» 2015-го — почти полвека под одной обложкой.", False) + '</div>'
-        + '<div class="ck">Архив времён · год первой записи каждого семпла и интерполяции · по титрам</div>'
+        + '<div class="ck">Архив времён · год первой записи каждого сэмпла и интерполяции · по титрам</div>'
         + f'<div class="chart">{"".join(s)}</div>'
         + f'<div class="list">{lst}</div>'
         + '<div class="epi">' + typo("«Говорю так не потому, чтобы я уже достиг, или усовершился; но стремлюсь…»", False)
@@ -105,7 +113,7 @@ def t15():
 #t15{background:linear-gradient(160deg,#5e656b 0%,#cfd5da 32%,#f2f4f6 48%,#9aa2a9 68%,#e6e9ec 84%,#6f777e 100%);color:#15191c}
 #t15 .k{position:absolute;left:20mm;top:18mm}
 #t15 h1{position:absolute;left:16mm;top:24mm;margin:0;font:400 33pt/1.02 'Rubik Broken Fax';letter-spacing:-.01em;width:220mm}
-#t15 .cnt{position:absolute;left:20mm;top:58mm;font:700 6.4pt/1.4 'Arimo';letter-spacing:.2em;text-transform:uppercase}
+#t15 .cnt{position:absolute;left:20mm;top:58mm;font:700 6.4pt/1.4 'Arimo';letter-spacing:.14em}
 #t15 .lcd{position:absolute;left:160mm;top:70mm;width:70mm;height:40mm;background:#b9c99a;border:1.6mm solid #2b2f33;border-radius:2mm;box-shadow:inset 0 0 6mm rgba(0,0,0,.25);padding:3mm;font:400 11pt/1.25 'Tiny5';color:#26321b}
 #t15 .lcd b{display:block;font-size:16pt;margin:1mm 0}
 #t15 .chart{position:absolute;left:20mm;top:120mm}
@@ -120,7 +128,7 @@ def t15():
     body = (
         '<div class="k kicker">15 / 20 · Часть IV · интерлюдия</div>'
         + '<h1>Siiiiiiiiilver Surffffeeeeer Intermission</h1>'
-        + '<div class="cnt">в названии: 9 × i · 4 × f · 5 × e — звук, растянутый буквами</div>'
+        + '<div class="cnt">В НАЗВАНИИ: 9 × i · 4 × f · 5 × e — ЗВУК, РАСТЯНУТЫЙ БУКВАМИ</div>'
         + f'<div class="meta">{track_meta(tr, color="#15191c", dim="rgba(0,0,0,.15)")}</div>'
         + '<div class="lcd">ВХОДЯЩИЙ ВЫЗОВ<b>MAX B</b>0:56 · ГРОМКАЯ СВЯЗЬ</div>'
         + f'<div class="chart">{"".join(s)}</div>'
@@ -143,7 +151,7 @@ def t16():
     for (x, y), lab in zip(pts, stops):
         last = lab == "звонок"
         s.append(f'<circle cx="{x}" cy="{y}" r="{2.2 if last else 1.5}" fill="{"#f2a541" if not last else "#fff"}" stroke="#2a2826" stroke-width=".5"/>')
-        s.append(f'<text x="{x}" y="{y + (7 if y < 18 else -4)}" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="3.2" fill="#f4efe6">{lab}</text>')
+        s.append(f'<text x="{x}" y="{y + (7 if y < 18 else -4)}" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="3.2" fill="#f4efe6" stroke="#2a2826" stroke-width="1.2" paint-order="stroke">{lab}</text>')
     s.append("</svg>")
     css = """
 #t16{background:#2a2826;color:#f4efe6}
@@ -244,9 +252,10 @@ def t17b():
         f'<b>{y}</b><span>{esc(a)}</span><i>{esc(t)}</i></div>' for a, t, y, c in crate)
     css = """
 #t17b{background:#111;color:#f4efe6}
-#t17b .shirt{position:absolute;left:20mm;top:18mm;width:120mm;height:94mm;background:#1b1b1b;border-radius:2mm;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#t17b .shirt .g{font:400 30pt/1.05 'UnifrakturCook';text-align:center;color:#f4efe6}
-#t17b .shirt .cap{margin-top:5mm;font:700 5.6pt/1.4 'Arimo';letter-spacing:.2em;text-transform:uppercase;color:#a99e90;text-align:center}
+#t17b .shirt{position:absolute;left:20mm;top:16mm;width:120mm;height:98mm}
+#t17b .shirt svg{position:absolute;left:0;top:0}
+#t17b .shirt .g{position:absolute;left:0;right:0;top:30mm;font:900 27pt/1.02 'Grenze Gotisch';text-align:center;color:#f4efe6;letter-spacing:.01em}
+#t17b .shirt .cap{position:absolute;left:30mm;right:30mm;top:66mm;font:700 5.2pt/1.45 'Arimo';letter-spacing:.18em;text-transform:uppercase;color:#a99e90;text-align:center}
 #t17b .words{position:absolute;left:148mm;top:18mm;width:82mm}
 #t17b .words .t{font:700 5.8pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase;color:#f2a65a;margin-bottom:2mm}
 #t17b .words .w{display:flex;align-items:flex-end;gap:2mm;margin-bottom:2.4mm}
@@ -259,7 +268,7 @@ def t17b():
 #t17b .rec b{font:700 9pt/1 'Unbounded';margin:1.2mm 0 .6mm;color:#f2a65a}
 #t17b .rec i{font-family:'EB Garamond';font-size:8pt;color:#cfc6b8}
 #t17b .txt{position:absolute;left:20mm;top:122mm;width:120mm;height:108mm;font-size:10.7pt;color:#efe8dc}
-#t17b .side{position:absolute;left:148mm;top:150mm;width:82mm;font:italic 400 10.6pt/1.35 'EB Garamond';color:#efe8dc;border-top:.3mm solid #f2a65a;padding-top:2.4mm}
+#t17b .side{position:absolute;left:148mm;top:168mm;width:82mm;font:italic 400 10.6pt/1.35 'EB Garamond';color:#efe8dc;border-top:.3mm solid #f2a65a;padding-top:2.4mm}
 """
     k_words, y_words = 370, 618
     wmax = 60
@@ -275,7 +284,7 @@ def t17b():
         "Музыкальная цельность песни показательна. TLOP умеет развивать продолжительную композицию, когда выбирает такой режим. Его разорванность в других местах нельзя целиком списать на отсутствие мастерства — хотя из этого не следует, что любой разрыв удачен.",
     )
     body = (
-        '<div class="shirt"><div class="g">I feel like Pablo</div><div class="cap">' + typo("строка из этой песни стала слоганом мерча 2016 года — в готике Кали Торнхилла ДеВитта", False) + '</div></div>'
+        '<div class="shirt"><svg width="120mm" height="98mm" viewBox="0 0 120 98"><path d="M38 4 C 46 10, 74 10, 82 4 L 112 18 L 104 40 L 92 35 L 92 96 L 28 96 L 28 35 L 16 40 L 8 18 Z" fill="#232323" stroke="#3a3a3a" stroke-width=".6"/><path d="M38 4 C 46 14, 74 14, 82 4" fill="none" stroke="#3a3a3a" stroke-width="1"/></svg><div class="g">I feel like<br>Pablo</div><div class="cap">' + typo("строка из этой песни стала слоганом мерча 2016 года — в готике Кали Торнхилла ДеВитта", False) + '</div></div>'
         + f'<div class="words">{words}</div>'
         + f'<div class="crate">{recs}</div>'
         + f'<div class="txt prose" style="--fn:#f2a65a">{text}</div>'
@@ -360,7 +369,7 @@ def t19():
             g.append(f'<rect x="{x:.1f}" y="{y}" width="5" height="6.4" rx=".8" fill="{col}" stroke="#ff2e88" stroke-width=".35" opacity="{1 if on else .45}"/>')
     g.append("</svg>")
     # pulse constant vs certainty fading
-    c = ['<svg width="96mm" height="40mm" viewBox="0 0 96 40">']
+    c = ['<svg width="84mm" height="40mm" viewBox="0 0 96 40">']
     c.append('<polyline points="0,10 96,10" stroke="#2ef2ff" stroke-width="1.2"/>')
     pts = " ".join(f"{x},{10 + (x / 96) ** 1.6 * 24:.1f}" for x in range(0, 97, 4))
     c.append(f'<polyline points="{pts}" fill="none" stroke="#ff2e88" stroke-width="1.2" stroke-dasharray="2 1"/>')
@@ -377,8 +386,8 @@ def t19():
 #t19 .fade span{display:block}
 #t19 .seq{position:absolute;left:20mm;top:74mm}
 #t19 .sl{position:absolute;left:20mm;top:116mm;font:700 5.6pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase;color:#2ef2ff}
-#t19 .pc{position:absolute;left:134mm;top:74mm}
-#t19 .mark{position:absolute;left:134mm;top:116mm;font:700 5.2pt/1 'Arimo';letter-spacing:.14em;text-transform:uppercase;border:.3mm solid #ff2e88;color:#ff2e88;padding:.7mm 1.3mm}
+#t19 .pc{position:absolute;left:146mm;top:74mm}
+#t19 .mark{position:absolute;left:146mm;top:116mm;font:700 5.2pt/1 'Arimo';letter-spacing:.14em;text-transform:uppercase;border:.3mm solid #ff2e88;color:#ff2e88;padding:.7mm 1.3mm}
 #t19 .meta{position:absolute;left:178mm;top:126mm;width:52mm}
 #t19 .txt{position:absolute;left:20mm;top:126mm;width:150mm;height:104mm;font-size:10.6pt;color:#f3e6fb}
 #t19 .vma{position:absolute;left:178mm;top:196mm;width:52mm;font:400 7pt/1.42 'Arimo';color:#d9c6ea;border-top:.3mm solid #2ef2ff;padding-top:2mm}
@@ -480,8 +489,8 @@ def t20b():
         x, y = cx + r * math.cos(a), cy + r * math.sin(a) * .92
         g.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{cx + 7 * math.cos(a):.1f}" y2="{cy + 7 * math.sin(a):.1f}" stroke="#ff7a3c" stroke-width=".15" opacity=".55"/>')
         g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rnd.uniform(.5, 1.1):.2f}" fill="#fff1e8" opacity=".8"/>')
-    g.append(f'<circle cx="{cx}" cy="{cy}" r="7" fill="#ff7a3c"/>')
-    g.append(f'<text x="{cx}" y="{cy + 1}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.6" fill="#0a0505">САМООЦЕНКА</text>')
+    g.append(f'<circle cx="{cx}" cy="{cy}" r="10" fill="#ff7a3c"/>')
+    g.append(f'<text x="{cx}" y="{cy + .9}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.3" fill="#0a0505">САМООЦЕНКА</text>')
     g.append("</svg>")
     css = """
 #t20b{background:#0a0505;color:#fff1e8}

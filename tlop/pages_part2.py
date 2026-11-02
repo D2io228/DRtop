@@ -16,7 +16,7 @@ def part2():
         for n in range(6, 11))
     css = """
 #part2{background:#fbfaf6;color:#15110e}
-#part2 .dim{position:absolute;left:0;top:0;width:125mm;height:250mm;background:radial-gradient(circle at 62mm 150mm,#3b3350 0,#1a1d38 38%,#0d1024 75%)}
+#part2 .dim{position:absolute;left:0;top:0;width:118mm;height:250mm;background:radial-gradient(circle at 62mm 150mm,#3b3350 0,#1a1d38 38%,#0d1024 75%)}
 #part2 .k{position:absolute;left:20mm;top:18mm;color:#e9b46a}
 #part2 .num{position:absolute;left:0;width:250mm;top:22mm;text-align:center;font:900 150pt/1 'Playfair';letter-spacing:-.02em}
 #part2 .num .l{color:#e9b46a}
@@ -47,6 +47,7 @@ def part2():
         + '<div class="epi">' + typo("«Всё мне позволительно, но не всё полезно; всё мне позволительно, но ничто не должно обладать мною».", False)
         + '<span class="src">1 Кор. 6:12</span></div>'
         + folio(right="Часть II", color="#15110e")
+        + '<style>#part2 .folio span:first-child{color:#e9b46a}</style>'
     )
     return page("part2", body, css=css)
 
@@ -148,7 +149,7 @@ def t07():
 #t07 .gopro{position:absolute;left:186mm;top:126mm;width:44mm;height:44mm;border-radius:50%;background:radial-gradient(circle at 40% 38%,#ffffff 0,#dcdad4 30%,#4a4744 72%,#161414 74%);box-shadow:inset 0 0 0 1.2mm #161414}
 #t07 .gopro span{position:absolute;left:0;right:0;top:19mm;text-align:center;font:700 5.6pt/1.3 'Arimo';letter-spacing:.2em;color:#161414}
 #t07 .txt{position:absolute;left:20mm;top:180mm;width:210mm;height:50mm;font-size:10.4pt;line-height:1.38}
-#t07 .txt.cols{column-count:3;column-gap:6mm}
+#t07 .txt.cols{column-count:3;column-gap:6mm;text-align:left}
 """
     text = P(
         "<i>Highlights</i> немедленно возвращают нас к публичному представлению жизни. Название указывает на отбор: подборка лучших моментов всегда подразумевает то, что осталось за кадром. На первый план выходят сексуальный успех, деньги, физическая привлекательность, громкие имена и умение производить впечатление.",
@@ -258,7 +259,7 @@ def t09():
 #t09 .note{position:absolute;left:20mm;top:104mm;width:56mm;font:400 6.4pt/1.45 'Arimo';opacity:.7}
 #t09 .epi{position:absolute;left:20mm;top:124mm;width:58mm;font-size:11pt;line-height:1.25}
 #t09 .txt{position:absolute;left:20mm;top:172mm;width:210mm;height:58mm;font-size:10.6pt;line-height:1.4}
-#t09 .txt.cols{column-count:3;column-gap:6mm}
+#t09 .txt.cols{column-count:3;column-gap:6mm;text-align:left}
 """
     text = P(
         "Затем <i>I Love Kanye</i> снимает почти всю звуковую декорацию. После насыщенных аранжировок голос без бита особенно заметен. Канье воспроизводит жалобы на собственные перемены — «I miss the old Kanye» — и превращает своё имя в главный материал текста.",

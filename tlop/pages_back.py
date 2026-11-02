@@ -15,32 +15,24 @@ def epi_a():
     cw = W / 20
     mid = 36
     unit = 9.6
-    s = [f'<svg width="{W}mm" height="{H + 22}mm" viewBox="0 0 {W} {H + 22}">']
+    s = [f'<svg width="{W}mm" height="{H + 26}mm" viewBox="0 0 {W} {H + 26}">']
     for v in (-3, 0, 3):
         y = mid - v * unit
         s.append(f'<line x1="0" y1="{y}" x2="{W}" y2="{y}" stroke="#15110e" stroke-width="{.35 if v == 0 else .15}" stroke-dasharray="{"" if v == 0 else "1 1"}" opacity=".6"/>')
-    s.append(f'<text x="0" y="{mid - 3 * unit - 2.5}" font-family="Arimo" font-weight="700" font-size="2.9" letter-spacing=".6">ВЛАДЕТЬ СОБОЙ</text>')
-    s.append(f'<text x="0" y="{mid + 3 * unit + 5.2}" font-family="Arimo" font-weight="700" font-size="2.9" letter-spacing=".6">НУЖДАТЬСЯ В ДРУГИХ</text>')
+    s.append(f'<text x="{W}" y="{mid - 3 * unit - 2.2}" text-anchor="end" font-family="Arimo" font-weight="700" font-size="2.9" letter-spacing=".6">↑ ВЛАДЕТЬ СОБОЙ</text>')
+    s.append(f'<text x="{W}" y="{mid + 3 * unit + 4.6}" text-anchor="end" font-family="Arimo" font-weight="700" font-size="2.9" letter-spacing=".6">↓ НУЖДАТЬСЯ В ДРУГИХ</text>')
     pts = [(i * cw + cw / 2, mid - t["self"] * unit) for i, t in enumerate(TRACKS)]
-    # smooth line
-    d = f"M{pts[0][0]:.1f},{pts[0][1]:.1f}"
-    for i in range(len(pts) - 1):
-        p0 = pts[i - 1] if i else pts[i]
-        p1, p2 = pts[i], pts[i + 1]
-        p3 = pts[i + 2] if i + 2 < len(pts) else p2
-        c1 = (p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6)
-        c2 = (p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6)
-        d += f" C{c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {p2[0]:.1f},{p2[1]:.1f}"
-    s.append(f'<path d="{d}" fill="none" stroke="#d9662c" stroke-width="1.3"/>')
+    s.append(f'<polyline points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in pts)}" fill="none" stroke="#d9662c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>')
     strong = {1: "уступает место хору", 12: "признаёт своё отсутствие", 14: "даёт Фрэнку закончить", 20: "даёт Самфе попросить"}
+    offs = {1: (3, 1.2, "start"), 12: (0, 7.4, "middle"), 14: (2, -4.4, "start"), 20: (-3, -4.4, "end")}
     for (x, y), t in zip(pts, TRACKS):
         big = t["n"] in strong
-        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{2.2 if big else 1.1}" fill="{"#15110e" if big else "#d9662c"}"/>')
-        s.append(f'<text x="{x:.1f}" y="{H + 8}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.6">{t["n"]:02d}</text>')
-        s.append(f'<text x="{x:.1f}" y="{H + 11.5}" text-anchor="middle" font-family="EB Garamond" font-style="italic" font-size="2.1" transform="rotate(0)">{esc(SHORT[t["n"]][:14])}</text>')
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{2.2 if big else 1.15}" fill="{"#15110e" if big else "#d9662c"}"/>')
+        s.append(f'<text x="{x:.1f}" y="{H + 6}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.6">{t["n"]:02d}</text>')
+        s.append(f'<text x="{x + 1:.1f}" y="{H + 9}" text-anchor="end" font-family="EB Garamond" font-style="italic" font-size="2.5" transform="rotate(-38 {x + 1:.1f} {H + 9})">{esc(SHORT[t["n"]])}</text>')
         if big:
-            off = {1: (10, 7.4, "start"), 12: (0, -5.2, "middle"), 14: (0, 7.6, "middle"), 20: (-3, -5.2, "end")}[t["n"]]
-            s.append(f'<text x="{x + off[0]:.1f}" y="{y + off[1]:.1f}" text-anchor="{off[2]}" font-family="EB Garamond" font-style="italic" font-size="3.3">{strong[t["n"]]}</text>')
+            dx, dy, anc = offs[t["n"]]
+            s.append(f'<text x="{x + dx:.1f}" y="{y + dy:.1f}" text-anchor="{anc}" font-family="EB Garamond" font-style="italic" font-size="3.3" stroke="#f4efe6" stroke-width="1" paint-order="stroke">{strong[t["n"]]}</text>')
     s.append("</svg>")
     css = """
 #epi-a .k{position:absolute;left:20mm;top:18mm}
@@ -48,7 +40,7 @@ def epi_a():
 #epi-a .mark{position:absolute;right:20mm;top:17mm;font:700 5.2pt/1 'Arimo';letter-spacing:.14em;text-transform:uppercase;border:.3mm solid #15110e;padding:.7mm 1.3mm}
 #epi-a .ck{position:absolute;left:20mm;top:50mm;font:700 6pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase}
 #epi-a .chart{position:absolute;left:20mm;top:56mm}
-#epi-a .txt{position:absolute;left:20mm;top:156mm;width:210mm;height:74mm;font-size:11pt}
+#epi-a .txt{position:absolute;left:20mm;top:160mm;width:210mm;height:70mm;font-size:11pt}
 """
     text = P(
         "Величие <i>The Life of Pablo</i> — в редкой согласованности литературной и музыкальной проблемы. Тексты всё время обещают устойчивую идентичность; форма показывает её распад и повторную сборку. Местоимения меняют направление ответственности. Просьбы становятся приказами. Воспоминание оборачивается оправданием. Самоирония даёт краткую дистанцию, после которой привычное поведение возвращается.",
@@ -104,9 +96,9 @@ def epi_b():
 #epi-b .alb{position:absolute;left:20mm;top:156mm}
 #epi-b .albk{position:absolute;left:20mm;top:150mm;font:700 5.8pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase}
 #epi-b .mot{position:absolute;left:134mm;top:24mm}
-#epi-b .motk{position:absolute;left:134mm;top:120mm;width:96mm;font:400 6.6pt/1.45 'Arimo'}
+#epi-b .motk{position:absolute;left:134mm;top:125mm;width:96mm;font:400 6.6pt/1.45 'Arimo'}
 #epi-b .motk b{color:#d9662c}
-#epi-b .four{position:absolute;left:134mm;top:140mm;width:96mm}
+#epi-b .four{position:absolute;left:134mm;top:146mm;width:96mm}
 #epi-b .four .t{font:700 5.8pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase;margin-bottom:2mm}
 #epi-b .four div.r{display:flex;gap:3mm;border-top:.3mm solid #15110e;padding:1.8mm 0;font:italic 400 10pt/1.25 'EB Garamond'}
 #epi-b .four div.r b{font:700 6.6pt/1.6 'Arimo';font-style:normal;width:22mm;flex:none}
@@ -223,7 +215,7 @@ def sources():
 """
     colophon = (
         '<h3>Колофон</h3>'
-        + "<p>" + typo("Шрифты (все — SIL Open Font License): EB Garamond, Cormorant Garamond, Arimo, Monomakh, UnifrakturCook, Playfair, Inter Tight, Sofia Sans Extra Condensed, Dela Gothic One, Bodoni Moda, Rubik Glitch, Rubik Broken Fax, Rubik Dirt, Alice, Tenor Sans, IBM Plex Mono, Overpass, Unbounded, Press Start 2P, Tiny5, Climate Crisis, Caveat.", False) + "</p>"
+        + "<p>" + typo("Шрифты (все — SIL Open Font License): EB Garamond, Cormorant Garamond, Arimo, Monomakh, UnifrakturCook, Grenze Gotisch, Playfair, Inter Tight, Sofia Sans Extra Condensed, Dela Gothic One, Bodoni Moda, Rubik Glitch, Rubik Broken Fax, Rubik Dirt, Alice, Tenor Sans, IBM Plex Mono, Overpass, Unbounded, Press Start 2P, Tiny5, Climate Crisis, Caveat.", False) + "</p>"
         + "<p>" + typo("Изображения: Рембрандт, «Автопортрет в образе апостола Павла», 1661 (Рейксмюсеум, общественное достояние); Караваджо, «Обращение Савла», 1601 (общественное достояние); Этьен Пикар по Чиро Ферри, «Святые Пётр и Павел в темнице» (The Met, CC0). Все схемы, графики и иллюстрации нарисованы для этого издания; обложка альбома и фотографии не воспроизводятся.", False) + "</p>"
         + "<p>" + typo("Строки песен приводятся короткими фрагментами для комментария. Схемы с пометкой «прочтение» — интерпретация, а не измерение.", False) + "</p>"
     )

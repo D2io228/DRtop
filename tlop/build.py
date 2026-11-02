@@ -24,7 +24,7 @@ USED_FONTS = {
     "Playfair", "Rubik Glitch", "Rubik Broken Fax", "Climate Crisis", "Overpass",
     "Ledger", "Tenor Sans", "Dela Gothic One", "Press Start 2P", "Tiny5",
     "Sofia Sans Extra Condensed", "Yeseva One", "Unbounded", "Handjet", "Oswald",
-    "Bodoni Moda", "Golos Text", "Alice", "Rubik Dirt", "Rubik Wet Paint", "Ysabeau",
+    "Bodoni Moda", "Golos Text", "Alice", "Rubik Dirt", "Rubik Wet Paint", "Ysabeau", "Grenze Gotisch",
 }
 
 

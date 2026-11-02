@@ -164,13 +164,13 @@ def track_meta(tr, color="currentColor", dim="rgba(0,0,0,.2)", extra="", feat_la
                show_samples=True, width=None):
     """Compact factual block: number, duration, credited voices, samples, Pablo index."""
     from data import TRACKS  # noqa: F401
-    rows = [f'<div class="mr"><span class="k">трек</span><b>{tr["n"]:02d}</b> / 20 · {fmt_dur(tr["sec"])}</div>']
+    rows = [f'<div class="mr"><span class="mk">трек</span><b>{tr["n"]:02d}</b> / 20 · {fmt_dur(tr["sec"])}</div>']
     if tr["feat"]:
-        rows.append(f'<div class="mr"><span class="k">{feat_label}</span>{esc(", ".join(tr["feat"]))}</div>')
+        rows.append(f'<div class="mr"><span class="mk">{feat_label}</span>{esc(", ".join(tr["feat"]))}</div>')
     if show_samples and tr["samples"]:
         sm = "; ".join(
             f'{esc(a)} — <i>{esc(t)}</i>' + (f" ({y})" if y else "") for a, t, y in tr["samples"])
-        rows.append(f'<div class="mr"><span class="k">семплы</span>{sm}</div>')
+        rows.append(f'<div class="mr"><span class="mk">сэмплы</span>{sm}</div>')
     if extra:
         rows.append(extra)
     st = f"width:{width}mm;" if width else ""

@@ -88,7 +88,7 @@ def inside():
     how = (
         '<h3>Как читать этот буклет</h3>'
         + P("Двадцать треков — двадцать комнат. У каждой свой свет, свой шрифт и своя температура: где-то госпел, где-то бухгалтерская книга, где-то телефонная трубка.",
-            "Схемы на полях бывают двух родов. Одни построены на данных — длительностях, датах, титрах, семплах. Другие — способы прочтения: они не измеряют альбом, а показывают, как его слышит этот текст. Такие схемы помечены знаком")
+            "Схемы на полях бывают двух родов. Одни построены на данных — длительностях, датах, титрах, сэмплах. Другие — способы прочтения: они не измеряют альбом, а показывают, как его слышит этот текст. Такие схемы помечены знаком")
         + '<p><span class="mark">прочтение</span></p>'
         + '<h3 style="margin-top:6mm">Индекс Пабло</h3>'
         + P("В шапке каждого трека — три шкалы от 0 до 3: чей голос в песне слышнее.")
@@ -259,8 +259,8 @@ def pro_release():
         svg.append(f'<circle cx="{xx:.1f}" cy="{cy:.1f}" r="2.45" fill="{col}"/>')
         svg.append(f'<text x="{xx:.1f}" y="{cy + 1.05:.1f}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="2.9" fill="#f4efe6">{i + 1}</text>')
     gap0, gap1 = x("2016-04-02"), x("2016-06-14")
-    svg.append(f'<path d="M{gap0 + 4:.1f} {AX + 11} L{gap1 - 4:.1f} {AX + 11}" stroke="#15110e" stroke-width=".3" stroke-dasharray="1 1"/>')
-    svg.append(f'<text x="{(gap0 + gap1) / 2:.1f}" y="{AX + 10}" text-anchor="middle" font-family="EB Garamond" font-style="italic" font-size="3.6">73 дня тишины — и новая последняя песня</text>')
+    svg.append(f'<path d="M{gap0 + 4:.1f} {AX + 14} L{gap1 - 4:.1f} {AX + 14}" stroke="#15110e" stroke-width=".3" stroke-dasharray="1 1"/>')
+    svg.append(f'<text x="{(gap0 + gap1) / 2:.1f}" y="{AX + 12.6}" text-anchor="middle" font-family="EB Garamond" font-style="italic" font-size="3.6">73 дня тишины — и новая последняя песня</text>')
     svg.append("</svg>")
     labels = [
         ("11.02", "Премьера в Madison Square Garden, показ Yeezy Season 3"),
@@ -279,7 +279,7 @@ def pro_release():
 #pro-release .k{position:absolute;left:20mm;top:18mm}
 #pro-release h2{position:absolute;left:19mm;top:23mm;width:170mm;margin:0;font:italic 300 34pt/1.02 'Cormorant Garamond';letter-spacing:-.01em}
 #pro-release .chart{position:absolute;left:20mm;top:58mm}
-#pro-release .leg{position:absolute;left:20mm;top:114mm;width:210mm;display:grid;grid-template-columns:1fr 1fr;column-gap:8mm;row-gap:1.4mm}
+#pro-release .leg{position:absolute;left:20mm;top:114mm;width:210mm;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column;column-gap:8mm;row-gap:1.4mm}
 #pro-release .ev{display:flex;gap:2.2mm;align-items:baseline;font:400 9.4pt/1.25 'EB Garamond';border-top:.25mm solid rgba(21,17,14,.35);padding-top:1.3mm}
 #pro-release .ev .no{font:700 6.4pt/1 'Arimo';width:3.6mm;height:3.6mm;border-radius:50%;background:#15110e;color:#f4efe6;display:inline-flex;align-items:center;justify-content:center;flex:none;transform:translateY(-.4mm)}
 #pro-release .ev .d{font:700 7pt/1 'Arimo';letter-spacing:.06em;width:10mm;flex:none}
@@ -287,7 +287,10 @@ def pro_release():
 #pro-release .ev.hot .d{color:#d9662c}
 #pro-release .cl{position:absolute;left:20mm;top:52mm;font:700 5.8pt/1.3 'Arimo';letter-spacing:.2em;text-transform:uppercase}
 #pro-release .src{position:absolute;right:20mm;top:52mm;font:400 5.8pt/1.3 'Arimo';opacity:.7}
-#pro-release .txt{position:absolute;left:20mm;top:150mm;width:210mm;height:76mm;font-size:12.3pt;line-height:1.44}
+#pro-release .txt{position:absolute;left:20mm;top:150mm;width:210mm;height:58mm;font-size:12pt;line-height:1.42}
+#pro-release .names{position:absolute;left:20mm;top:212mm;width:210mm;border-top:.35mm solid #15110e;padding-top:2.4mm;display:flex;align-items:baseline;gap:3mm;flex-wrap:wrap;font:italic 400 10.5pt/1.3 'EB Garamond'}
+#pro-release .names s{font:700 8pt/1 'Arimo';letter-spacing:.06em;text-decoration-thickness:.35mm}
+#pro-release .names b{font:700 8pt/1 'Arimo';letter-spacing:.06em;color:#d9662c}
 """
     text = P(
         "Но незавершённость интересна здесь прежде всего как художественная задача. Лирический герой альбома хочет раз и навсегда определить, кто он такой: великий художник, верный муж, заботливый отец, свободный человек, предприниматель, верующий. Каждое определение оказывается тесным. Следующая песня приносит обстоятельство, признание или поступок — и предыдущая версия себя идёт трещинами.",
@@ -301,6 +304,7 @@ def pro_release():
         + f'<div class="chart">{"".join(svg)}</div>'
         + f'<div class="leg">{leg}</div>'
         + f'<div class="txt prose cols">{text}</div>'
+        + '<div class="names"><span>' + typo("Имя меняют, когда меняется жизнь: Савл стал Павлом. Альбом за два с лишним года сменил четыре имени —", False) + '</span><span style="white-space:nowrap;display:flex;gap:3mm;align-items:baseline"><s>SO HELP ME GOD</s><span>→</span><s>SWISH</s><span>→</span><s>WAVES</s><span>→</span><b>THE LIFE OF PABLO</b></span></div>'
         + folio(right="Пролог")
     )
     return page("pro-release", body, cls="tex", css=css)
@@ -413,7 +417,7 @@ def pablos_a():
         ("Пикассо", "Малага · 1881 — 1973", "искусство", icon_picasso,
          "Разобрал лицо на плоскости и показал его сразу с нескольких сторон. В 1912 году вклеил в натюрморт кусок клеёнки — и чужой готовый материал стал языком живописи. Писал себя всю жизнь, от «голубого периода» до последних лет.",
          "Метод — кубизм и коллаж.",
-         "коллаж семплов, лицо из плоскостей, вычитание в <i>Wolves</i>"),
+         "коллаж сэмплов, лицо из плоскостей, вычитание в <i>Wolves</i>"),
         ("Эскобар", "Медельин · 1949 — 1993", "продукт", icon_escobar,
          "Глава Медельинского картеля; империя на кокаине, подкупе и терроре. Логистика, превращённая во власть. Бегемоты, которых он завёз в своё поместье, пережили хозяина и расплодились на воле — наследство, которое больше никому не подчиняется.",
          "Формула — <i>plata o plomo</i>: «серебро или свинец».",
@@ -615,7 +619,7 @@ def authorship():
         '<div class="box"><div class="q">' + typo("«Приветствую вас в Господе и я, Тертий, писавший сие послание».", False)
         + '</div><span class="src">Послание к Римлянам, 16:22</span></div>'
         + "<p>" + typo("Писец, записывавший за Павлом, оставил в каноническом тексте собственную строчку. Две тысячи лет спустя в альбоме, названном именем Павла, так же говорят продюсеры, хористы и архивные голоса.") + "</p>"
-        + "<p>" + typo("А в мае 1912 года Пикассо вклеил в натюрморт кусок клеёнки с узором плетёного стула — и готовый чужой материал вошёл в живопись. Семпл — его музыкальный родственник.") + "</p>"
+        + "<p>" + typo("А в мае 1912 года Пикассо вклеил в натюрморт кусок клеёнки с узором плетёного стула — и готовый чужой материал вошёл в живопись. Сэмпл — его музыкальный родственник.") + "</p>"
     )
     # voices strip: for each track, black dot = Kanye's voice, orange = credited voices, ring = sampled recordings
     s = ['<svg width="210mm" height="56mm" viewBox="0 0 210 56">']
@@ -630,8 +634,9 @@ def authorship():
             items.append(("f", f))
         for sm in tr["samples"]:
             items.append(("s", sm[0]))
+        base = 0 if tr["kanye"] else 1
         for j, (kind, _) in enumerate(items):
-            yy = y - j * 4.3
+            yy = y - (j + base) * 4.3
             if kind == "k":
                 s.append(f'<circle cx="{x:.1f}" cy="{yy:.1f}" r="1.75" fill="#15110e"/>')
             elif kind == "f":

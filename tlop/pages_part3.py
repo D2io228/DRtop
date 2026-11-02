@@ -14,7 +14,7 @@ def part3():
         for n in range(11, 15))
     css = """
 #part3{background:#13223a;color:#dce6f0}
-#part3 .img{position:absolute;right:0;top:0;width:132mm;height:250mm;overflow:hidden}
+#part3 .img{position:absolute;right:0;top:0;width:132mm;height:232mm;overflow:hidden}
 #part3 .img img{width:100%;height:100%;object-fit:cover;object-position:60% 40%;display:block}
 #part3 .k{position:absolute;left:20mm;top:18mm;color:#8fb4d9}
 #part3 .num{position:absolute;left:16mm;top:20mm;font:900 120pt/1 'Playfair';color:#dce6f0;letter-spacing:-.02em}
@@ -27,7 +27,7 @@ def part3():
 #part3 .it em{font-style:normal}
 #part3 .epi{position:absolute;left:20mm;top:186mm;width:92mm;font-size:13pt;line-height:1.24}
 #part3 .epi .src{color:#8fb4d9}
-#part3 .cap{position:absolute;right:4mm;bottom:4mm;width:110mm;text-align:right;font:700 5pt/1.4 'Arimo';letter-spacing:.14em;text-transform:uppercase;color:#dce6f0;background:#13223a;padding:1.2mm 2mm}
+#part3 .cap{position:absolute;right:4mm;bottom:22mm;width:110mm;text-align:right;font:700 5pt/1.4 'Arimo';letter-spacing:.14em;text-transform:uppercase;color:#dce6f0;background:#13223a;padding:1.2mm 2mm}
 """
     body = (
         '<div class="img"><img src="../img/picart_prison_cyan.png" alt=""></div>'
@@ -60,16 +60,17 @@ def t11():
 #t11 table.led{position:absolute;left:20mm;top:66mm;width:140mm;border-collapse:collapse;font:400 8.6pt/1.2 'IBM Plex Mono'}
 #t11 .led th{font:700 6.2pt/1.2 'IBM Plex Mono';letter-spacing:.14em;text-transform:uppercase;text-align:left;border-bottom:.5mm double #1d2a1f;padding:1.4mm 1mm;color:#b3261e}
 #t11 .led td{height:6mm;padding:0 1mm;border-bottom:.2mm solid rgba(29,42,31,.35)}
-#t11 .led td.v{text-align:right;width:14mm}
+#t11 .led td.v{text-align:left;color:#6c7d6c;font-style:italic}
 #t11 .led tr.tot td{border-top:.5mm double #1d2a1f;font-weight:700}
 #t11 .meta{position:absolute;left:168mm;top:66mm;width:62mm}
 #t11 .glitch{position:absolute;left:0;top:219mm}
 #t11 .txt{position:absolute;left:20mm;top:116mm;width:210mm;height:102mm;font-size:10.5pt;line-height:1.4}
-#t11 .txt.cols{column-count:3;column-gap:6mm}
+#t11 .txt.cols{column-count:3;column-gap:6mm;text-align:left}
 """
     rows = [("дети", "любовь", "страх потерять имущество"), ("жена", "преданность", "ожидание враждебной публики"),
             ("миссия", "призвание", "собственные срывы")]
-    led = ('<table class="led"><tr><th>актив · ради чего держаться</th><th></th><th>пассив · чего боится</th><th></th></tr>'
+    led = ('<table class="led"><colgroup><col style="width:20mm"><col style="width:24mm"><col><col style="width:16mm"></colgroup>'
+           '<tr><th colspan="2">актив · ради чего держаться</th><th colspan="2">пассив · чего боится</th></tr>'
            + "".join(f'<tr><td>{a}</td><td class="v">{b}</td><td>{c}</td><td class="v">—</td></tr>' for a, b, c in rows)
            + '<tr class="tot"><td colspan="3">сальдо: «I’m the only one that’s in control»</td><td class="v">не&nbsp;сходится</td></tr></table>')
     # ledger lines that lose control at the bottom (Section 25 "Hit" outro)
@@ -133,7 +134,7 @@ def t12a():
 #t12a .k{position:absolute;left:20mm;top:18mm}
 #t12a h1{position:absolute;left:18mm;top:23mm;margin:0;font:400 60pt/1 'Alice';letter-spacing:-.01em}
 #t12a .sub{position:absolute;left:20mm;top:47mm;font:italic 400 15pt/1.2 'EB Garamond'}
-#t12a .phone{position:absolute;left:150mm;top:18mm;width:80mm;height:104mm;border-radius:7mm;background:#1c2e4a;color:#dce4ec;padding:9mm 5mm 5mm;box-shadow:inset 0 0 0 1mm #3f5a7a}
+#t12a .phone{position:absolute;left:150mm;top:18mm;width:80mm;height:86mm;border-radius:7mm;background:#1c2e4a;color:#dce4ec;padding:9mm 5mm 5mm;box-shadow:inset 0 0 0 1mm #3f5a7a}
 #t12a .phone .t{font:700 6pt/1 'Arimo';letter-spacing:.22em;text-transform:uppercase;color:#8fa6bf;margin-bottom:3mm}
 #t12a .phone .c{display:flex;gap:2mm;align-items:baseline;border-top:.25mm solid #3f5a7a;padding:2.3mm 0;font:400 8.6pt/1.2 'Arimo'}
 #t12a .phone .c .i{color:#ff6b5b;width:4mm}
@@ -145,11 +146,11 @@ def t12a():
 #t12a .cal .hd span{font:700 6pt/1 'Arimo';letter-spacing:.14em;text-transform:uppercase;padding:0 0 1.6mm 1mm}
 #t12a .cal .gd span{height:9.4mm;border-top:.25mm solid #3f5a7a;border-left:.25mm solid rgba(63,90,122,.35);font:400 8pt/1 'Arimo';padding:1mm;position:relative}
 #t12a .cal .gd span.thu{background:rgba(63,90,122,.16)}
-#t12a .cal .gd span.bd::after{content:"";position:absolute;left:1.8mm;top:3.2mm;width:5.2mm;height:5.2mm;border:.45mm solid #c0392b;border-radius:50%}
+#t12a .cal .gd span.bd::after{content:"";position:absolute;left:-.2mm;top:-.4mm;width:5.4mm;height:5.4mm;border:.45mm solid #c0392b;border-radius:50%}
 #t12a .cal .cn{font:400 6.4pt/1.4 'Arimo';margin-top:1.8mm;opacity:.8}
-#t12a .meta{position:absolute;left:150mm;top:128mm;width:80mm}
+#t12a .meta{position:absolute;left:150mm;top:112mm;width:80mm}
 #t12a .txt{position:absolute;left:20mm;top:126mm;width:122mm;height:104mm;font-size:10.8pt}
-#t12a .txt2{position:absolute;left:150mm;top:160mm;width:80mm;height:70mm;font-size:10.8pt}
+#t12a .txt2{position:absolute;left:150mm;top:148mm;width:80mm;height:80mm;font-size:10.8pt}
 """
     t1 = P(
         "<i>Real Friends</i> переносит проблему из области обещаний в область повседневного внимания.",
@@ -203,7 +204,7 @@ def t12b():
 #t12b .epi .src{color:#3f5a7a}
 #t12b .rec{position:absolute;left:150mm;top:20mm;width:80mm;font:italic 300 20pt/1.15 'Cormorant Garamond';text-align:right}
 #t12b .rec b{display:block;font:700 6pt/1.2 'Arimo';font-style:normal;letter-spacing:.2em;text-transform:uppercase;margin-top:2mm;color:#3f5a7a}
-#t12b .txt{position:absolute;left:20mm;top:62mm;width:122mm;height:166mm;font-size:10.8pt}
+#t12b .txt{position:absolute;left:20mm;top:62mm;width:118mm;height:166mm;font-size:12.2pt;line-height:1.5}
 #t12b .lap{position:absolute;left:146mm;top:66mm}
 #t12b .lapc{position:absolute;left:150mm;top:132mm;width:80mm;font:400 7.2pt/1.42 'Arimo'}
 #t12b .tux{position:absolute;left:150mm;top:160mm}
@@ -304,7 +305,8 @@ def t13a():
 #t13a .states{position:absolute;left:12mm;top:66mm;width:226mm;display:flex;justify-content:space-between}
 #t13a .st{display:flex;flex-direction:column;align-items:center;gap:2mm;font:700 5.6pt/1 'Arimo';letter-spacing:.18em;text-transform:uppercase;color:#8fb4d9}
 #t13a .bull{position:absolute;left:20mm;top:106mm;width:210mm;font:italic 400 10.5pt/1.3 'EB Garamond';color:#b9cbe0;border-top:.25mm solid #3f5a7a;padding-top:2mm}
-#t13a .txt{position:absolute;left:20mm;top:124mm;width:150mm;height:106mm;font-size:10.8pt;color:#dfe8f1}
+#t13a .txt{position:absolute;left:20mm;top:124mm;width:150mm;height:72mm;font-size:11pt;color:#dfe8f1}
+#t13a .bigwolf{position:absolute;left:150mm;top:196mm;opacity:.9}
 #t13a .meta{position:absolute;left:178mm;top:124mm;width:52mm}
 """
     text = P(
@@ -320,6 +322,7 @@ def t13a():
         + '<div class="bull">' + typo("Зимой 1945–1946 года Пикассо за одиннадцать состояний литографии «Бык» свёл животное к нескольким линиям. <i>Wolves</i> сделан тем же жестом — вычитанием. Рисунок волка здесь — оригинальная иллюстрация по этому принципу.", False) + '</div>'
         + f'<div class="txt prose cols" style="--fn:#8fb4d9">{text}</div>'
         + f'<div class="meta">{track_meta(tr, color="#b9cbe0", dim="rgba(185,203,224,.2)")}</div>'
+        + f'<div class="bigwolf"><svg width="74mm" height="44mm" viewBox="-2 0 104 66">{_wolf_states(ink="#5f7fa3")[4].replace("stroke-width=\"1\"", "stroke-width=\".45\"")}</svg></div>'
         + folio(right="13 · Wolves", color="#8fb4d9")
     )
     return page("t13a", body, css=css)
@@ -349,7 +352,7 @@ def t13b():
 #t13b .vers .t{font:700 5.8pt/1.2 'Arimo';letter-spacing:.2em;text-transform:uppercase;color:#8fb4d9;margin-bottom:2mm}
 #t13b .vers .v{display:flex;gap:3mm;border-top:.25mm solid #3f5a7a;padding:1.8mm 0;font:400 9pt/1.3 'EB Garamond'}
 #t13b .vers .v b{font:700 6.6pt/1.5 'Arimo';width:19mm;flex:none;color:#c8a44d}
-#t13b .txt{position:absolute;left:20mm;top:130mm;width:210mm;height:100mm;font-size:10.9pt;color:#dfe8f1}
+#t13b .txt{position:absolute;left:20mm;top:128mm;width:210mm;height:100mm;font-size:12pt;line-height:1.5;color:#dfe8f1}
 """
     text = P(
         "Текст поднимает семейную историю до библейского масштаба. Вопрос «What if Mary was in the club» предлагает представить священную фигуру в пространстве, которое общество привыкло связывать с сексуальной стигмой. В этом жесте — попытка защитить любимую женщину от окончательного определения через её прошлое.<sup class=\"fn\">20</sup>",
@@ -383,8 +386,8 @@ def t14():
     for x, a, b, lab in zip(xs, light, heat, pts):
         s.append(f'<circle cx="{x}" cy="{yv(a)}" r="1.3" fill="#9fc6e8"/><circle cx="{x}" cy="{yv(b)}" r="1.3" fill="#e0a07a"/>')
         s.append(f'<text x="{x}" y="47" text-anchor="middle" font-family="Arimo" font-size="2.6" fill="#7d8c9b">{lab}</text>')
-    s.append('<text x="120" y="3" text-anchor="end" font-family="Arimo" font-size="2.7" fill="#9fc6e8" font-weight="700">— СВЕТ</text>')
-    s.append('<text x="120" y="7.5" text-anchor="end" font-family="Arimo" font-size="2.7" fill="#e0a07a" font-weight="700">- - ТЕПЛО</text>')
+    s.append('<text x="0" y="3" font-family="Arimo" font-size="2.7" fill="#7aa6cc" font-weight="700">— СВЕТ</text>')
+    s.append('<text x="18" y="3" font-family="Arimo" font-size="2.7" fill="#d98c62" font-weight="700">- - ТЕПЛО</text>')
     s.append("</svg>")
     css = """
 #t14{background:radial-gradient(circle at 70% 34%,#ffffff 0,#f6f9fc 34%,#e8eff6 100%);color:#5d6b79}

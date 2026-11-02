@@ -90,7 +90,7 @@ def t01a():
 
     rnd = random.Random(3)
     heads = []
-    tiers = [(170, 3.0, 20), (182, 3.3, 18), (195, 3.6, 16), (209, 3.9, 15), (224, 4.3, 13)]
+    tiers = [(181, 3.0, 20), (192, 3.3, 18), (204, 3.6, 16), (217, 3.9, 15), (231, 4.3, 13)]
     for ty, r, n in tiers:
         span = n * r * 2.9
         x0 = 125 - span / 2
@@ -133,7 +133,7 @@ def t01a():
 #t01a h1{position:absolute;left:18mm;top:24mm;margin:0;font:400 58pt/.92 'UnifrakturCook';color:#f4efe6}
 #t01a .sub{position:absolute;left:20mm;top:76mm;width:110mm;font:italic 300 18pt/1.2 'Cormorant Garamond';color:#e8c47a}
 #t01a .meta{position:absolute;left:20mm;top:96mm;width:84mm}
-#t01a .lead{position:absolute;left:20mm;top:132mm;width:92mm;font:italic 400 13.2pt/1.38 'EB Garamond';color:#efe6d4;text-align:left}
+#t01a .lead{position:absolute;left:20mm;top:126mm;width:80mm;font:italic 400 12.6pt/1.38 'EB Garamond';color:#efe6d4;text-align:left}
 """
     lead = typo("<i>Ultralight Beam</i> открывает альбом коллективным обращением. Детская молитва, протяжённые аккорды, отдельные вокальные линии и хор понемногу выстраивают пространство, в котором можно почувствовать себя принятым — как в церкви, где на входе ни о чём не спрашивают.", True)
     body = (
@@ -187,7 +187,8 @@ def t01b():
             lift = 2.4 + (k % 3) * 4.0
             s.append(f'<circle cx="{x:.1f}" cy="{ty:.1f}" r=".9" fill="#15110e"/>')
             s.append(f'<line x1="{x:.1f}" y1="{ty:.1f}" x2="{x:.1f}" y2="{ty - lift + 1:.1f}" stroke="#15110e" stroke-width=".2"/>')
-            s.append(f'<text x="{x:.1f}" y="{ty - lift:.1f}" text-anchor="middle" font-family="EB Garamond" font-style="italic" font-size="3.1">+ {esc(new[i])}</text>')
+            anc = "start" if i == 0 else "middle"
+            s.append(f'<text x="{x - (cw / 2 - .5 if i == 0 else 0):.1f}" y="{ty - lift:.1f}" text-anchor="{anc}" font-family="EB Garamond" font-style="italic" font-size="3.1">+ {esc(new[i])}</text>')
         s.append(f'<text x="{x:.1f}" y="{mid + 1.1:.1f}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="3" fill="#15110e">{cum}</text>')
     s.append("</svg>")
     chart = "".join(s)
@@ -234,21 +235,21 @@ def t01b():
 def t02():
     tr = T[2]
     # bathos: register line (interpretive)
-    pts = [(4, 10, "молитва, 1976"), (30, 20, "тег Metro"), (56, 7, "утро Кади"), (80, 9, ""), (90, 42, "шутка"), (110, 44, "футболка")]
-    s = ['<svg width="62mm" height="58mm" viewBox="0 0 116 58">']
-    s.append('<text x="0" y="5" font-family="Arimo" font-size="3.4" font-weight="700" letter-spacing=".6">ВОЗВЫШЕННОЕ</text>')
-    s.append('<text x="0" y="56" font-family="Arimo" font-size="3.4" font-weight="700" letter-spacing=".6">БЫТОВОЕ</text>')
-    s.append('<line x1="0" y1="8" x2="116" y2="8" stroke="#15110e" stroke-width=".2" stroke-dasharray="1 1"/>')
-    s.append('<line x1="0" y1="50" x2="116" y2="50" stroke="#15110e" stroke-width=".2" stroke-dasharray="1 1"/>')
-    d = "M" + " L".join(f"{x},{y + 2}" for x, y, _ in pts)
-    s.append(f'<path d="{d}" fill="none" stroke="#b5481c" stroke-width="1.4" stroke-linejoin="round"/>')
-    for x, y, lab in pts:
-        if lab:
-            s.append(f'<circle cx="{x}" cy="{y + 2}" r="1.3" fill="#15110e"/>')
-            anchor = "start" if x < 100 else "end"
-            s.append(f'<text x="{x + (2 if anchor == "start" else -2)}" y="{y + (8 if y < 30 else -3)}" text-anchor="{anchor}" font-family="EB Garamond" font-style="italic" font-size="4.2">{lab}</text>')
-    s.append('<path d="M84 16 L88 30" stroke="#b5481c" stroke-width=".5" marker-end=""/>')
-    s.append('<text x="62" y="34" font-family="Arimo" font-weight="700" font-size="3.6" fill="#b5481c" letter-spacing=".5">БАТОС ↓</text>')
+    pts = [(6, 12), (34, 24), (60, 9), (86, 11), (98, 46), (124, 48)]
+    labs = [(6, 12, 2, -3.2, "start", "молитва, 1976"), (34, 24, 0, 6.4, "middle", "тег Metro"),
+            (60, 9, 0, -3.2, "middle", "утро Кади"), (98, 46, -2, -3, "end", "шутка"),
+            (124, 48, 0, 7, "end", "футболка")]
+    s = ['<svg width="72mm" height="40mm" viewBox="0 0 130 72">']
+    s.append('<text x="0" y="4" font-family="Arimo" font-size="3.6" font-weight="700" letter-spacing=".6">ВОЗВЫШЕННОЕ</text>')
+    s.append('<text x="0" y="70" font-family="Arimo" font-size="3.6" font-weight="700" letter-spacing=".6">БЫТОВОЕ</text>')
+    s.append('<line x1="0" y1="8" x2="130" y2="8" stroke="#15110e" stroke-width=".25" stroke-dasharray="1 1"/>')
+    s.append('<line x1="0" y1="58" x2="130" y2="58" stroke="#15110e" stroke-width=".25" stroke-dasharray="1 1"/>')
+    d = "M" + " L".join(f"{x},{y + 4}" for x, y in pts)
+    s.append(f'<path d="{d}" fill="none" stroke="#b5481c" stroke-width="1.6" stroke-linejoin="round"/>')
+    for x, y, dx, dy, anc, lab in labs:
+        s.append(f'<circle cx="{x}" cy="{y + 4}" r="1.5" fill="#15110e"/>')
+        s.append(f'<text x="{x + dx}" y="{y + 4 + dy}" text-anchor="{anc}" font-family="EB Garamond" font-style="italic" font-size="4.6">{lab}</text>')
+    s.append('<text x="96" y="30" text-anchor="start" font-family="Arimo" font-weight="700" font-size="4" fill="#b5481c" letter-spacing=".5">↓ БАТОС</text>')
     s.append("</svg>")
     chart = "".join(s)
     css = """
@@ -256,7 +257,7 @@ def t02():
 #t02 .band{position:absolute;left:0;top:0;width:250mm;height:100mm;overflow:hidden;background:#15110e}
 #t02 .band img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;display:block}
 #t02 .imgcap{position:absolute;left:20mm;top:88mm;background:#15110e;color:#f6c66b;font:700 5.4pt/1.35 'Arimo';letter-spacing:.14em;text-transform:uppercase;padding:1.2mm 2mm}
-#t02 .card{position:absolute;right:16mm;top:12mm;width:70mm;background:#f3eadb;padding:4mm 4mm 3mm;box-shadow:1.2mm 1.2mm 0 #15110e}
+#t02 .card{position:absolute;right:16mm;top:12mm;width:80mm;background:#f3eadb;padding:4mm 4mm 3mm;box-shadow:1.2mm 1.2mm 0 #15110e}
 #t02 .card .ck{font:700 5.6pt/1.2 'Arimo';letter-spacing:.2em;text-transform:uppercase;margin-bottom:2mm}
 #t02 .card .mark{display:inline-block;margin-top:1mm;font:700 5.2pt/1 'Arimo';letter-spacing:.14em;text-transform:uppercase;border:.3mm solid #15110e;padding:.7mm 1.3mm}
 #t02 h1{position:absolute;left:19mm;top:104mm;margin:0;font:800 italic 30pt/1 'Playfair';letter-spacing:-.01em;color:#15110e}
@@ -266,7 +267,7 @@ def t02():
 #t02 .meta .tmeta{display:grid;grid-template-columns:1.2fr 1.4fr 2.2fr 1.3fr;column-gap:4mm}
 #t02 .meta .tmeta .pindex{border-top:.25mm solid currentColor;padding-top:1.1mm;align-self:start}
 #t02 .txt{position:absolute;left:20mm;top:136mm;width:210mm;height:94mm;font-size:10.7pt;line-height:1.42}
-#t02 .txt.cols{column-count:3;column-gap:6mm}
+#t02 .txt.cols{column-count:3;column-gap:6mm;text-align:left}
 """
     text = P(
         "В <i>Father Stretch My Hands Pt. 1</i> это противоречие становится почти физически ощутимым. Запись пастора T. L. Barrett приносит фактуру уже существовавшего религиозного исполнения: возраст голоса, общинную интонацию, ощущение просьбы о помощи. Затем продюсерский тег Metro Boomin — голосом Future — отмечает переход, вступает бит, и Kid Cudi превращает музыку в переживание утреннего облегчения.<sup class=\"fn\">6</sup>",
@@ -310,7 +311,7 @@ def t03():
 #t03 .lab{position:absolute;left:20mm;top:118mm;font:700 5.6pt/1.2 'Arimo';letter-spacing:.2em;text-transform:uppercase}
 #t03 .st{position:absolute;left:20mm;top:123mm;width:210mm;height:8mm;display:grid;grid-template-columns:repeat(6,1fr);gap:1mm}
 #t03 .st div{font:700 6.4pt/8mm 'Arimo';letter-spacing:.14em;text-align:center;border:.3mm solid #0d0d0d}
-#t03 .txt{position:absolute;left:20mm;top:138mm;width:210mm;height:90mm;font-size:11.2pt}
+#t03 .txt{position:absolute;left:20mm;top:138mm;width:210mm;height:90mm;font-size:12.2pt;line-height:1.46}
 """
     text = P(
         "<i>Pt. 2</i> меняет характер движения. Вместо раскрывающейся мелодии — торопливое перечисление: отец, деньги, семейные потери, смерть матери, автомобильная авария. События не получают пространства, соразмерного своей тяжести.",
@@ -353,7 +354,7 @@ def t04a():
 #t04a .cell .sb{font:italic 400 9pt/1.2 'EB Garamond';margin-top:1mm;max-width:46mm}
 #t04a .arrow{margin-top:5mm;font:700 5.8pt/1 'Arimo';letter-spacing:.18em;text-transform:uppercase;border-top:.3mm solid #111;padding-top:2mm}
 #t04a .sub{position:absolute;left:14mm;top:118mm;width:222mm;font:italic 400 15pt/1.2 'Playfair';border-bottom:.25mm solid #111;padding-bottom:2mm}
-#t04a .txt{position:absolute;left:14mm;top:131mm;width:160mm;height:98mm;font-size:11.2pt}
+#t04a .txt{position:absolute;left:14mm;top:131mm;width:160mm;height:98mm;font-size:12pt;line-height:1.45}
 #t04a .meta{position:absolute;left:180mm;top:131mm;width:56mm}
 """
     # sentence diagram: I made that ▇▇▇ famous  (HTML so the words space themselves)
@@ -416,13 +417,15 @@ def t04b():
 #t04b .struct div{font:700 5.6pt/9mm 'Arimo';letter-spacing:.06em;text-align:center;white-space:nowrap;overflow:hidden}
 #t04b .halves{position:absolute;left:14mm;top:116mm;width:222mm;display:flex;font:italic 400 9.6pt/1.2 'EB Garamond'}
 #t04b .halves div{flex:1;border-top:.3mm solid #111;padding-top:1mm}
-#t04b .txt{position:absolute;left:14mm;top:128mm;width:150mm;height:100mm;font-size:10.9pt}
+#t04b .txt{position:absolute;left:14mm;top:128mm;width:150mm;height:64mm;font-size:11.4pt}
 #t04b .side{position:absolute;left:172mm;top:128mm;width:64mm}
 #t04b .eliot{background:#111;color:#ece5d3;padding:4mm}
 #t04b .eliot .q{font:italic 400 11pt/1.25 'Playfair'}
 #t04b .eliot .src{display:block;margin-top:2mm;font:700 5.4pt/1.3 'Arimo';letter-spacing:.18em;text-transform:uppercase;color:#f2c230}
 #t04b .fact{font:400 7.2pt/1.42 'Arimo';border-top:.3mm solid #111;padding:1.6mm 0 0;margin-top:2.6mm}
 #t04b .fact b{font-weight:700}
+#t04b .pull{position:absolute;left:14mm;top:196mm;width:150mm;font:italic 400 17pt/1.22 'Playfair';border-top:.6mm solid #111;padding-top:3mm}
+#t04b .pull b{font-style:normal;color:#d7261e}
 """
     text = P(
         "Во второй части монтаж меняет источник удовольствия. Фигура рассказчика отступает, ритмический фрагмент Sister Nancy начинает организовывать общее движение, реплики Swizz Beatz усиливают ощущение публичного праздника. Песня набирает энергию, которая уже превосходит и личную обиду, и хвастовство.",
@@ -443,6 +446,7 @@ def t04b():
         + '<div class="halves"><div>' + typo("первая половина: рассказчик и его версия", False) + '</div><div style="flex:1.3">' + typo("вторая: Sister Nancy, Swizz — общий праздник", False) + '</div></div>'
         + f'<div class="txt prose cols">{text}</div>'
         + f'<div class="side">{side}</div>'
+        + '<div class="pull">' + typo("Чужой голос способен сохранить достаточно характера, чтобы <b>изменить значение всей композиции</b>.", False) + '</div>'
         + folio(right="04 · Famous", color="#111")
     )
     return page("t04b", body, css=css)
@@ -459,7 +463,7 @@ def t05():
         pts.append((60 + r * math.cos(a), 60 + r * math.sin(a)))
     d = "M" + " L".join(f"{x:.2f},{y:.2f}" for x, y in pts)
     labels = [(60, 49, "критика"), (88, 70, "«гениальность»"), (32, 82, "громче"), (100, 22, "ещё громче"), (8, 30, "ответ не слышен")]
-    lab = "".join(f'<text x="{x}" y="{y}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="3.6" letter-spacing=".6" fill="#d4ff3a">{t.upper()}</text>' for x, y, t in labels)
+    lab = "".join(f'<text x="{x}" y="{y}" text-anchor="middle" font-family="Arimo" font-weight="700" font-size="3.6" letter-spacing=".6" fill="#d4ff3a" stroke="#0b0b0b" stroke-width="1.4" paint-order="stroke">{t.upper()}</text>' for x, y, t in labels)
     spiral = (f'<svg width="120mm" height="120mm" viewBox="0 0 120 120"><path d="{d}" fill="none" stroke="#d4ff3a" stroke-width=".9"/>'
               f'<circle cx="60" cy="60" r="2" fill="#d4ff3a"/>{lab}</svg>')
     css = """
