@@ -1,0 +1,297 @@
+/* Buttons: hover (+6% lightness, icon lift), pressed (0.96, 60 ms), selected (gold border + glow),
+   disabled (40%), focus-visible (gold ring). */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  min-width: var(--touch);
+  height: var(--btn-h);
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius);
+  background: var(--btn-bg);
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-hover) ease-out,
+    border-color var(--dur-hover) ease-out,
+    box-shadow var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out,
+    transform var(--dur-press) ease-out;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+
+.btn:active:not(:disabled) {
+  background: var(--btn-bg-active);
+  transform: scale(0.96);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btn.is-selected {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 8px var(--gold-glow);
+  color: var(--gold-hover);
+}
+
+.btn.is-selected:focus-visible,
+.btn:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Icon buttons lift their icon by 1 px on hover. */
+.btn--icon {
+  width: 36px;
+  min-width: 36px;
+  padding: 0;
+}
+
+.btn--icon .icon {
+  transition: transform var(--dur-hover) ease-out;
+}
+
+.btn--icon:hover:not(:disabled) .icon {
+  transform: translateY(-1px);
+}
+
+.btn--small {
+  width: var(--touch);
+  min-width: var(--touch);
+}
+
+.btn--speed {
+  min-width: 40px;
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-15);
+}
+
+/* While paused, the speed that Resume will restore is outlined. */
+.btn--speed.is-resume {
+  border-style: dashed;
+  border-color: rgba(242, 193, 78, 0.55);
+  color: var(--text-2);
+}
+
+.btn--text {
+  font-size: var(--fs-13);
+  padding: 0 var(--sp-3);
+}
+
+.btn--chip {
+  height: 28px;
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-12);
+  color: var(--text-2);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.btn--chip:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.btn--primary {
+  height: 36px;
+  padding: 0 var(--sp-4);
+  border-color: var(--gold-pressed);
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: var(--fs-15);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--gold-hover);
+}
+
+.btn--primary:active:not(:disabled) {
+  background: var(--gold-pressed);
+}
+
+.seed-chip__value {
+  color: var(--text);
+}
+
+/* Keycap chips */
+.keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: var(--fs-11);
+  line-height: 1;
+}
+
+.keycap--inline {
+  margin-left: var(--sp-2);
+  vertical-align: 1px;
+}
+
+/* Tooltip: 350 ms delay (engine timer), 120 ms fade, never covers the control. */
+.tooltip {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  z-index: var(--z-tooltip);
+  max-width: 280px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  background: var(--panel-bg-solid);
+  box-shadow: var(--panel-shadow);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.tooltip.is-visible {
+  opacity: 1;
+  animation: tooltip-in 120ms ease-out;
+}
+
+.tooltip__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.tooltip__title {
+  font-family: var(--font-title);
+  font-size: var(--fs-15);
+  color: var(--text);
+}
+
+.tooltip__desc {
+  margin-top: 2px;
+  color: var(--text-2);
+  font-size: var(--fs-12);
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 24px;
+  margin: 4px 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) ease-out,
+    border-color var(--dur-hover) ease-out;
+}
+
+.switch:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.switch__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: var(--text-2);
+  transition:
+    transform var(--dur-panel) var(--ease-out),
+    background-color var(--dur-hover) ease-out;
+}
+
+.switch.is-on {
+  background: rgba(242, 193, 78, 0.22);
+  border-color: var(--gold);
+}
+
+.switch.is-on .switch__knob {
+  transform: translateX(20px);
+  background: var(--gold);
+}
+
+.switch:active .switch__knob {
+  transform: scale(0.9);
+}
+
+.switch.is-on:active .switch__knob {
+  transform: translateX(20px) scale(0.9);
+}
+
+/* Badges and tabs */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--sp-2);
+  padding: 0 6px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-size: var(--fs-11);
+}
+
+.badge--danger {
+  background: var(--danger);
+  color: var(--ink);
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  height: var(--btn-h);
+  padding: 0 var(--sp-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-title);
+  font-size: var(--fs-13);
+  cursor: pointer;
+  transition:
+    color var(--dur-hover) ease-out,
+    border-color var(--dur-panel) var(--ease-out),
+    background-color var(--dur-hover) ease-out;
+}
+
+.tab:hover {
+  color: var(--text);
+  background: var(--btn-bg-hover);
+}
+
+.tab.is-selected {
+  color: var(--gold-hover);
+  border-bottom-color: var(--gold);
+}

@@ -1,0 +1,325 @@
+/* Drawers open and close in 200 ms with an 8 px slide and fade; hidden drawers are inert. */
+.drawer {
+  position: absolute;
+  z-index: var(--z-drawer);
+  display: flex;
+  flex-direction: column;
+  transition:
+    opacity var(--dur-panel) var(--ease-out),
+    transform var(--dur-panel) var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+.drawer[data-open="false"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-panel) var(--ease-out),
+    transform var(--dur-panel) var(--ease-out),
+    visibility 0s linear var(--dur-panel);
+}
+
+.drawer--right {
+  top: calc(var(--topbar-h) + var(--sp-2));
+  right: var(--sp-2);
+  width: var(--drawer-w);
+  max-height: calc(100% - var(--topbar-h) - var(--sp-4));
+}
+
+.drawer--right[data-open="false"] {
+  transform: translateX(var(--panel-slide));
+}
+
+.drawer--top {
+  top: calc(var(--topbar-h) + var(--sp-2));
+  left: var(--sp-2);
+  right: var(--sp-2);
+  height: min(46vh, 520px);
+}
+
+.drawer--top[data-open="false"] {
+  transform: translateY(calc(var(--panel-slide) * -1));
+}
+
+.drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.drawer__title {
+  font-family: var(--font-title);
+  font-size: var(--fs-18);
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.drawer__body {
+  overflow-y: auto;
+  padding: var(--sp-2) var(--sp-4) var(--sp-4);
+}
+
+/* Settings */
+.settings-section + .settings-section {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--panel-border);
+}
+
+.settings-section__title {
+  margin: var(--sp-2) 0;
+  font-family: var(--font-title);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.setting {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+}
+
+.setting__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.setting__label {
+  font-size: var(--fs-13);
+  color: var(--text);
+}
+
+.setting__desc {
+  font-size: var(--fs-12);
+  color: var(--text-2);
+}
+
+/* Bottom sheet on narrow screens (rule 18). */
+@media (max-width: 800px) {
+  .drawer--right {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 70%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .drawer--right[data-open="false"] {
+    transform: translateY(var(--panel-slide));
+  }
+
+  .drawer--top {
+    left: var(--sp-1);
+    right: var(--sp-1);
+    height: min(60vh, 520px);
+  }
+}
+
+/* Performance overlay (F3) */
+.perf {
+  position: absolute;
+  top: calc(var(--topbar-h) + var(--sp-2));
+  left: var(--sp-2);
+  width: 266px;
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+  font-size: var(--fs-12);
+  animation: fade-in var(--dur-panel) var(--ease-out);
+}
+
+.perf__title {
+  margin-bottom: var(--sp-1);
+  font-family: var(--font-title);
+  font-size: var(--fs-13);
+  color: var(--gold);
+}
+
+.perf__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px var(--sp-2);
+  margin: 0 0 var(--sp-2);
+}
+
+.perf__grid dt {
+  color: var(--text-3);
+}
+
+.perf__grid dd {
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+  font-family: var(--font-title);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.perf__grid dd.is-warn {
+  color: var(--gold);
+}
+
+.perf__grid dd.is-bad {
+  color: var(--danger);
+}
+
+.perf__spark {
+  display: block;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  image-rendering: pixelated;
+}
+
+/* Toasts: slide in from the right with a slight overshoot; hover pauses (engine side). */
+.toasts {
+  position: absolute;
+  top: calc(var(--topbar-h) + var(--sp-2));
+  right: var(--sp-2);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  width: min(360px, calc(100% - var(--sp-4)));
+  pointer-events: none;
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-1) var(--sp-2) var(--sp-2);
+  border-left: 3px solid var(--info);
+  pointer-events: auto;
+  animation: toast-in 320ms var(--ease-overshoot);
+  transition:
+    opacity 220ms ease-in,
+    transform 220ms ease-in;
+}
+
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateX(24px);
+}
+
+.toast--success {
+  border-left-color: var(--success);
+}
+
+.toast--warning {
+  border-left-color: var(--gold);
+}
+
+.toast--danger {
+  border-left-color: var(--danger);
+}
+
+.toast__text {
+  flex: 1;
+  min-width: 0;
+  padding-top: 6px;
+  font-size: var(--fs-13);
+  color: var(--text);
+}
+
+.toast__close {
+  width: var(--touch);
+  min-width: var(--touch);
+  border-color: transparent;
+  background: transparent;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Crash cards from panel error boundaries */
+.crash-card {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-6);
+  z-index: var(--z-crash);
+  width: min(380px, calc(100% - var(--sp-4)));
+  transform: translateX(-50%);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--danger);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  align-items: flex-start;
+  pointer-events: auto;
+  animation: fade-in var(--dur-panel) var(--ease-out);
+}
+
+.crash-card--topbar {
+  top: 0;
+  bottom: auto;
+}
+
+.crash-card__title {
+  font-family: var(--font-title);
+  font-size: var(--fs-15);
+  color: var(--text);
+}
+
+.crash-card__desc {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-12);
+  color: var(--text-2);
+}
+
+.root-crash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-4);
+  background: var(--app-bg);
+}
+
+.root-crash__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  max-width: 440px;
+  padding: var(--sp-6);
+}
+
+.root-crash__title {
+  font-family: var(--font-title);
+  font-size: var(--fs-24);
+  color: var(--gold);
+}
+
+/* While the console is open, toasts move below it so they never cover its controls. */
+.app:has(.console[data-open="true"]) .toasts {
+  top: calc(var(--topbar-h) + min(46vh, 520px) + var(--sp-4));
+}
+
+@media (max-width: 800px) {
+  .app:has(.console[data-open="true"]) .toasts {
+    top: calc(var(--topbar-h) + min(60vh, 520px) + var(--sp-4));
+  }
+}

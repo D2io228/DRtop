@@ -1,0 +1,123 @@
+/* Dev Console (Backquote) */
+.console {
+  font-family: var(--font-mono);
+}
+
+.console__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-1) var(--sp-2) 0 var(--sp-4);
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.console__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-left: auto;
+  padding-bottom: var(--sp-1);
+}
+
+.console__output {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-12);
+  line-height: 1.5;
+  user-select: text;
+}
+
+.console__line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+}
+
+.console__line--input {
+  color: var(--gold);
+}
+
+.console__line--muted {
+  color: var(--text-3);
+}
+
+.console__line--error {
+  color: var(--danger);
+}
+
+.console__line--success {
+  color: var(--success);
+}
+
+.console__empty {
+  color: var(--text-3);
+}
+
+.console__prompt {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-4);
+  height: 40px;
+  border-top: 1px solid var(--panel-border);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.console__caret {
+  color: var(--gold);
+  font-family: var(--font-title);
+}
+
+.console__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--fs-13);
+  color: var(--text);
+  outline: none;
+  box-shadow: none;
+}
+
+.console__input::placeholder {
+  color: var(--text-3);
+}
+
+.error-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.error-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.error-row__message {
+  color: var(--danger);
+  font-size: var(--fs-13);
+  word-break: break-word;
+}
+
+.error-row__meta {
+  color: var(--text-3);
+  font-size: var(--fs-11);
+}
+
+.error-row__stack {
+  margin: var(--sp-1) 0 0;
+  max-height: 96px;
+  overflow: auto;
+  color: var(--text-2);
+  font-size: var(--fs-11);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
