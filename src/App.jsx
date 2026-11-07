@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HashRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider, useApp } from './store/AppContext'
 import Layout from './components/Layout'
 import Onboarding from './pages/Onboarding'
@@ -55,12 +55,15 @@ function Shell() {
   )
 }
 
+// The self-contained build runs inside an embedded frame, so routing stays in memory there
+const Router = import.meta.env.VITE_OFFLINE ? MemoryRouter : HashRouter
+
 export default function App() {
   return (
     <AppProvider>
-      <HashRouter>
+      <Router>
         <Shell />
-      </HashRouter>
+      </Router>
     </AppProvider>
   )
 }

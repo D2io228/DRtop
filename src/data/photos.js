@@ -96,10 +96,15 @@ const IDS = {
   bar: '1543007630-9710e4a00a20',
 }
 
+// Self-contained build (VITE_OFFLINE=1) serves images from the bundle instead of remote hosts
+export const OFFLINE = !!import.meta.env.VITE_OFFLINE
+
 export const photo = (key, w = 800) => {
   const id = IDS[key]
   if (!id) return key // allow raw urls (e.g. uploaded object URLs)
+  if (OFFLINE) return `img/${key}.jpg`
   return `https://images.unsplash.com/photo-${id}?w=${w}&q=70&auto=format&fit=crop`
 }
 
-export const avatar = (key) => (key?.startsWith?.('pv') ? `https://i.pravatar.cc/200?img=${key.slice(2)}` : photo(key, 200))
+export const avatar = (key) =>
+  key?.startsWith?.('pv') ? (OFFLINE ? `av/${key}.jpg` : `https://i.pravatar.cc/200?img=${key.slice(2)}`) : photo(key, 200)

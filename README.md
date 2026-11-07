@@ -17,6 +17,14 @@ npm run preview
 
 There's no backend and no auth. All data is local mock data in `src/data/`, and all state lives in memory, so a refresh restarts onboarding. On the welcome screen, tap **"Skip — explore with a demo profile"** to jump straight in.
 
+### Self-contained build (for sharing as a single hosted page)
+
+```bash
+OFFLINE_ASSETS=/path/to/assets VITE_OFFLINE=1 npm run build   # → dist-offline/
+```
+
+This build loads no remote images or tiles. Photos, avatars and flags are read from `OFFLINE_ASSETS` (`img/<key>.jpg`, `av/pv<N>.jpg`, `flags/<cc>.png`). Instead of raster tiles, the map is drawn on a canvas from bundled OpenStreetMap data (`src/data/basemap-belgrade.json`: water, parks and main streets of central Belgrade, © OpenStreetMap contributors, ODbL). Routing stays in memory, so the page works inside sandboxed iframes.
+
 ## Tech
 
 - React 18 + Vite

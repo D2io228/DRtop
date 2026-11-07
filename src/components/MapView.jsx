@@ -4,9 +4,14 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CITY } from '../config'
 import { photo, avatar } from '../data/photos'
+import VectorBasemap from './VectorBasemap'
 
 // OpenStreetMap standard tiles — no API key. Dark mode is done with a CSS filter (see index.css).
+const OFFLINE = !!import.meta.env.VITE_OFFLINE
+// The self-contained build draws its own basemap from bundled OSM data (see VectorBasemap)
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+const TILE_OPTS = { maxZoom: 19 }
+const MAP_OPTS = OFFLINE ? { minZoom: 12, maxZoom: 17, maxBounds: [[44.775, 20.375], [44.865, 20.505]], maxBoundsViscosity: 1 } : {}
 const ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
 const imgUrl = (item) => (item.avatar ? avatar(item.avatar) : item.img ? photo(item.img, 160) : null)
@@ -24,6 +29,14 @@ export function pinIcon(item, i = 0) {
 
 const meIcon = L.divIcon({ html: '<div class="me-pin"></div>', className: 'pin-wrap', iconSize: [22, 22], iconAnchor: [11, 11] })
 const pickIcon = L.divIcon({ html: '<div class="pick-pin">📍</div>', className: 'pin-wrap', iconSize: [34, 34], iconAnchor: [17, 32] })
+
+function AttributionText() {
+  const map = useMap()
+  useEffect(() => {
+    map.attributionControl?.addAttribution(ATTR)
+  }, [map])
+  return null
+}
 
 function FlyTo({ target, zoom }) {
   const map = useMap()
@@ -72,10 +85,12 @@ export default function MapView({
       doubleClickZoom={interactive}
       touchZoom={interactive}
       attributionControl
+      {...MAP_OPTS}
       className={`isolate ${className}`}
       style={{ height: '100%', width: '100%' }}
     >
-      <TileLayer url={TILE_URL} attribution={ATTR} maxZoom={19} />
+      {OFFLINE ? <VectorBasemap /> : <TileLayer url={TILE_URL} attribution={ATTR} {...TILE_OPTS} />}
+      {OFFLINE && <AttributionText />}
       <InvalidateOnResize />
       {markers.map(({ it, icon }) => (
         <Marker key={it.id} position={[it.lat, it.lng]} icon={icon} zIndexOffset={it.active ? 1000 : 0} eventHandlers={{ click: () => onSelect?.(it) }} />

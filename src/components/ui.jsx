@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeft, BadgeCheck, Star, X } from 'lucide-react'
 import { photo, avatar as avatarUrl } from '../data/photos'
 import { COUNTRIES, LANGUAGES } from '../data/meta'
@@ -9,7 +9,7 @@ import { useApp } from '../store/AppContext'
 
 export function Img({ src, w = 800, alt = '', className = '', ...rest }) {
   const [failed, setFailed] = useState(false)
-  const url = failed ? `https://picsum.photos/seed/${encodeURIComponent(src)}/${w}/${Math.round(w * 0.75)}` : photo(src, w)
+  const url = failed && !import.meta.env.VITE_OFFLINE ? `https://picsum.photos/seed/${encodeURIComponent(src)}/${w}/${Math.round(w * 0.75)}` : photo(src, w)
   return <img src={url} alt={alt} loading="lazy" onError={() => setFailed(true)} className={cx('bg-neutral-200 object-cover dark:bg-neutral-800', className)} {...rest} />
 }
 
@@ -202,10 +202,11 @@ export function Toast() {
 
 export function PageHeader({ title, subtitle, right, back = true, transparent }) {
   const nav = useNavigate()
+  const loc = useLocation()
   return (
     <div className={cx('sticky top-0 z-30 flex h-14 items-center gap-2 px-2', transparent ? '' : 'glass border-b divider')}>
       {back && (
-        <button className="icon-btn" onClick={() => (window.history.length > 1 ? nav(-1) : nav('/'))} aria-label="Back">
+        <button className="icon-btn" onClick={() => (loc.key !== 'default' ? nav(-1) : nav('/'))} aria-label="Back">
           <ArrowLeft className="h-5 w-5" />
         </button>
       )}
@@ -220,11 +221,12 @@ export function PageHeader({ title, subtitle, right, back = true, transparent })
 
 export function FloatingBack({ right }) {
   const nav = useNavigate()
+  const loc = useLocation()
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between p-3">
       <button
         className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-ink-900 backdrop-blur transition active:scale-90 dark:bg-black/70 dark:text-white"
-        onClick={() => (window.history.length > 1 ? nav(-1) : nav('/'))}
+        onClick={() => (loc.key !== 'default' ? nav(-1) : nav('/'))}
         aria-label="Back"
       >
         <ArrowLeft className="h-5 w-5" />

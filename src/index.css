@@ -130,6 +130,28 @@
   color: #fff;
 }
 
+.map-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #6b6b6b;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.map-label.is-water {
+  color: #2b7fc0;
+  font-style: italic;
+  font-weight: 600;
+}
+.dark .map-label {
+  color: #9a9a9a;
+  text-shadow: 0 0 3px #000, 0 0 3px #000;
+}
+.dark .map-label.is-water {
+  color: #5aa7e0;
+}
 .pin-wrap {
   background: transparent !important;
   border: none !important;
