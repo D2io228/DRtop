@@ -10,6 +10,7 @@ import { placeById } from '../data/places'
 import { TODAY } from '../config'
 import { cx, fmtDateTime, fmtTime, MONTHS_LONG, relativeDay, sameDay, sortByMatch } from '../lib/utils'
 import { getUser } from '../lib/entities'
+import { EVENT_ICON, IconFor } from '../lib/icons'
 
 export default function Events() {
   const { events, me, t, joinedEvents } = useApp()
@@ -49,7 +50,7 @@ export default function Events() {
         </Chip>
         {EVENT_CATEGORIES.map((c) => (
           <Chip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>
-            {c.emoji} {c.label}
+            <IconFor map={EVENT_ICON} id={c.id} className="h-3.5 w-3.5" /> {c.label}
           </Chip>
         ))}
       </ChipRow>
@@ -58,7 +59,7 @@ export default function Events() {
         <>
           {cat === 'all' && (
             <section className="mb-8">
-              <SectionHeader title="✨ Picked for you" />
+              <SectionHeader title="Picked for you" />
               <div className="no-scrollbar flex gap-4 overflow-x-auto px-4">
                 {forYou.map((e) => (
                   <EventCard key={e.id} ev={e} wide />
@@ -222,7 +223,7 @@ export function EventPage() {
       </div>
       <div className="px-4 pt-5">
         <span className="chip !py-1 text-xs">
-          {cat?.emoji} {cat?.label}
+          <IconFor map={EVENT_ICON} id={ev.category} className="h-3.5 w-3.5" /> {cat?.label}
         </span>
         <h1 className="mt-3 text-[28px] font-extrabold leading-tight tracking-tight">{ev.title}</h1>
 
@@ -383,7 +384,7 @@ export function CreateEvent() {
           <div className="flex flex-wrap gap-2">
             {EVENT_CATEGORIES.map((c) => (
               <Chip key={c.id} active={f.category === c.id} onClick={() => set('category', c.id)}>
-                {c.emoji} {c.label}
+                <IconFor map={EVENT_ICON} id={c.id} className="h-3.5 w-3.5" /> {c.label}
               </Chip>
             ))}
           </div>

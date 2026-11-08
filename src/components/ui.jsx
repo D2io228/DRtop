@@ -1,16 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ArrowLeft, BadgeCheck, Star, X } from 'lucide-react'
+import {
+  ArrowLeft, BadgeCheck, Star, X, Languages, Check, Undo2, Search, MessageCircle, CalendarDays, Bookmark, Users, PenLine, Briefcase, House, Stethoscope,
+  BookOpen, Bell, Moon, Compass, MapPin, Store, ClipboardList, Telescope, Sprout, HeartHandshake,
+} from 'lucide-react'
+import { BrandLogo } from '../lib/icons'
 import { photo, avatar as avatarUrl } from '../data/photos'
 import { COUNTRIES, LANGUAGES } from '../data/meta'
 import { cx, flagUrl } from '../lib/utils'
 import { useApp } from '../store/AppContext'
 
-export function Img({ src, w = 800, alt = '', className = '', ...rest }) {
+export function Img({ src, w = 800, alt = '', className = '', style, ...rest }) {
   const [failed, setFailed] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const url = failed && !import.meta.env.VITE_OFFLINE ? `https://picsum.photos/seed/${encodeURIComponent(src)}/${w}/${Math.round(w * 0.75)}` : photo(src, w)
-  return <img src={url} alt={alt} loading="lazy" onError={() => setFailed(true)} className={cx('bg-neutral-200 object-cover dark:bg-neutral-800', className)} {...rest} />
+  return (
+    <img
+      src={url}
+      alt={alt}
+      loading="lazy"
+      onLoad={() => setLoaded(true)}
+      onError={() => setFailed(true)}
+      className={cx('bg-neutral-100 object-cover transition-opacity duration-500 dark:bg-neutral-900', loaded ? 'opacity-100' : 'opacity-0', className)}
+      style={style}
+      {...rest}
+    />
+  )
 }
 
 export function Flag({ code, className = '' }) {
@@ -25,10 +41,12 @@ export function Flag({ code, className = '' }) {
   )
 }
 
-export function Avatar({ src, size = 40, flag, ring, className = '', emoji, onClick }) {
+export function Avatar({ src, size = 40, flag, ring, className = '', emoji, brand, onClick }) {
   return (
     <div className={cx('relative shrink-0', className)} style={{ width: size, height: size }} onClick={onClick}>
-      {emoji ? (
+      {brand ? (
+        <BrandLogo brand={brand} size={size} round />
+      ) : emoji ? (
         <div className="flex h-full w-full items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800" style={{ fontSize: size * 0.45 }}>
           {emoji}
         </div>
@@ -64,28 +82,28 @@ export function AvatarStack({ ids = [], resolve, size = 24, max = 4 }) {
 
 export function LangBadge({ code, highlight }) {
   return (
-    <span
-      title={LANGUAGES[code]}
-      className={cx(
-        'inline-flex h-5 items-center rounded-md px-1.5 text-[10px] font-bold uppercase tracking-wide',
-        highlight ? 'bg-accent-100 text-accent-700 dark:bg-accent/25 dark:text-accent-200' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300',
-      )}
-    >
+    <span title={LANGUAGES[code]} className={cx('text-[11px] font-semibold uppercase tracking-wide', highlight ? 'text-accent' : 'text-neutral-500 dark:text-neutral-400')}>
       {code}
     </span>
   )
 }
 
+// Compact language line: icon + codes, the viewer's own languages highlighted
 export function LangBadges({ langs = [], max = 4 }) {
   const { me } = useApp()
-  const sorted = [...langs].sort((a, b) => (me?.languages.includes(b) ? 1 : 0) - (me?.languages.includes(a) ? 1 : 0))
+  const mine = (l) => me?.languages.includes(l) && l !== 'en'
+  const sorted = [...langs].sort((a, b) => (mine(b) ? 1 : 0) - (mine(a) ? 1 : 0))
   return (
-    <div className="flex flex-wrap items-center gap-1">
-      {sorted.slice(0, max).map((l) => (
-        <LangBadge key={l} code={l} highlight={me?.languages.includes(l) && l !== 'en'} />
+    <span className="inline-flex items-center gap-1" title={langs.map((l) => LANGUAGES[l]).join(', ')}>
+      <Languages className="h-3 w-3 text-neutral-400" strokeWidth={2.2} />
+      {sorted.slice(0, max).map((l, i) => (
+        <span key={l} className="inline-flex items-center gap-1">
+          {i > 0 && <span className="h-0.5 w-0.5 rounded-full bg-neutral-300 dark:bg-neutral-600" />}
+          <LangBadge code={l} highlight={mine(l)} />
+        </span>
       ))}
       {langs.length > max && <span className="text-[10px] font-semibold text-neutral-400">+{langs.length - max}</span>}
-    </div>
+    </span>
   )
 }
 
@@ -140,18 +158,42 @@ export function ProgressRing({ value, size = 56, stroke = 6, color = '#6C47FF', 
   )
 }
 
+const EMPTY_ICON = {
+  '🔍': Search, '🧐': Search, '💬': MessageCircle, '📅': CalendarDays, '🌙': Moon, '🔖': Bookmark, '👥': Users, '✍️': PenLine, '💼': Briefcase,
+  '🏠': House, '🩺': Stethoscope, '📚': BookOpen, '🔔': Bell, '🤷': Compass, '📋': ClipboardList, '⭐': Star, '🔭': Telescope, '🌱': Sprout,
+  '🫶': HeartHandshake, '🏪': Store, '📍': MapPin,
+}
+
 export function EmptyState({ emoji = '🌱', title, text, action }) {
+  const Icon = EMPTY_ICON[emoji]
   return (
     <div className="flex flex-col items-center px-8 py-14 text-center animate-fade-up">
-      <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-neutral-100 text-4xl animate-bounce1 dark:bg-neutral-900">{emoji}</div>
-      <div className="text-lg font-bold">{title}</div>
-      {text && <p className="muted mt-1 max-w-xs text-sm">{text}</p>}
+      <div className="relative mb-5 flex h-20 w-20 items-center justify-center">
+        <div className="absolute inset-0 rotate-6 rounded-[28px] bg-accent-100 dark:bg-accent/15" />
+        <div className="absolute inset-0 -rotate-6 rounded-[28px] border border-accent-200 bg-white dark:border-accent/30 dark:bg-ink-800" />
+        {Icon ? <Icon className="relative h-8 w-8 text-accent" strokeWidth={1.8} /> : <span className="relative text-3xl">{emoji}</span>}
+      </div>
+      <div className="text-lg font-bold tracking-tight">{title}</div>
+      {text && <p className="muted mt-1 max-w-xs text-sm leading-relaxed">{text}</p>}
       {action && <div className="mt-5">{action}</div>}
     </div>
   )
 }
 
 export function Sheet({ open, onClose, children, title, className = '' }) {
+  const [drag, setDrag] = useState(0)
+  const start = useRef(null)
+  const onDown = (e) => {
+    if (e.target.closest('button')) return
+    start.current = e.clientY
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+  }
+  const onMove = (e) => start.current != null && setDrag(Math.max(0, e.clientY - start.current))
+  const onUp = () => {
+    if (drag > 110) onClose()
+    start.current = null
+    setDrag(0)
+  }
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -167,8 +209,9 @@ export function Sheet({ open, onClose, children, title, className = '' }) {
           'relative max-h-[90dvh] w-full overflow-y-auto rounded-t-[28px] bg-white pb-safe animate-sheet-up dark:bg-ink-800 md:max-w-lg md:rounded-[28px] md:animate-fade-up',
           className,
         )}
+        style={drag ? { transform: `translateY(${drag}px)`, transition: 'none' } : { transition: 'transform .25s cubic-bezier(.22,1,.36,1)' }}
       >
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur dark:bg-ink-800/95">
+        <div className="sticky top-0 z-10 touch-none bg-white/95 backdrop-blur dark:bg-ink-800/95" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}>
           <div className="mx-auto mt-2.5 h-1.5 w-10 rounded-full bg-neutral-300 dark:bg-neutral-700 md:hidden" />
           {title && (
             <div className="flex items-center justify-between px-5 pb-2 pt-3">
@@ -192,9 +235,11 @@ export function Toast() {
   return (
     <div
       key={toast.id}
-      className="fixed bottom-24 left-1/2 z-[1300] flex items-center gap-2 rounded-full bg-ink-900 px-4 py-2.5 text-sm font-semibold text-white shadow-lg animate-toast-in dark:bg-white dark:text-black md:bottom-8"
+      className="fixed bottom-24 left-1/2 z-[1300] flex items-center gap-2.5 whitespace-nowrap rounded-full bg-ink-900 py-2.5 pl-2.5 pr-4 text-sm font-semibold text-white shadow-lg animate-toast-in dark:bg-white dark:text-black md:bottom-8"
     >
-      <span>{toast.icon}</span>
+      <span className={cx('flex h-5 w-5 items-center justify-center rounded-full', toast.icon === '↩' ? 'bg-white/20 dark:bg-black/10' : 'bg-accent text-white')}>
+        {toast.icon === '↩' ? <Undo2 className="h-3 w-3" strokeWidth={2.5} /> : <Check className="h-3 w-3" strokeWidth={3} />}
+      </span>
       {toast.text}
     </div>
   )

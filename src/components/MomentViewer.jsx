@@ -97,7 +97,7 @@ export default function MomentViewer({ list, index, onClose }) {
             </span>
             {p && (
               <button onClick={() => (onClose(), nav(`/place/${p.id}`))} className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur hover:bg-white/30">
-                {p.logo} Visit {p.name} →
+                Visit {p.name} →
               </button>
             )}
           </div>

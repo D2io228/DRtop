@@ -6,6 +6,7 @@ import { POST_TYPES } from '../data/meta'
 import { places } from '../data/places'
 import { communities } from '../data/social'
 import { cx } from '../lib/utils'
+import { BrandLogo, brandOf } from '../lib/icons'
 
 const SAMPLE_PHOTOS = ['coffee', 'city', 'streetCafe', 'tree', 'friendsGroup', 'foodSpread']
 
@@ -101,7 +102,7 @@ export default function Composer() {
               )}
               {community && (
                 <span className="chip !py-1 text-xs">
-                  {community.emoji} {community.name}
+                  {community.name}
                   <X className="h-3.5 w-3.5 cursor-pointer" onClick={() => setCommunityId(null)} />
                 </span>
               )}
@@ -137,7 +138,7 @@ export default function Composer() {
                 .filter((p) => p.name.toLowerCase().includes(q.toLowerCase()))
                 .map((p) => (
                   <button key={p.id} onClick={() => (setPlaceId(p.id), setPicker(null), setQ(''))} className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left hover:bg-white dark:hover:bg-ink-800">
-                    <span className="text-xl">{p.logo}</span>
+                    <BrandLogo brand={brandOf(p)} size={32} />
                     <div className="min-w-0">
                       <div className="truncate text-sm font-semibold">{p.name}</div>
                       <div className="muted truncate text-xs">
@@ -153,7 +154,7 @@ export default function Composer() {
           <div className="mt-4 rounded-2xl bg-neutral-50 p-2 dark:bg-neutral-900">
             {communities.map((c) => (
               <button key={c.id} onClick={() => (setCommunityId(c.id), setPicker(null))} className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left hover:bg-white dark:hover:bg-ink-800">
-                <span className="text-xl">{c.emoji}</span>
+                <Img src={c.avatar} w={80} className="h-8 w-8 rounded-full" />
                 <span className="flex-1 text-sm font-semibold">{c.name}</span>
                 {joinedCommunities.has(c.id) && <span className="text-xs text-accent">Joined</span>}
               </button>

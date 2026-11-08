@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Bookmark, Heart, MessageCircle, Repeat2, Send, MapPin, Clock, Users, Briefcase, Wifi, Home, BedDouble, Ruler, CalendarDays, ChevronRight, BookOpen } from 'lucide-react'
+import { Bookmark, Heart, MessageCircle, Repeat2, Send, MapPin, Clock, Users, Briefcase, Wifi, BedDouble, Ruler, ChevronRight, BookOpen, Hand, Sparkles } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, AvatarStack, Flag, Img, LangBadges, Rating, Verified } from './ui'
 import { cx, fmtNum, timeAgo, fmtTime, relativeDay, monthShort, dayNum, isOpenNow, overlap } from '../lib/utils'
@@ -9,6 +9,7 @@ import { placeById } from '../data/places'
 import { communityById, translations } from '../data/social'
 import { COUNTRIES, LANGUAGES, interestById, EVENT_CATEGORIES } from '../data/meta'
 import { guideById } from '../data/guides'
+import { BrandLogo, brandOf, brandOfJob, EVENT_ICON, INTEREST_ICON } from '../lib/icons'
 
 const TYPE_STYLES = {
   question: { label: 'Question', cls: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300' },
@@ -89,7 +90,7 @@ export function PostCard({ post, compact }) {
           <LangBadges langs={author.languages} max={3} />
           {community && (
             <Link to={`/community/c/${community.id}`} className="muted truncate text-xs hover:underline">
-              in {community.emoji} {community.name}
+              in {community.name}
             </Link>
           )}
         </div>
@@ -113,7 +114,7 @@ export function PostCard({ post, compact }) {
         )}
         {place && (
           <Link to={`/place/${place.id}`} className="mt-3 flex items-center gap-2.5 rounded-2xl border divider p-2.5 transition hover:bg-neutral-50 dark:hover:bg-neutral-900">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-100 text-lg dark:bg-neutral-800">{place.logo}</span>
+            <BrandLogo brand={brandOf(place)} size={36} />
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold">{place.name}</div>
               <div className="muted flex items-center gap-1 truncate text-xs">
@@ -218,8 +219,9 @@ export function EventCard({ ev, wide }) {
           <Bookmark className={cx('h-4 w-4', saved.has(`event:${ev.id}`) && 'fill-current')} />
         </button>
         <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-          <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-ink-900 backdrop-blur">
-            {cat?.emoji} {cat?.label}
+          <span className="flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-ink-900 backdrop-blur">
+            {EVENT_ICON[ev.category] && (() => { const I = EVENT_ICON[ev.category]; return <I className="h-3.5 w-3.5" strokeWidth={2.2} /> })()}
+            {cat?.label}
           </span>
           {ev.price > 0 ? (
             <span className="rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur">€{ev.price}</span>
@@ -272,7 +274,7 @@ export function PlaceCard({ p }) {
       </div>
       <div className="px-0.5 pt-2.5">
         <div className="flex items-center gap-1.5">
-          <span className="text-base">{p.logo}</span>
+          <BrandLogo brand={brandOf(p)} size={20} className="!rounded-md" />
           <span className="truncate text-[15px] font-semibold">{p.name}</span>
           {p.verified && <Verified />}
         </div>
@@ -327,7 +329,7 @@ export function JobCard({ j }) {
   return (
     <Link to={`/job/${j.id}`} className="card block p-4 transition hover:-translate-y-0.5">
       <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-neutral-100 text-2xl dark:bg-neutral-800">{j.logo}</div>
+        <BrandLogo brand={brandOfJob(j, placeById)} size={48} />
         <div className="min-w-0 flex-1">
           <div className="text-[15px] font-semibold leading-snug">{j.title}</div>
           <div className="muted text-[13px]">
@@ -427,37 +429,44 @@ export function PersonCard({ u, onHi }) {
   const { me, t } = useApp()
   const shared = overlap(u.interests, me?.interests || [])
   const sharedLangs = overlap(u.languages, me?.languages || []).filter((l) => l !== 'en')
+  const reasons = [u.country === me?.country && `From ${COUNTRIES[u.country]} too`, sharedLangs.length > 0 && `Speaks ${sharedLangs.map((l) => LANGUAGES[l]).join(', ')}`, shared.length > 0 && `${shared.length} shared interest${shared.length > 1 ? 's' : ''}`].filter(Boolean)
+  const interests = [...u.interests].sort((a, b) => (shared.includes(b) ? 1 : 0) - (shared.includes(a) ? 1 : 0)).slice(0, 3)
   return (
     <div className="card flex flex-col p-4">
-      <Link to={`/u/${u.id}`} className="flex items-start gap-3">
-        <Avatar src={u.avatar} size={60} flag={u.country} />
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-[15px] font-semibold">{u.name}</div>
-          <div className="muted truncate text-[13px]">
-            From {COUNTRIES[u.country]} · {u.neighborhood}
+      <div className="flex items-center gap-3">
+        <Link to={`/u/${u.id}`}>
+          <Avatar src={u.avatar} size={52} flag={u.country} />
+        </Link>
+        <Link to={`/u/${u.id}`} className="min-w-0 flex-1">
+          <div className="truncate text-[15px] font-semibold leading-tight">{u.name}</div>
+          <div className="muted mt-0.5 truncate text-[13px]">
+            {u.neighborhood} · since {u.since.slice(0, 4)}
           </div>
-          <div className="muted text-[13px]">In Belgrade since {u.since.slice(0, 4)}</div>
-        </div>
-      </Link>
-      <div className="mt-3 flex items-center gap-1.5">
-        <LangBadges langs={u.languages} />
+          <div className="mt-1">
+            <LangBadges langs={u.languages} />
+          </div>
+        </Link>
+        <button onClick={() => onHi(u)} className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-accent-50 px-3.5 text-[13px] font-bold text-accent transition hover:bg-accent-100 active:scale-95 dark:bg-accent/15 dark:text-accent-200">
+          <Hand className="h-4 w-4" strokeWidth={2.2} /> {t('Say hi').replace(' 👋', '')}
+        </button>
       </div>
-      <div className="mt-2.5 flex min-h-[28px] flex-wrap gap-1">
-        {u.interests.slice(0, 4).map((i) => (
-          <span key={i} className={cx('rounded-full px-2 py-0.5 text-xs', shared.includes(i) ? 'bg-accent-100 font-semibold text-accent-700 dark:bg-accent/20 dark:text-accent-200' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300')}>
-            {interestById[i]?.emoji} {interestById[i]?.label}
-          </span>
-        ))}
+      {u.bio && <p className="mt-3 line-clamp-2 text-[14px] leading-snug text-neutral-600 dark:text-neutral-300">{u.bio}</p>}
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {interests.map((i) => {
+          const I = INTEREST_ICON[i]
+          return (
+            <span key={i} className={cx('flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium', shared.includes(i) ? 'bg-ink-900 text-white dark:bg-white dark:text-black' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300')}>
+              {I && <I className="h-3 w-3" strokeWidth={2.2} />} {interestById[i]?.label}
+            </span>
+          )
+        })}
       </div>
-      {(shared.length > 0 || sharedLangs.length > 0 || u.country === me?.country) && (
-        <div className="mt-2 text-xs font-semibold text-accent">
-          ✨ {[u.country === me?.country && 'Same country', sharedLangs.length > 0 && `Speaks ${sharedLangs.map((l) => LANGUAGES[l]).join(', ')}`, shared.length > 0 && `${shared.length} shared interest${shared.length > 1 ? 's' : ''}`].filter(Boolean).join(' · ')}
+      {reasons.length > 0 && (
+        <div className="mt-3 flex items-center gap-1.5 border-t divider pt-3 text-xs font-semibold text-accent">
+          <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
+          <span className="truncate">{reasons.join(' · ')}</span>
         </div>
       )}
-      <div className="flex-1" />
-      <button onClick={() => onHi(u)} className="btn-dark mt-4 w-full">
-        {t('Say hi')}
-      </button>
     </div>
   )
 }
@@ -465,13 +474,13 @@ export function PersonCard({ u, onHi }) {
 export function CommunityCircle({ c, joined, size = 68 }) {
   return (
     <Link to={`/community/c/${c.id}`} className="flex w-[76px] shrink-0 flex-col items-center gap-1.5 text-center">
-      <div className={cx('rounded-full p-[2.5px]', joined ? 'bg-gradient-to-tr from-accent via-fuchsia-500 to-amber-400' : 'bg-neutral-200 dark:bg-neutral-800')}>
+      <div className={cx('relative rounded-full p-[2.5px]', joined ? 'bg-gradient-to-tr from-accent via-fuchsia-500 to-amber-400' : 'bg-neutral-200 dark:bg-neutral-800')}>
         <div className="rounded-full bg-white p-[2px] dark:bg-black">
           <div className="relative overflow-hidden rounded-full" style={{ width: size - 9, height: size - 9 }}>
             <Img src={c.avatar} w={200} className="h-full w-full" />
-            <span className="absolute inset-0 flex items-center justify-center bg-black/25 text-2xl">{c.emoji}</span>
           </div>
         </div>
+        {c.country && <Flag code={c.country} className="absolute bottom-0 right-0 !h-[18px] !w-[18px] !rounded-full ring-2 !ring-white dark:!ring-black" />}
       </div>
       <span className="line-clamp-2 text-[11px] font-medium leading-tight">{c.name}</span>
     </Link>
@@ -484,7 +493,6 @@ export function CommunityRow({ c }) {
     <Link to={`/community/c/${c.id}`} className="flex items-center gap-3 px-4 py-3 transition hover:bg-neutral-50 dark:hover:bg-neutral-900">
       <div className="relative h-12 w-12 overflow-hidden rounded-2xl">
         <Img src={c.avatar} w={150} className="h-full w-full" />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/25 text-xl">{c.emoji}</span>
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 truncate font-semibold">

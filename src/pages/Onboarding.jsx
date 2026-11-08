@@ -6,6 +6,7 @@ import { Avatar, Img } from '../components/ui'
 import { Logo } from '../components/Layout'
 import { APP_NAME, APP_TAGLINE } from '../config'
 import { cx, flagUrl } from '../lib/utils'
+import { IconFor, INTEREST_ICON, ROLE_ICON } from '../lib/icons'
 
 const AVATARS = ['pv33', 'pv5', 'pv12', 'pv25', 'pv57', 'pv41']
 
@@ -165,7 +166,7 @@ export default function Onboarding() {
                   onClick={() => setRole(r.id)}
                   className={cx('flex items-center gap-4 rounded-3xl border-2 p-4 text-left transition active:scale-[.98] sm:flex-col sm:items-start', role === r.id ? 'border-accent bg-accent-50 dark:bg-accent/15' : 'divider')}
                 >
-                  <span className="text-4xl">{r.emoji}</span>
+                  <span className={cx('flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition', role === r.id ? 'bg-accent text-white' : 'bg-neutral-100 text-ink-900 dark:bg-neutral-800 dark:text-white')}><IconFor map={ROLE_ICON} id={r.id} className="h-6 w-6" strokeWidth={1.9} /></span>
                   <div>
                     <div className="font-bold">{r.label}</div>
                     <div className="muted text-sm">{r.desc}</div>
@@ -183,7 +184,7 @@ export default function Onboarding() {
             <div className="mt-6 flex flex-wrap gap-2.5">
               {INTERESTS.map((i) => (
                 <button key={i.id} onClick={() => toggle(interests, setInterests, i.id)} className={cx('chip !px-4 !py-2.5 !text-[15px]', interests.includes(i.id) && 'chip-accent')}>
-                  <span>{i.emoji}</span> {i.label}
+                  <IconFor map={INTEREST_ICON} id={i.id} className="h-4 w-4" /> {i.label}
                 </button>
               ))}
             </div>

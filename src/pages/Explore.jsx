@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Bookmark, ChevronRight, Eye, LocateFixed, Navigation, Play, Search, SlidersHorizontal, Users, X, Clock, Star } from 'lucide-react'
+import { Bookmark, ChevronRight, Eye, LocateFixed, Navigation, Play, Search, SlidersHorizontal, Users, X, Clock, Star, Languages } from 'lucide-react'
 import MapView from '../components/MapView'
 import MomentViewer from '../components/MomentViewer'
 import { Avatar, Chip, ChipRow, Flag, Img, LangBadges, ProgressRing, Rating, Sheet, Verified } from '../components/ui'
@@ -12,6 +12,7 @@ import { communities, moments } from '../data/social'
 import { userById } from '../data/users'
 import { goals } from '../data/guides'
 import { LANGUAGES, MAP_CATEGORIES, mapCat } from '../data/meta'
+import { KIND_ICON, brandOf, BrandLogo } from '../lib/icons'
 import { cx, distanceKm, fmtKm, fmtNum, fmtTime, isOpenNow, overlap, relativeDay } from '../lib/utils'
 
 const ME = [44.8065, 20.4689]
@@ -82,81 +83,75 @@ export default function Explore() {
 
   return (
     <div className="absolute inset-0 isolate overflow-hidden">
-      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe />
+      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe cluster />
 
-      {/* Top overlay */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] space-y-2.5 p-3 md:max-w-xl">
-        <Link to="/guides" className="pointer-events-auto flex items-center gap-3 rounded-2xl bg-white/95 p-2.5 pr-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,.15)] backdrop-blur transition active:scale-[.98] dark:bg-ink-800/95">
-          <ProgressRing value={progress} size={38} stroke={4.5}>
-            <span className="text-[10px] font-extrabold">{Math.round(progress * 100)}%</span>
-          </ProgressRing>
-          <div className="min-w-0 flex-1">
-            <div className="text-[13px] font-bold leading-tight">
-              {t('Your settling-in progress')} {Math.round(progress * 100)}%
-            </div>
-            <div className="muted truncate text-xs">Next: {nextStep(done)?.title}</div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-neutral-400" />
-        </Link>
-
-        <div className="pointer-events-auto flex gap-2">
-          <div className="flex h-12 flex-1 items-center gap-2 rounded-full bg-white px-4 shadow-[0_2px_12px_-4px_rgba(0,0,0,.15)] dark:bg-ink-800">
-            <Search className="h-[18px] w-[18px] text-neutral-400" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Search places, people, events…')} className="min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-neutral-400" />
-            {q && (
-              <button onClick={() => setQ('')} aria-label="Clear">
-                <X className="h-4 w-4 text-neutral-400" />
-              </button>
-            )}
-          </div>
-          <button onClick={() => setFilterOpen(true)} className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,.15)] transition active:scale-90 dark:bg-ink-800" aria-label="Filters">
-            <SlidersHorizontal className="h-5 w-5" />
-            {filterCount > 0 && <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-white">{filterCount}</span>}
+      {/* Top overlay (sits under the floating top bar) */}
+      <div className="pointer-events-none absolute inset-x-0 top-[60px] z-[500] space-y-2.5 px-3 md:max-w-xl">
+        <div className="float-ui pointer-events-auto flex h-12 items-center gap-2 rounded-full pl-4 pr-1.5">
+          <Search className="h-[18px] w-[18px] shrink-0 text-neutral-400" strokeWidth={2.2} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Search places, people, events…')} className="min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-neutral-400" />
+          {q && (
+            <button onClick={() => setQ('')} aria-label="Clear" className="p-1">
+              <X className="h-4 w-4 text-neutral-400" />
+            </button>
+          )}
+          <button onClick={() => setFilterOpen(true)} className={cx('relative flex h-9 w-9 items-center justify-center rounded-full transition active:scale-90', filterCount ? 'bg-ink-900 text-white dark:bg-white dark:text-black' : 'bg-neutral-100 dark:bg-neutral-800')} aria-label="Filters">
+            <SlidersHorizontal className="h-4 w-4" strokeWidth={2.2} />
+            {filterCount > 0 && <span className="absolute -right-1 -top-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white ring-2 ring-white dark:ring-ink-800">{filterCount}</span>}
           </button>
         </div>
 
-        <ChipRow className="pointer-events-auto !mx-0 !px-0 pb-1">
-          <Chip active={myLangs} accent onClick={() => setMyLangs(!myLangs)} className="shadow-sm">
-            🗣️ Speaks my language
-          </Chip>
-          <Chip active={cat === 'all'} onClick={() => setCat('all')} className="shadow-sm">
-            All
-          </Chip>
-          {MAP_CATEGORIES.map((c) => (
-            <Chip key={c.id} active={cat === c.id} onClick={() => setCat(cat === c.id ? 'all' : c.id)} className="shadow-sm">
-              <span className="h-2 w-2 rounded-full" style={{ background: c.color }} />
-              {c.label}
-            </Chip>
-          ))}
-        </ChipRow>
+        <div className="no-scrollbar pointer-events-auto -mx-3 flex gap-2 overflow-x-auto px-3 pb-2">
+          <Link to="/guides" className="float-ui flex h-9 shrink-0 items-center gap-2 rounded-full pl-1 pr-3.5 text-[13px] font-semibold transition active:scale-95">
+            <ProgressRing value={progress} size={28} stroke={3.5}>
+              <span className="text-[8.5px] font-extrabold">{Math.round(progress * 100)}</span>
+            </ProgressRing>
+            Settling in
+            <ChevronRight className="-ml-1 h-3.5 w-3.5 text-neutral-400" />
+          </Link>
+          <MapChip active={myLangs} accent onClick={() => setMyLangs(!myLangs)}>
+            <Languages className="h-3.5 w-3.5" strokeWidth={2.2} /> My languages
+          </MapChip>
+          {MAP_CATEGORIES.map((c) => {
+            const Icon = KIND_ICON[c.id]
+            return (
+              <MapChip key={c.id} active={cat === c.id} onClick={() => setCat(cat === c.id ? 'all' : c.id)}>
+                <span className="flex h-5 w-5 items-center justify-center rounded-full text-white" style={{ background: c.color }}>
+                  <Icon className="h-3 w-3" strokeWidth={2.4} />
+                </span>
+                {c.label}
+              </MapChip>
+            )
+          })}
+        </div>
       </div>
 
       {/* Locate */}
       <button
         onClick={() => setFly([...ME])}
-        className="absolute right-3 z-[500] flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,.2)] transition active:scale-90 dark:bg-ink-800"
-        style={{ bottom: selected ? 300 : 222 }}
+        className="float-ui absolute right-3 z-[500] flex h-11 w-11 items-center justify-center rounded-full transition-all active:scale-90"
+        style={{ bottom: selected ? 300 : 214 }}
         aria-label="My location"
       >
-        <LocateFixed className="h-5 w-5 text-accent" />
+        <LocateFixed className="h-5 w-5 text-accent" strokeWidth={2.2} />
       </button>
 
       {/* Bottom: moments or preview */}
       {!selected && (
         <div className="absolute inset-x-0 bottom-0 z-[500] pb-3 animate-fade-up">
-          <div className="mb-2 flex items-center justify-between px-3">
-            <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-bold shadow-sm backdrop-blur dark:bg-ink-800/95">
-              ✨ {t('Moments around you')}
+          <div className="mb-2 px-3">
+            <span className="float-ui inline-flex items-center gap-1.5 rounded-full py-1.5 pl-2.5 pr-3 text-[13px] font-bold">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-rose-500" />
+              {t('Moments around you')}
             </span>
-            <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold shadow-sm backdrop-blur dark:bg-ink-800/95">{filtered.length} places on map</span>
           </div>
           <div className="no-scrollbar flex gap-2.5 overflow-x-auto px-3">
             {moments.map((m, i) => {
               const u = userById[m.userId]
               return (
-                <button key={m.id} onClick={() => setMoment(i)} className="relative h-[156px] w-[108px] shrink-0 overflow-hidden rounded-2xl shadow-md transition active:scale-95">
+                <button key={m.id} onClick={() => setMoment(i)} className="relative h-[150px] w-[106px] shrink-0 overflow-hidden rounded-[20px] shadow-[0_6px_20px_-8px_rgba(0,0,0,.45)] ring-2 ring-white transition active:scale-95 dark:ring-ink-800">
                   <Img src={m.photo} w={300} className="h-full w-full" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/75" />
                   <div className="absolute left-2 top-2 rounded-full bg-gradient-to-tr from-accent via-fuchsia-500 to-amber-400 p-[2px]">
                     <Avatar src={u.avatar} size={30} className="rounded-full ring-2 ring-black/20" />
                   </div>
@@ -183,7 +178,7 @@ export default function Explore() {
           <div>
             <div className="label">City</div>
             <div className="flex gap-2">
-              <Chip active>📍 Belgrade</Chip>
+              <Chip active>Belgrade</Chip>
               <Chip className="opacity-50">Novi Sad · soon</Chip>
             </div>
           </div>
@@ -195,7 +190,7 @@ export default function Explore() {
               </Chip>
               {MAP_CATEGORIES.map((c) => (
                 <Chip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>
-                  {c.emoji} {c.label}
+                  <span className="h-2 w-2 rounded-full" style={{ background: c.color }} /> {c.label}
                 </Chip>
               ))}
             </div>
@@ -274,7 +269,7 @@ function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggle
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-[600] p-3 animate-sheet-up md:left-3 md:right-auto md:w-[400px]">
-      <div className="overflow-hidden rounded-[28px] bg-white shadow-2xl dark:bg-ink-800">
+      <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_50px_-15px_rgba(0,0,0,.45)] dark:bg-ink-800 dark:ring-1 dark:ring-white/10">
         <div className="relative cursor-pointer" onClick={() => nav(link)}>
           {r.profession ? (
             <div className="flex items-center gap-3 p-4 pb-0">
@@ -309,8 +304,7 @@ function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggle
             <div className="flex items-start gap-2">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-lg font-bold leading-tight">
-                  {r.logo && <span>{r.logo}</span>}
-                  {r.emoji && <span>{r.emoji}</span>}
+                  {r.logo && <BrandLogo brand={brandOf(r)} size={24} />}
                   <span className="truncate">{it.name}</span>
                   {r.verified && <Verified />}
                 </div>
@@ -334,7 +328,7 @@ function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggle
             </span>
             <LangBadges langs={it.languages} />
           </div>
-          {speaksMine?.length > 0 && <div className="mt-2 text-xs font-semibold text-accent">🗣️ Speaks {speaksMine.map((l) => LANGUAGES[l]).join(', ')}</div>}
+          {speaksMine?.length > 0 && <div className="mt-2 flex items-center gap-1 text-xs font-semibold text-accent"><Languages className="h-3.5 w-3.5" /> Speaks {speaksMine.map((l) => LANGUAGES[l]).join(', ')}</div>}
           <div className="mt-4 flex gap-2">
             {it.type === 'event' ? (
               <JoinButton joined={joinedEvents.has(r.id)} onClick={() => toggleEvent(r.id)} className="flex-1" />
@@ -355,5 +349,19 @@ function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggle
         </div>
       </div>
     </div>
+  )
+}
+
+function MapChip({ active, accent, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cx(
+        'flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full pl-2 pr-3.5 text-[13px] font-semibold transition active:scale-95',
+        active ? (accent ? 'bg-accent text-white shadow-[0_6px_16px_-6px_rgba(108,71,255,.7)]' : 'bg-ink-900 text-white dark:bg-white dark:text-black') : 'float-ui',
+      )}
+    >
+      {children}
+    </button>
   )
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ImagePlus, MapPin, MessageCircle, Plus, Users, HelpCircle, Share2 } from 'lucide-react'
+import { ImagePlus, MapPin, MessageCircle, Plus, Users, HelpCircle, Share2, Check } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, AvatarStack, EmptyState, Flag, Img, LangBadges, PageHeader, Tabs, FloatingBack, RoundBtn } from '../components/ui'
 import { CommunityCircle, CommunityRow, JoinButton, PostCard } from '../components/cards'
@@ -93,7 +93,7 @@ export default function Community() {
               {i === 3 && tab === 'foryou' && <SuggestedCommunities />}
             </div>
           ))}
-          <div className="muted py-10 text-center text-sm">You’re all caught up ✨</div>
+          <div className="muted flex flex-col items-center gap-2 py-12 text-center text-sm"><span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent text-accent"><Check className="h-5 w-5" strokeWidth={2.5} /></span>You’re all caught up</div>
         </>
       )}
     </div>
@@ -133,10 +133,9 @@ export function CommunityPage() {
         <FloatingBack right={<RoundBtn label="Share" onClick={() => showToast('Invite link copied', '🔗')}><Share2 className="h-4 w-4" /></RoundBtn>} />
       </div>
       <div className="px-4">
-        <div className="-mt-10 flex items-end justify-between">
+        <div className="relative z-10 -mt-10 flex items-end justify-between">
           <div className="relative h-20 w-20 overflow-hidden rounded-3xl ring-4 ring-white dark:ring-black">
             <Img src={c.avatar} w={200} className="h-full w-full" />
-            <span className="absolute inset-0 flex items-center justify-center bg-black/20 text-3xl">{c.emoji}</span>
           </div>
           <div className="flex gap-2 pb-1">
             <button

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Search, SlidersHorizontal, Star, X, Rocket } from 'lucide-react'
+import { Search, SlidersHorizontal, Star, X, Rocket, Languages } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Chip, ChipRow, EmptyState, Sheet, Tabs } from '../components/ui'
 import { HousingCard, JobCard, PlaceCard, SpecialistCard } from '../components/cards'
@@ -11,12 +11,13 @@ import { housing } from '../data/market'
 import { LANGUAGES, NEIGHBORHOODS } from '../data/meta'
 import { APP_NAME } from '../config'
 import { isOpenNow, overlap, sortByMatch } from '../lib/utils'
+import { IconFor, KIND_ICON } from '../lib/icons'
 
 const BIZ_CATS = [
-  { id: 'cafe', label: '☕ Cafés' },
-  { id: 'restaurant', label: '🍽️ Restaurants' },
-  { id: 'shop', label: '🛍️ Shops' },
-  { id: 'service', label: '🛠️ Services' },
+  { id: 'cafe', label: 'Cafés' },
+  { id: 'restaurant', label: 'Restaurants' },
+  { id: 'shop', label: 'Shops' },
+  { id: 'service', label: 'Services' },
 ]
 
 export default function Services() {
@@ -90,7 +91,7 @@ export default function Services() {
         onChange={setTab}
         className="sticky top-0 z-20 glass"
         tabs={[
-          { id: 'places', label: t('Places & Businesses') },
+          { id: 'places', label: <><span className="sm:hidden">{t('Places')}</span><span className="hidden sm:inline">{t('Places & Businesses')}</span></> },
           { id: 'specialists', label: t('Specialists') },
           { id: 'jobs', label: t('Jobs') },
           { id: 'housing', label: t('Housing') },
@@ -112,7 +113,7 @@ export default function Services() {
         {tab === 'places' && (
           <>
             <Chip active={cat === 'all'} onClick={() => setCat('all')}>All</Chip>
-            {BIZ_CATS.map((c) => <Chip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>{c.label}</Chip>)}
+            {BIZ_CATS.map((c) => <Chip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}><IconFor map={KIND_ICON} id={c.id} className="h-3.5 w-3.5" /> {c.label}</Chip>)}
           </>
         )}
         {tab === 'specialists' && (
@@ -136,7 +137,7 @@ export default function Services() {
         )}
         {me && me.languages.filter((l) => l !== 'en').slice(0, 2).map((l) => (
           <Chip key={l} accent active={langs.includes(l)} onClick={() => setLangs(langs.includes(l) ? langs.filter((x) => x !== l) : [...langs, l])}>
-            🗣️ {LANGUAGES[l]}
+            <Languages className="h-3.5 w-3.5" strokeWidth={2.2} /> {LANGUAGES[l]}
           </Chip>
         ))}
       </ChipRow>

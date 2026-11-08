@@ -3,6 +3,7 @@ import { placeById } from '../data/places'
 import { specialistById } from '../data/specialists'
 import { communityById } from '../data/social'
 import { jobById, housingById } from '../data/market'
+import { brandOf, brandOfJob } from './icons'
 
 export const getUser = (id, me) => {
   if (id === 'me') return me ? { id: 'me', ...me } : null
@@ -19,7 +20,7 @@ export const chatMeta = (chat, { me, events, jobs }) => {
     }
     case 'business': {
       const p = placeById[chat.refId]
-      return { title: p?.name, emoji: p?.logo, subtitle: p?.category, link: `/place/${p?.id}` }
+      return { title: p?.name, brand: p && brandOf(p), subtitle: p?.category, link: `/place/${p?.id}` }
     }
     case 'specialist': {
       const s = specialistById[chat.refId]
@@ -33,7 +34,7 @@ export const chatMeta = (chat, { me, events, jobs }) => {
       return { title: ev?.title, avatar: ev?.cover, photo: true, subtitle: 'Event group chat', link: `/event/${ev?.id}`, group: true }
     case 'job': {
       const j = jobs?.find((x) => x.id === chat.refId) || jobById[chat.refId]
-      return { title: j?.company, emoji: j?.logo, subtitle: `Re: ${j?.title}`, link: `/job/${j?.id}` }
+      return { title: j?.company, brand: j && brandOfJob(j, placeById), subtitle: `Re: ${j?.title}`, link: `/job/${j?.id}` }
     }
     case 'housing': {
       const h = housingById[chat.refId]
@@ -49,10 +50,10 @@ export const senderMeta = (from, chat, ctx) => {
   if (from === 'me') return { name: 'You', avatar: ctx.me?.avatar }
   if (from === 'contact' || from === chat.refId) {
     const m = chatMeta(chat, ctx)
-    return { name: m.title, avatar: m.avatar, emoji: m.emoji }
+    return { name: m.title, avatar: m.avatar, brand: m.brand }
   }
   const p = placeById[from]
-  if (p) return { name: p.name, emoji: p.logo }
+  if (p) return { name: p.name, brand: brandOf(p) }
   const u = userById[from]
   return { name: u?.name, avatar: u?.avatar, flag: u?.country }
 }

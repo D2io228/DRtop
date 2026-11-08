@@ -12,6 +12,7 @@ import { housingById } from '../data/market'
 import { guideById } from '../data/guides'
 import { COUNTRIES, interestById, INTERESTS, LANGUAGES, NEIGHBORHOODS, ROLES } from '../data/meta'
 import { cx, fmtNum, MONTHS_LONG } from '../lib/utils'
+import { BrandLogo, brandOfName, IconFor, INTEREST_ICON } from '../lib/icons'
 
 const sinceLabel = (s) => {
   const [y, m] = s.split('-')
@@ -64,7 +65,7 @@ export default function Profile() {
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {u.interests.map((i) => (
-            <span key={i} className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium dark:bg-neutral-800">{interestById[i]?.emoji} {interestById[i]?.label}</span>
+            <span key={i} className="flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium dark:bg-neutral-800"><IconFor map={INTEREST_ICON} id={i} className="h-3 w-3" /> {interestById[i]?.label}</span>
           ))}
         </div>
         <div className="mt-4 flex gap-5 text-sm">
@@ -174,7 +175,7 @@ function EditProfile({ open, onClose }) {
         </div>
         <div>
           <label className="label">Interests</label>
-          <div className="flex flex-wrap gap-2">{INTERESTS.map((i) => <Chip key={i.id} accent active={f.interests.includes(i.id)} onClick={() => tog('interests', i.id)}>{i.emoji} {i.label}</Chip>)}</div>
+          <div className="flex flex-wrap gap-2">{INTERESTS.map((i) => <Chip key={i.id} accent active={f.interests.includes(i.id)} onClick={() => tog('interests', i.id)}><IconFor map={INTEREST_ICON} id={i.id} className="h-3.5 w-3.5" /> {i.label}</Chip>)}</div>
         </div>
         <button className="btn-dark w-full py-3" onClick={() => { setMe(f); onClose(); showToast('Profile updated', '✨') }}>Save</button>
       </div>
@@ -208,7 +209,7 @@ export function BusinessDashboard() {
       <PageHeader title="Business dashboard" subtitle={business.name} />
       <div className="px-4 pt-5">
         <div className="flex items-center gap-4 rounded-[28px] bg-ink-900 p-5 text-white dark:bg-ink-800">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-3xl">🏪</div>
+          <BrandLogo brand={brandOfName(business.name)} size={64} />
           <div className="min-w-0 flex-1">
             <div className="truncate text-xl font-extrabold">{business.name}</div>
             <div className="text-sm text-white/70">{business.category} · {business.address}</div>

@@ -10,6 +10,7 @@ import { communities } from '../data/social'
 import { guides } from '../data/guides'
 import { housing } from '../data/market'
 import { cx, fmtTime, relativeDay } from '../lib/utils'
+import { BrandLogo, brandOf } from '../lib/icons'
 
 const ICONS = {
   heart: <Heart className="h-3.5 w-3.5 fill-white" />,
@@ -71,9 +72,9 @@ export function Search() {
   const show = (k) => tab === 'all' || tab === k
   const TRENDING = ['residence permit', 'dentist', 'Dorćol', 'language exchange', 'kindergarten', 'simit', 'coworking', 'apartment']
 
-  const Row = ({ to, img, avatar, emoji, title, sub }) => (
+  const Row = ({ to, img, avatar, brand, title, sub }) => (
     <Link to={to} className="flex items-center gap-3 px-4 py-2.5 transition hover:bg-neutral-50 dark:hover:bg-neutral-950">
-      {avatar ? <Avatar src={avatar} size={44} /> : img ? <Img src={img} w={120} className="h-11 w-11 rounded-xl" /> : <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-neutral-100 text-xl dark:bg-neutral-800">{emoji}</div>}
+      {brand ? <BrandLogo brand={brand} size={44} /> : avatar ? <Avatar src={avatar} size={44} /> : img ? <Img src={img} w={120} className="h-11 w-11 rounded-xl" /> : <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-neutral-100 text-xl dark:bg-neutral-800">{emoji}</div>}
       <div className="min-w-0 flex-1">
         <div className="truncate font-semibold">{title}</div>
         <div className="muted truncate text-sm">{sub}</div>
@@ -102,11 +103,11 @@ export function Search() {
         <>
           <Tabs value={tab} onChange={setTab} tabs={[{ id: 'all', label: `All ${total}` }, ...Object.entries(res).filter(([, v]) => v.length).map(([k, v]) => ({ id: k, label: `${k[0].toUpperCase()}${k.slice(1)} ${v.length}` }))]} />
           {total === 0 && <EmptyState emoji="🧐" title={`Nothing for “${q}”`} text="Try another word — or ask the community!" />}
-          <Group k="places" title="Places" n={res.places.length}>{res.places.map((p) => <Row key={p.id} to={`/place/${p.id}`} img={p.cover} title={`${p.logo} ${p.name}`} sub={`${p.category} · ${p.neighborhood}`} />)}</Group>
+          <Group k="places" title="Places" n={res.places.length}>{res.places.map((p) => <Row key={p.id} to={`/place/${p.id}`} brand={brandOf(p)} title={p.name} sub={`${p.category} · ${p.neighborhood}`} />)}</Group>
           <Group k="specialists" title="Specialists" n={res.specialists.length}>{res.specialists.map((x) => <Row key={x.id} to={`/specialist/${x.id}`} avatar={x.avatar} title={x.name} sub={x.profession} />)}</Group>
           <Group k="people" title="People" n={res.people.length}>{res.people.map((u) => <Row key={u.id} to={`/u/${u.id}`} avatar={u.avatar} title={u.name} sub={`@${u.handle} · ${u.neighborhood}`} />)}</Group>
           <Group k="events" title="Events" n={res.events.length}>{res.events.map((e) => <Row key={e.id} to={`/event/${e.id}`} img={e.cover} title={e.title} sub={`${relativeDay(e.date)} · ${fmtTime(e.date)} · ${e.venue}`} />)}</Group>
-          <Group k="communities" title="Communities" n={res.communities.length}>{res.communities.map((c) => <Row key={c.id} to={`/community/c/${c.id}`} img={c.avatar} title={`${c.emoji} ${c.name}`} sub={`${c.members.toLocaleString()} members`} />)}</Group>
+          <Group k="communities" title="Communities" n={res.communities.length}>{res.communities.map((c) => <Row key={c.id} to={`/community/c/${c.id}`} img={c.avatar} title={c.name} sub={`${c.members.toLocaleString()} members`} />)}</Group>
           <Group k="guides" title="Guides" n={res.guides.length}>{res.guides.map((g) => <Row key={g.id} to={`/guide/${g.id}`} img={g.cover} title={g.title} sub={g.topic} />)}</Group>
           <Group k="housing" title="Housing" n={res.housing.length}>{res.housing.map((h) => <Row key={h.id} to={`/housing/${h.id}`} img={h.photos[0]} title={h.title} sub={`€${h.price}/mo · ${h.neighborhood}`} />)}</Group>
           <Group k="posts" title="Posts" n={res.posts.length}>{res.posts.map((p) => { const u = userById[p.authorId]; return <Row key={p.id} to={`/post/${p.id}`} avatar={u?.avatar} title={u?.name || 'You'} sub={p.text} /> })}</Group>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Paperclip, Search, Send, SlidersHorizontal, Smile, FileText, Users, ImagePlus, Info } from 'lucide-react'
+import { Paperclip, Search, Send, SlidersHorizontal, FileText, Users, Info, Languages } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, Chip, ChipRow, EmptyState, Flag, Img, PageHeader, Sheet, Tabs } from '../components/ui'
 import { PersonCard } from '../components/cards'
@@ -8,6 +8,7 @@ import { users } from '../data/users'
 import { COUNTRIES, INTERESTS, LANGUAGES, NEIGHBORHOODS } from '../data/meta'
 import { chatMeta, senderMeta } from '../lib/entities'
 import { cx, sortByMatch } from '../lib/utils'
+import { IconFor, INTEREST_ICON } from '../lib/icons'
 
 export default function Connect() {
   const { t, chats } = useApp()
@@ -82,7 +83,7 @@ function People() {
       <ChipRow className="py-4">
         {me.languages.filter((l) => l !== 'en').map((l) => (
           <Chip key={l} accent active={langs.includes(l)} onClick={() => setLangs(langs.includes(l) ? langs.filter((x) => x !== l) : [...langs, l])}>
-            🗣️ Speaks {LANGUAGES[l]}
+            <Languages className="h-3.5 w-3.5" strokeWidth={2.2} /> Speaks {LANGUAGES[l]}
           </Chip>
         ))}
         <Chip active={country === me.country} onClick={() => setCountry(country === me.country ? 'all' : me.country)}>
@@ -92,7 +93,7 @@ function People() {
           const it = INTERESTS.find((x) => x.id === i)
           return (
             <Chip key={i} active={interest.includes(i)} onClick={() => setInterest(interest.includes(i) ? interest.filter((x) => x !== i) : [...interest, i])}>
-              {it.emoji} {it.label}
+              <IconFor map={INTEREST_ICON} id={i} className="h-3.5 w-3.5" /> {it.label}
             </Chip>
           )
         })}
@@ -133,7 +134,7 @@ function People() {
           <div>
             <div className="label">Interests</div>
             <div className="flex flex-wrap gap-2">
-              {INTERESTS.map((i) => <Chip key={i.id} active={interest.includes(i.id)} onClick={() => setInterest(interest.includes(i.id) ? interest.filter((x) => x !== i.id) : [...interest, i.id])}>{i.emoji} {i.label}</Chip>)}
+              {INTERESTS.map((i) => <Chip key={i.id} active={interest.includes(i.id)} onClick={() => setInterest(interest.includes(i.id) ? interest.filter((x) => x !== i.id) : [...interest, i.id])}><IconFor map={INTEREST_ICON} id={i.id} className="h-3.5 w-3.5" /> {i.label}</Chip>)}
             </div>
           </div>
           <div>
@@ -189,7 +190,7 @@ function ChatList() {
                   <span className="absolute bottom-0.5 right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white text-ink-900 dark:bg-black dark:text-white"><Users className="h-3 w-3" /></span>
                 </div>
               ) : (
-                <Avatar src={m.avatar} emoji={m.emoji} size={56} flag={m.flag} />
+                <Avatar src={m.avatar} brand={m.brand} size={56} flag={m.flag} />
               )}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
@@ -239,7 +240,7 @@ export function ChatPage() {
       <PageHeader
         title={
           <Link to={m.link || '#'} className="flex items-center gap-2.5">
-            {m.photo ? <Img src={m.avatar} w={100} className="h-9 w-9 rounded-xl" /> : <Avatar src={m.avatar} emoji={m.emoji} size={36} />}
+            {m.photo ? <Img src={m.avatar} w={100} className="h-9 w-9 rounded-xl" /> : <Avatar src={m.avatar} brand={m.brand} size={36} />}
             <span className="min-w-0">
               <span className="block truncate text-[15px] font-bold leading-tight">{m.title}</span>
               <span className="muted block truncate text-xs font-normal">{typer ? 'typing…' : m.subtitle}</span>
@@ -263,7 +264,7 @@ export function ChatPage() {
           const s = !mine && senderMeta(msg.from, chat, ctx)
           return (
             <div key={msg.id} className={cx('flex items-end gap-2 animate-fade-up', mine ? 'justify-end' : 'justify-start', first && 'pt-2')}>
-              {!mine && <div className="w-7 shrink-0">{first && <Avatar src={s.avatar} emoji={s.emoji} size={28} />}</div>}
+              {!mine && <div className="w-7 shrink-0">{first && <Avatar src={s.avatar} brand={s.brand} size={28} />}</div>}
               <div className={cx('max-w-[78%]')}>
                 {!mine && first && m.group && <div className="mb-0.5 ml-3 text-xs font-semibold text-neutral-500">{s.name} {s.flag && <Flag code={s.flag} className="ml-0.5" />}</div>}
                 {msg.attachment && (
@@ -287,7 +288,7 @@ export function ChatPage() {
         })}
         {typer && (
           <div className="flex items-end gap-2 pt-2">
-            <Avatar src={typer.avatar} emoji={typer.emoji} size={28} />
+            <Avatar src={typer.avatar} brand={typer.brand} size={28} />
             <div className="flex gap-1 rounded-[20px] rounded-bl-md bg-neutral-100 px-4 py-3 dark:bg-neutral-800">
               {[0, 1, 2].map((i) => <span key={i} className="h-2 w-2 animate-bounce rounded-full bg-neutral-400" style={{ animationDelay: `${i * 0.15}s` }} />)}
             </div>

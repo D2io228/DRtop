@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
-  Bookmark, CalendarDays, Check, ChevronRight, Clock, Globe, MapPin, MessageCircle, Navigation, Phone, Share2, Briefcase, Wifi, BedDouble, Ruler, Layers, PawPrint, Sofa, FileText, ShieldCheck,
+  Bookmark, Languages, CalendarDays, Check, ChevronRight, Clock, Globe, MapPin, MessageCircle, Navigation, Phone, Share2, Briefcase, Wifi, BedDouble, Ruler, Layers, PawPrint, Sofa, FileText, ShieldCheck,
 } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, EmptyState, Flag, FloatingBack, Img, LangBadges, PageHeader, Rating, RoundBtn, Sheet, Stars, Tabs, Verified, Chip } from '../components/ui'
@@ -15,6 +15,7 @@ import { COUNTRIES, LANGUAGES, mapCat } from '../data/meta'
 import { APP_NAME } from '../config'
 import { cx, fmtNum, hoursLabel, isOpenNow, overlap, WEEK } from '../lib/utils'
 import { getUser } from '../lib/entities'
+import { BrandLogo, brandOf, brandOfJob } from '../lib/icons'
 
 function Reviews({ reviews: initial, rating, count }) {
   const { me, showToast } = useApp()
@@ -118,8 +119,8 @@ export function PlacePage() {
         />
       </div>
       <div className="px-4">
-        <div className="-mt-8 flex items-end justify-between">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-3xl shadow-sm ring-4 ring-white dark:bg-ink-800 dark:ring-black">{p.logo}</div>
+        <div className="relative z-10 -mt-8 flex items-end justify-between">
+          <BrandLogo brand={brandOf(p)} size={68} className="ring-4 ring-white dark:ring-black" />
           {!isOrg && (
             <button onClick={() => toggleFollowBiz(p.id)} className={cx(following ? 'btn-soft' : 'btn-dark', '!py-2')}>
               {following ? '✓ Following' : t('Follow')}
@@ -142,7 +143,7 @@ export function PlacePage() {
           <LangBadges langs={p.languages} max={6} />
           {p.ownerCountry && <span className="muted flex items-center gap-1 text-xs"><Flag code={p.ownerCountry} /> {COUNTRIES[p.ownerCountry]}-owned</span>}
         </div>
-        {speaks?.length > 0 && <div className="mt-2 inline-block rounded-full bg-accent-50 px-3 py-1 text-xs font-semibold text-accent-700 dark:bg-accent/15 dark:text-accent-200">🗣️ Staff speak {speaks.map((l) => LANGUAGES[l]).join(', ')}</div>}
+        {speaks?.length > 0 && <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-accent-50 px-3 py-1 text-xs font-semibold text-accent-700 dark:bg-accent/15 dark:text-accent-200"><Languages className="h-3.5 w-3.5" strokeWidth={2.2} /> Staff speak {speaks.map((l) => LANGUAGES[l]).join(', ')}</div>}
 
         <div className="mt-5 flex gap-2">
           {!isOrg && <ActionBtn icon={<MessageCircle className="h-5 w-5" />} label={t('Message')} onClick={message} active />}
@@ -287,7 +288,7 @@ export function SpecialistPage() {
             <ShieldCheck className="h-3.5 w-3.5" /> Verified — license & ID checked by {APP_NAME}
           </div>
         )}
-        {speaks?.length > 0 && <div className="mt-2 text-xs font-semibold text-accent">🗣️ Speaks your language: {speaks.map((l) => LANGUAGES[l]).join(', ')}</div>}
+        {speaks?.length > 0 && <div className="mt-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-accent"><Languages className="h-3.5 w-3.5" strokeWidth={2.2} /> Speaks your language: {speaks.map((l) => LANGUAGES[l]).join(', ')}</div>}
         <div className="mx-auto mt-5 flex max-w-sm gap-2">
           <button onClick={() => nav(`/chat/${findOrCreateChat({ kind: 'specialist', refId: s.id })}`)} className="btn-ghost flex-1 py-3">
             <MessageCircle className="h-4 w-4" /> {t('Message')}
@@ -398,7 +399,7 @@ export function JobPage() {
       <PageHeader title={j.company} subtitle="Job" right={<button className="icon-btn" onClick={() => toggleSave(`job:${j.id}`)} aria-label="Save"><Bookmark className={cx('h-5 w-5', saved.has(`job:${j.id}`) && 'fill-current')} /></button>} />
       <div className="space-y-7 px-4 pt-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-neutral-100 text-3xl dark:bg-neutral-800">{j.logo}</div>
+          <BrandLogo brand={brandOfJob(j, placeById)} size={64} />
           <div>
             <h1 className="text-2xl font-extrabold leading-tight tracking-tight">{j.title}</h1>
             <div className="muted mt-0.5">{place ? <Link to={`/place/${place.id}`} className="hover:underline">{j.company}</Link> : j.company} · {j.neighborhood}</div>

@@ -9,6 +9,7 @@ import { placeById } from '../data/places'
 import { userById } from '../data/users'
 import { cx, fmtNum } from '../lib/utils'
 import { getUser } from '../lib/entities'
+import { BrandLogo, brandOf, GOAL_ICON, IconFor } from '../lib/icons'
 
 const goalRelevant = (g, me) => g.id !== 'kids' || me?.interests.includes('family')
 
@@ -54,7 +55,7 @@ export default function Guides() {
           return (
             <Link key={g.id} to={`/guides/goal/${g.id}`} className={cx('card flex flex-col items-start gap-3 p-4 transition hover:-translate-y-0.5 active:scale-[.98]', !goalRelevant(g, me) && 'opacity-60')}>
               <ProgressRing value={v} size={54} stroke={5} color={g.color}>
-                <span className="text-xl">{g.emoji}</span>
+                <IconFor map={GOAL_ICON} id={g.id} className="h-[22px] w-[22px]" strokeWidth={2} />
               </ProgressRing>
               <div>
                 <div className="text-[15px] font-bold leading-snug">{g.title}</div>
@@ -154,7 +155,7 @@ export function GoalPage() {
       <PageHeader title={g.title} subtitle={`${d}/${g.steps.length} steps done`} />
       <div className="flex flex-col items-center px-4 pt-6 text-center">
         <ProgressRing value={d / g.steps.length} size={112} stroke={10} color={g.color}>
-          <span className="text-4xl">{g.emoji}</span>
+          <span style={{ color: g.color }}><IconFor map={GOAL_ICON} id={g.id} className="h-11 w-11" strokeWidth={1.8} /></span>
         </ProgressRing>
         <h1 className="mt-4 text-2xl font-extrabold tracking-tight">{g.title}</h1>
         <p className="muted text-sm">{d === g.steps.length ? 'All done. You’re a pro!' : 'Tap a step to see guides, specialists and places that help.'}</p>
@@ -206,7 +207,7 @@ export function GoalPage() {
                     const p = placeById[pid]
                     return (
                       <Link key={pid} to={`/?focus=${pid}`} className="flex items-center gap-3">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-100 text-lg dark:bg-neutral-800">{p.logo}</span>
+                        <BrandLogo brand={brandOf(p)} size={36} />
                         <div className="min-w-0 flex-1"><div className="truncate text-sm font-semibold">{p.name}</div><div className="muted flex items-center gap-1 text-xs"><MapPin className="h-3 w-3" /> Show on map</div></div>
                         <ChevronRight className="h-4 w-4 text-neutral-400" />
                       </Link>
