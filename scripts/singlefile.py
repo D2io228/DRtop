@@ -1,6 +1,6 @@
 """Turn dist-offline/ into ONE self-contained HTML file (JS, CSS and images inlined).
 
-Usage: python3 scripts/singlefile.py dist-offline kompas.html
+Usage: python3 scripts/singlefile.py dist-offline Haven.html
 Images are re-encoded smaller (JPEG) and embedded as data URIs in window.__ASSETS.
 """
 import base64, io, json, re, sys

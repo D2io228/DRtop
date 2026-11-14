@@ -12,7 +12,7 @@ export const jobs = [
   { id: 'j6', title: 'Sales Assistant (Chinese + Serbian)', company: 'Golden Dragon Market', logo: '🐉', posterId: 'u4', placeId: 'b3', neighborhood: 'Novi Beograd', type: 'Part-time', remote: 'On-site', salaryMin: 650, salaryMax: 750, languages: ['zh', 'sr'], niceToHave: ['en'], posted: '4d', applicants: 5, tags: ['business'],
     description: 'Help customers, manage stock and the cash desk. Weekends required.', perks: ['Employee discount', 'Flexible weekdays'] },
   { id: 'j7', title: 'Social Media Intern (Turkish)', company: 'Simit & Sava', logo: '🥯', posterId: 'u2', placeId: 'b2', neighborhood: 'Remote', type: 'Part-time', remote: 'Remote', salaryMin: 400, salaryMax: 500, languages: ['tr', 'en'], niceToHave: [], posted: '6d', applicants: 22, tags: ['art', 'business'],
-    description: 'Shoot reels in the bakery twice a week and run our Instagram & Kompas page.', perks: ['Unlimited simit', 'Portfolio work'] },
+    description: 'Shoot reels in the bakery twice a week and run our Instagram & Haven page.', perks: ['Unlimited simit', 'Portfolio work'] },
 ]
 
 export const housing = [

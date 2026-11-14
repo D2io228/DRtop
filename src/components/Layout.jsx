@@ -8,6 +8,7 @@ import { APP_NAME } from '../config'
 import { Avatar, Flag, Sheet, Toast } from './ui'
 import { cx } from '../lib/utils'
 import Composer from './Composer'
+import { HavenWordmark } from './HavenLogo'
 
 export const NAV = [
   { to: '/', label: 'Explore', icon: Compass, end: true },
@@ -18,14 +19,7 @@ export const NAV = [
 ]
 
 export function Logo({ small }) {
-  return (
-    <div className="flex items-center gap-2">
-      <div className={cx('flex items-center justify-center rounded-xl bg-accent text-white', small ? 'h-7 w-7' : 'h-9 w-9')}>
-        <Compass className={small ? 'h-4 w-4' : 'h-5 w-5'} strokeWidth={2.5} />
-      </div>
-      <span className={cx('font-extrabold tracking-tight', small ? 'text-lg' : 'text-xl')}>{APP_NAME.toLowerCase()}</span>
-    </div>
-  )
+  return <HavenWordmark size={small ? 28 : 36} />
 }
 
 const LANGS = [

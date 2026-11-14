@@ -4,6 +4,7 @@ import { useApp } from '../store/AppContext'
 import { COUNTRIES, LANGUAGES, INTERESTS, ROLES } from '../data/meta'
 import { Avatar, Img } from '../components/ui'
 import { Logo } from '../components/Layout'
+import { HavenMark } from '../components/HavenLogo'
 import { APP_NAME, APP_TAGLINE } from '../config'
 import { cx, flagUrl } from '../lib/utils'
 import { IconFor, INTEREST_ICON, ROLE_ICON } from '../lib/icons'
@@ -64,12 +65,7 @@ export default function Onboarding() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/10" />
         <div className="relative mt-auto px-6 pb-10 md:mx-auto md:max-w-md md:pb-16">
-          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent">
-            <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="white" strokeWidth="2.5">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M15.5 8.5l-2 5-5 2 2-5z" fill="white" />
-            </svg>
-          </div>
+          <HavenMark size={64} rounded={19} className="mb-5 shadow-[0_12px_30px_-10px_rgba(108,71,255,.8)] rounded-[19px]" />
           <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight">
             Welcome to {APP_NAME}.
             <br />

@@ -1,10 +1,10 @@
-# Kompas — settle into Belgrade
+# Haven — settle into Belgrade
 
 A clickable, mobile-first prototype of an all-in-one platform that helps immigrants settle into a new country. The launch city is **Belgrade, Serbia**.
 
 People find community, places, events, guides, jobs, housing and specialists. Businesses and self-employed specialists get discovered by clients who speak their language. Everything is connected by **languages spoken** and **country of origin**.
 
-> The product name is a placeholder. To rename it, change `APP_NAME` in [`src/config.js`](src/config.js).
+> The logo (a swallow flying over the Earth) lives in [`src/components/HavenLogo.jsx`](src/components/HavenLogo.jsx); the name is `APP_NAME` in [`src/config.js`](src/config.js).
 
 ## Run it
 
@@ -28,7 +28,7 @@ This build loads no remote images or tiles. Photos, avatars and flags are read f
 To get **one HTML file** you can send to anyone (opens with a double click, no server or internet needed), run after that build:
 
 ```bash
-python3 scripts/singlefile.py dist-offline Kompas.html   # needs Pillow
+python3 scripts/singlefile.py dist-offline Haven.html   # needs Pillow
 ```
 
 It inlines the JS and CSS and embeds every image as a data URI.

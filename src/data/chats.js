@@ -23,7 +23,7 @@ export const chats = [
     id: 'ch3', type: 'group', kind: 'event', refId: 'e2', unread: 0,
     messages: [
       { id: 1, from: 'u6', text: 'Welcome everyone to the Newcomers Meetup chat! 🎉 Rooftop opens at 17:00.', time: 'Mon' },
-      { id: 2, from: 'u12', text: 'Can I bring a friend who isn’t on Kompas yet?', time: 'Mon' },
+      { id: 2, from: 'u12', text: 'Can I bring a friend who isn’t on Haven yet?', time: 'Mon' },
       { id: 3, from: 'u6', text: 'Of course! Just have them register at the door.', time: 'Mon' },
       { id: 4, from: 'u24', text: 'Looking forward to it — first event in Belgrade for me 🙌', time: 'Tue' },
     ],
