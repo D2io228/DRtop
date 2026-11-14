@@ -52,4 +52,7 @@ export function IconFor({ map, id, className = 'h-4 w-4', strokeWidth = 2 }) {
   return I ? <I className={className} strokeWidth={strokeWidth} /> : null
 }
 
-export const brandOfJob = (job, placeById) => (job.placeId && placeById[job.placeId] ? brandOf(placeById[job.placeId]) : brandOfName(job.company))
+export const brandOfJob = (job, placeById) => {
+  const place = job.placeId && placeById[job.placeId]
+  return place && place.name === job.company ? brandOf(place) : brandOfName(job.company)
+}

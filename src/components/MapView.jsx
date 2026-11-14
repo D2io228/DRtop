@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
+import { Link } from 'react-router-dom'
+import { Maximize2 } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import { CITY } from '../config'
 import { photo, avatar } from '../data/photos'
@@ -89,7 +91,12 @@ function Clustered({ items, onSelect, getIcon, radius = 58 }) {
 }
 
 const meIcon = L.divIcon({ html: '<div class="me-pin"></div>', className: 'pin-wrap', iconSize: [22, 22], iconAnchor: [11, 11] })
-const pickIcon = L.divIcon({ html: '<div class="pick-pin">📍</div>', className: 'pin-wrap', iconSize: [34, 34], iconAnchor: [17, 32] })
+const pickIcon = L.divIcon({
+  html: '<svg class="pick-pin animate-pin-drop" width="34" height="42" viewBox="0 0 34 42"><path d="M17 41s14-13.4 14-24A14 14 0 0 0 3 17c0 10.6 14 24 14 24z" fill="#6C47FF" stroke="#fff" stroke-width="3"/><circle cx="17" cy="17" r="5.5" fill="#fff"/></svg>',
+  className: 'pin-wrap',
+  iconSize: [34, 42],
+  iconAnchor: [17, 41],
+})
 
 function AttributionText() {
   const map = useMap()
@@ -170,10 +177,24 @@ export default function MapView({
 }
 
 // Small non-interactive map for detail pages
-export function MiniMap({ lat, lng, color = '#6C47FF', emoji = '📍', img, avatar: av, height = 180 }) {
-  return (
-    <div className="overflow-hidden rounded-3xl border divider" style={{ height }}>
+export function MiniMap({ lat, lng, color = '#6C47FF', emoji = '📍', img, avatar: av, height = 180, to }) {
+  const href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`
+  const inner = (
+    <>
       <MapView items={[{ id: 'x', lat, lng, color, emoji, img, avatar: av }]} center={[lat, lng]} zoom={15} interactive={false} />
-    </div>
+      <span className="float-ui pointer-events-none absolute bottom-3 right-3 z-[500] flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+        <Maximize2 className="h-3.5 w-3.5" strokeWidth={2.4} /> {to ? 'Open on map' : 'Open in OpenStreetMap'}
+      </span>
+    </>
+  )
+  const cls = 'relative block overflow-hidden rounded-3xl border divider transition active:scale-[.99]'
+  return to ? (
+    <Link to={to} className={cls} style={{ height }}>
+      {inner}
+    </Link>
+  ) : (
+    <a href={href} target="_blank" rel="noreferrer" className={cls} style={{ height }}>
+      {inner}
+    </a>
   )
 }

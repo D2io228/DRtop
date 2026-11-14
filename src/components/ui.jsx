@@ -20,6 +20,7 @@ export function Img({ src, w = 800, alt = '', className = '', style, ...rest }) 
       src={url}
       alt={alt}
       loading="lazy"
+      decoding="async"
       onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
       className={cx('bg-neutral-100 object-cover transition-opacity duration-500 dark:bg-neutral-900', loaded ? 'opacity-100' : 'opacity-0', className)}
@@ -130,7 +131,7 @@ export function Chip({ active, onClick, children, className = '', accent }) {
 }
 
 export function ChipRow({ children, className = '' }) {
-  return <div className={cx('no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4', className)}>{children}</div>
+  return <div className={cx('no-scrollbar flex gap-2 overflow-x-auto px-4', className)}>{children}</div>
 }
 
 export function ProgressRing({ value, size = 56, stroke = 6, color = '#6C47FF', children, track }) {

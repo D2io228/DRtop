@@ -12,7 +12,7 @@ const SAMPLE_PHOTOS = ['coffee', 'city', 'streetCafe', 'tree', 'friendsGroup', '
 
 const PLACEHOLDER = {
   post: 'What’s new?',
-  question: 'Ask anything — the community will help 🙌',
+  question: 'Ask anything — the community will help',
   recommendation: 'Recommend a place, a specialist, a hack…',
   guide: 'Share what you’ve learned, step by step…',
 }

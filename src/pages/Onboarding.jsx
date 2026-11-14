@@ -66,13 +66,13 @@ export default function Onboarding() {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/10" />
         <div className="relative mt-auto px-6 pb-10 md:mx-auto md:max-w-md md:pb-16">
           <HavenMark size={64} rounded={19} className="mb-5 shadow-[0_12px_30px_-10px_rgba(108,71,255,.8)] rounded-[19px]" />
-          <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight">
+          <h1 className="text-[clamp(28px,8.6vw,42px)] font-extrabold leading-[1.05] tracking-tight [@media(max-height:620px)]:text-[clamp(26px,7vw,34px)]">
             Welcome to {APP_NAME}.
             <br />
             <span className="text-accent-200">Belgrade</span> feels like home faster here.
           </h1>
           <p className="mt-3 text-[15px] text-white/70">{APP_TAGLINE} Friends, places, events, specialists, jobs and housing — for every nationality, in one app.</p>
-          <div className="mt-5 flex items-center gap-1.5">
+          <div className="mt-5 flex flex-wrap items-center gap-1.5 [@media(max-height:620px)]:mt-3">
             {['ru', 'ua', 'tr', 'cn', 'in', 'de', 'us', 'ir', 'br'].map((c) => (
               <img key={c} src={flagUrl(c)} alt="" className="h-4 w-6 rounded-[3px] object-cover" />
             ))}

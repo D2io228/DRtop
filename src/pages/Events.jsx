@@ -89,7 +89,7 @@ export default function Events() {
           {list.length === 0 ? (
             <EmptyState emoji="📅" title="No events here yet" text="Why not host the first one?" action={<button onClick={() => nav('/events/new')} className="btn-accent">Create event</button>} />
           ) : (
-            <div className="grid gap-x-5 gap-y-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-5 gap-y-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
               {list.map((e) => (
                 <EventCard key={e.id} ev={e} />
               ))}
@@ -207,7 +207,7 @@ export function EventPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="relative">
-        <Img src={ev.cover} w={1400} className="aspect-[16/10] w-full md:aspect-[2/1] md:rounded-b-[32px]" />
+        <Img src={ev.cover} w={1400} className="aspect-[16/10] max-h-[52vh] w-full md:aspect-[2/1] md:rounded-b-[32px]" />
         <FloatingBack
           right={
             <>
@@ -294,7 +294,7 @@ export function EventPage() {
         </button>
 
         <h2 className="section-title mt-7 mb-3">Location</h2>
-        <MiniMap lat={ev.lat} lng={ev.lng} img={ev.cover} color="#EC4899" height={200} />
+        <MiniMap lat={ev.lat} lng={ev.lng} img={ev.cover} color="#EC4899" height={200} to={`/?focus=${ev.id}`} />
         <a href={`https://www.openstreetmap.org/directions?to=${ev.lat}%2C${ev.lng}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold text-accent">
           Get directions →
         </a>
@@ -405,7 +405,7 @@ export function CreateEvent() {
           <div className="relative h-56 overflow-hidden rounded-3xl border divider">
             <MapView pick={f.pick} onMapClick={(ll) => set('pick', ll)} zoom={13} />
             {!f.pick && (
-              <div className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit rounded-full bg-ink-900 px-3 py-1.5 text-xs font-semibold text-white">👆 Tap the map to drop a pin</div>
+              <div className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit rounded-full bg-ink-900 px-3 py-1.5 text-xs font-semibold text-white">Tap the map to drop a pin</div>
             )}
           </div>
         </div>

@@ -104,9 +104,9 @@ export const OFFLINE = !!import.meta.env.VITE_OFFLINE
 export const photo = (key, w = 800) => {
   const id = IDS[key]
   if (!id) return key // allow raw urls (e.g. uploaded object URLs)
-  if (OFFLINE) return asset(`img/${key}.jpg`)
+  if (OFFLINE) return asset(`img/${key}.webp`)
   return `https://images.unsplash.com/photo-${id}?w=${w}&q=70&auto=format&fit=crop`
 }
 
 export const avatar = (key) =>
-  key?.startsWith?.('pv') ? (OFFLINE ? asset(`av/${key}.jpg`) : `https://i.pravatar.cc/200?img=${key.slice(2)}`) : photo(key, 200)
+  key?.startsWith?.('pv') ? (OFFLINE ? asset(`av/${key}.webp`) : `https://i.pravatar.cc/200?img=${key.slice(2)}`) : photo(key, 200)

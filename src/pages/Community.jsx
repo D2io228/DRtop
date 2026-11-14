@@ -14,7 +14,7 @@ export function ComposerPrompt({ communityId }) {
   return (
     <div className="flex items-center gap-3 border-b divider px-4 py-3">
       <Avatar src={me?.avatar} size={40} />
-      <button onClick={() => setComposer({ type: 'post', communityId })} className="flex-1 text-left text-[15px] text-neutral-400">
+      <button onClick={() => setComposer({ type: 'post', communityId })} className="min-w-0 flex-1 truncate text-left text-[15px] text-neutral-400">
         {t('What’s new?')}
       </button>
       <button onClick={() => setComposer({ type: 'post', communityId })} className="icon-btn text-neutral-400" aria-label="Add photo">

@@ -1,7 +1,7 @@
 """Turn dist-offline/ into ONE self-contained HTML file (JS, CSS and images inlined).
 
 Usage: python3 scripts/singlefile.py dist-offline Haven.html
-Images are re-encoded smaller (JPEG) and embedded as data URIs in window.__ASSETS.
+Images (WebP as-is, JPEG re-encoded smaller) are embedded as data URIs in window.__ASSETS.
 """
 import base64, io, json, re, sys
 from pathlib import Path
@@ -15,6 +15,8 @@ for f in sorted(src.rglob('*')):
     rel = f.relative_to(src).as_posix()
     if f.suffix == '.png' and rel.startswith('flags/'):
         assets[rel] = 'data:image/png;base64,' + base64.b64encode(f.read_bytes()).decode()
+    elif f.suffix == '.webp':
+        assets[rel] = 'data:image/webp;base64,' + base64.b64encode(f.read_bytes()).decode()
     elif f.suffix == '.jpg':
         im = Image.open(f).convert('RGB')
         small = rel.startswith('av/') or re.fullmatch(r'img/p\d+\.jpg', rel)

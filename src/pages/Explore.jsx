@@ -31,6 +31,8 @@ export default function Explore() {
   const [openNow, setOpenNow] = useState(false)
   const [myLangs, setMyLangs] = useState(false)
   const [moment, setMoment] = useState(null)
+  // On short screens (landscape phones) keep the map visible: moments start collapsed
+  const [momentsOpen, setMomentsOpen] = useState(() => window.innerHeight >= 560)
 
   const totalSteps = goals.reduce((a, g) => a + g.steps.length, 0)
   const progress = done.size / totalSteps
@@ -83,7 +85,7 @@ export default function Explore() {
 
   return (
     <div className="absolute inset-0 isolate overflow-hidden">
-      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe cluster />
+      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe cluster onMapClick={() => selected && close()} />
 
       {/* Top overlay (sits under the floating top bar) */}
       <div className="pointer-events-none absolute inset-x-0 top-[60px] z-[500] space-y-2.5 px-3 md:max-w-xl">
@@ -130,7 +132,7 @@ export default function Explore() {
       <button
         onClick={() => setFly([...ME])}
         className="float-ui absolute right-3 z-[500] flex h-11 w-11 items-center justify-center rounded-full transition-all active:scale-90"
-        style={{ bottom: selected ? 300 : 214 }}
+        style={{ bottom: selected ? (window.innerHeight < 560 ? 176 : 300) : momentsOpen ? 214 : 64 }}
         aria-label="My location"
       >
         <LocateFixed className="h-5 w-5 text-accent" strokeWidth={2.2} />
@@ -139,13 +141,14 @@ export default function Explore() {
       {/* Bottom: moments or preview */}
       {!selected && (
         <div className="absolute inset-x-0 bottom-0 z-[500] pb-3 animate-fade-up">
-          <div className="mb-2 px-3">
-            <span className="float-ui inline-flex items-center gap-1.5 rounded-full py-1.5 pl-2.5 pr-3 text-[13px] font-bold">
+          <div className={cx('px-3', momentsOpen && 'mb-2')}>
+            <button onClick={() => setMomentsOpen((o) => !o)} aria-expanded={momentsOpen} className="float-ui inline-flex items-center gap-1.5 rounded-full py-1.5 pl-2.5 pr-2 text-[13px] font-bold transition active:scale-95">
               <span className="h-2 w-2 animate-pulse rounded-full bg-rose-500" />
               {t('Moments around you')}
-            </span>
+              <ChevronRight className={cx('h-4 w-4 text-neutral-400 transition-transform', momentsOpen ? 'rotate-90' : '-rotate-90')} />
+            </button>
           </div>
-          <div className="no-scrollbar flex gap-2.5 overflow-x-auto px-3">
+          <div className={cx('no-scrollbar flex gap-2.5 overflow-x-auto px-3', !momentsOpen && 'hidden')}>
             {moments.map((m, i) => {
               const u = userById[m.userId]
               return (
@@ -256,7 +259,7 @@ export function Toggle({ on, onChange }) {
 
 function nextStep(done) {
   for (const g of goals) for (const s of g.steps) if (!done.has(s.id)) return s
-  return { title: 'All done — you’re a local now! 🎉' }
+  return { title: 'All done — you’re a local now!' }
 }
 
 function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggleEvent, joinedCommunities, toggleCommunity, t }) {
@@ -282,7 +285,7 @@ function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggle
               </div>
             </div>
           ) : (
-            <div className="no-scrollbar flex gap-1 overflow-x-auto">
+            <div className="no-scrollbar flex gap-1 overflow-x-auto [@media(max-height:560px)]:hidden">
               {(r.photos || [r.cover || r.avatar]).slice(0, 3).map((p, i) => (
                 <Img key={i} src={p} w={500} className={cx('h-36 shrink-0', (r.photos?.length || 1) > 1 ? 'w-[70%]' : 'w-full')} />
               ))}

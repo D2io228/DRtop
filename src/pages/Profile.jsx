@@ -77,9 +77,9 @@ export default function Profile() {
         <div className="mt-5 flex gap-2">
           {isMe ? (
             <>
-              <button onClick={() => setEdit(true)} className="btn-ghost flex-1 whitespace-nowrap !px-3"><Pencil className="h-4 w-4" /> Edit profile</button>
-              <button onClick={() => (switchToBusiness(), nav('/business'))} className="btn-ghost flex-1 whitespace-nowrap !px-3">
-                <Store className="h-4 w-4" /> {business ? 'Dashboard' : 'Switch to business'}
+              <button onClick={() => setEdit(true)} className="btn-ghost min-w-0 flex-1 whitespace-nowrap !px-3"><Pencil className="h-4 w-4 shrink-0 max-[359px]:hidden" /> Edit profile</button>
+              <button onClick={() => (switchToBusiness(), nav('/business'))} className="btn-ghost min-w-0 flex-1 whitespace-nowrap !px-3">
+                <Store className="h-4 w-4 shrink-0 max-[359px]:hidden" /> {business ? 'Dashboard' : 'Switch to business'}
               </button>
             </>
           ) : (
@@ -244,10 +244,10 @@ export function BusinessDashboard() {
               </div>
             ))}
           </div>
-          <div className="muted mt-3 text-xs">Top audiences: 🇷🇺 Russian speakers 41% · 🇺🇸 English 27% · 🇹🇷 Turkish 12%</div>
+          <div className="muted mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">Top audiences: <span className="flex items-center gap-1"><Flag code="ru" /> Russian speakers 41%</span>· <span className="flex items-center gap-1"><Flag code="us" /> English 27%</span>· <span className="flex items-center gap-1"><Flag code="tr" /> Turkish 12%</span></div>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-3">
           <button onClick={() => (setF(business), setEdit(true))} className="card flex items-center gap-3 p-4 text-left transition active:scale-[.98]">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent-100 text-accent dark:bg-accent/20"><Store className="h-5 w-5" /></span>
             <div><div className="font-semibold">Edit listing</div><div className="muted text-xs">Photos, hours, languages</div></div>
