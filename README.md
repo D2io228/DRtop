@@ -33,6 +33,10 @@ python3 scripts/singlefile.py dist-offline Kompas.html   # needs Pillow
 
 It inlines the JS and CSS and embeds every image as a data URI.
 
+### Live site (GitHub Pages)
+
+`docs/` holds a ready-built copy of the self-contained version. To refresh it: run the self-contained build, then `rm -rf docs && cp -r dist-offline docs && touch docs/.nojekyll`. Serve it with GitHub Pages → Deploy from a branch → this branch, folder `/docs`.
+
 ## Tech
 
 - React 18 + Vite
