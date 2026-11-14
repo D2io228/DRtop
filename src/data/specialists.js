@@ -1,0 +1,86 @@
+export const SPECIALIST_CATEGORIES = ['Health', 'Legal', 'Translation', 'Education', 'Beauty', 'Finance', 'Real estate', 'Wellness']
+
+export const specialists = [
+  {
+    id: 's1', userId: 'u22', name: 'Dr. Hannah Schmidt', avatar: 'pv47', profession: 'Pediatrician', category: 'Health', country: 'de', languages: ['de', 'en'],
+    rating: 4.9, reviewsCount: 128, priceFrom: 40, verified: true, availability: 'today', neighborhood: 'Senjak', lat: 44.7922, lng: 20.4461,
+    tags: ['family'],
+    about: 'German-trained pediatrician with 12 years of experience. Check-ups, vaccinations (incl. German & US schedules), sick visits and home visits for newborns.',
+    services: [{ name: 'Consultation', price: 40, duration: '30 min' }, { name: 'Well-child check-up', price: 55, duration: '45 min' }, { name: 'Home visit', price: 80, duration: '45 min' }, { name: 'Vaccination (excl. vaccine)', price: 20, duration: '15 min' }],
+    reviews: [{ userId: 'u11', rating: 5, text: 'Very calm and thorough with our daughter. Explained everything in English.', time: '1w' }, { userId: 'u15', rating: 5, text: 'Came to our home on a Sunday. Thank you!', time: '1mo' }],
+  },
+  {
+    id: 's2', userId: 'u18', name: 'Tom Hughes', avatar: 'pv59', profession: 'Immigration lawyer', category: 'Legal', country: 'gb', languages: ['en', 'sr'],
+    rating: 4.9, reviewsCount: 211, priceFrom: 60, verified: true, availability: 'tomorrow', neighborhood: 'Stari Grad', lat: 44.8185, lng: 20.4602,
+    tags: ['business'],
+    about: 'UK-trained, member of the Belgrade Bar. Temporary residence, work permits, family reunification, company & entrepreneur registration, citizenship.',
+    services: [{ name: 'Initial consultation', price: 60, duration: '45 min' }, { name: 'Temporary residence — full package', price: 350, duration: '' }, { name: 'Entrepreneur (preduzetnik) setup', price: 250, duration: '' }, { name: 'Document review', price: 40, duration: '30 min' }],
+    reviews: [{ userId: 'u9', rating: 5, text: 'Got my boravak approved with zero stress. Worth every euro.', time: '2w' }, { userId: 'u12', rating: 5, text: 'Explained the digital nomad options clearly.', time: '1mo' }],
+  },
+  {
+    id: 's3', userId: 'u13', name: 'Sophie Laurent', avatar: 'p13', profession: 'Court translator', category: 'Translation', country: 'fr', languages: ['fr', 'en', 'sr'],
+    rating: 4.8, reviewsCount: 96, priceFrom: 20, verified: true, availability: 'today', neighborhood: 'Vračar', lat: 44.7990, lng: 20.4705,
+    tags: ['language'],
+    about: 'Sworn court interpreter for French, English and Serbian. Certified translations of diplomas, birth certificates, contracts. Express 24h service.',
+    services: [{ name: 'Certified translation (per page)', price: 20, duration: '2–3 days' }, { name: 'Express 24h (per page)', price: 30, duration: '24h' }, { name: 'Interpreting at office visit', price: 45, duration: '1 hour' }],
+    reviews: [{ userId: 'u20', rating: 5, text: 'Translated my diploma in a day. Super precise.', time: '3w' }],
+  },
+  {
+    id: 's4', userId: 'u21', name: 'Armen Hakobyan', avatar: 'pv53', profession: 'Math & coding tutor', category: 'Education', country: 'am', languages: ['ru', 'en'],
+    rating: 4.9, reviewsCount: 74, priceFrom: 20, verified: true, availability: 'this week', neighborhood: 'Palilula', lat: 44.8155, lng: 20.4825,
+    tags: ['family', 'it'],
+    about: 'Math, Python and Scratch for ages 8–17. Preparation for Serbian school exams and international olympiads. Online or at your home.',
+    services: [{ name: 'Lesson (60 min)', price: 20, duration: '60 min' }, { name: 'Pack of 8 lessons', price: 144, duration: '' }, { name: 'Free trial lesson', price: 0, duration: '30 min' }],
+    reviews: [{ userId: 'u11', rating: 5, text: 'Сын теперь сам просит заниматься программированием!', time: '2w' }],
+  },
+  {
+    id: 's5', userId: 'u3', name: 'Olena Kovalenko', avatar: 'p3', profession: 'Beauty master', category: 'Beauty', country: 'ua', languages: ['uk', 'ru', 'en'],
+    rating: 4.8, reviewsCount: 176, priceFrom: 20, verified: true, availability: 'today', neighborhood: 'Novi Beograd', lat: 44.8129, lng: 20.4171, placeId: 'b5',
+    tags: ['wellness'],
+    about: 'Manicure, pedicure, brows and lashes. 10 years of experience in Kyiv, now at Studio Lileya in Blok 21.',
+    services: [{ name: 'Manicure + gel polish', price: 25, duration: '90 min' }, { name: 'Brow shaping & tint', price: 20, duration: '45 min' }, { name: 'Lash lift', price: 35, duration: '60 min' }],
+    reviews: [{ userId: 'u15', rating: 5, text: 'Олена — чарівниця! 💅', time: '3d' }],
+  },
+  {
+    id: 's6', userId: 'u23', name: 'Li Na', avatar: 'pv44', profession: 'Accountant', category: 'Finance', country: 'cn', languages: ['zh', 'en', 'sr'],
+    rating: 4.7, reviewsCount: 58, priceFrom: 50, verified: true, availability: 'this week', neighborhood: 'Novi Beograd', lat: 44.8095, lng: 20.4050,
+    tags: ['business'],
+    about: 'Bookkeeping for preduzetnici and small DOO companies. Paušal tax, VAT registration, payroll. Monthly packages.',
+    services: [{ name: 'Paušal bookkeeping (month)', price: 50, duration: '' }, { name: 'DOO bookkeeping (month)', price: 150, duration: '' }, { name: 'Consultation', price: 30, duration: '45 min' }],
+    reviews: [{ userId: 'u14', rating: 5, text: 'Took over our books mid-year and fixed everything.', time: '1mo' }],
+  },
+  {
+    id: 's7', name: 'Dr. Ivan Marković', avatar: 'pv68', profession: 'Family doctor (GP)', category: 'Health', country: 'rs', languages: ['sr', 'en', 'ru'],
+    rating: 4.8, reviewsCount: 143, priceFrom: 35, verified: true, availability: 'today', neighborhood: 'Dorćol', lat: 44.8240, lng: 20.4610,
+    tags: ['wellness', 'family'],
+    about: 'Private general practice in Dorćol. Same-day appointments, blood tests, medical certificates for residence permits and driving licences.',
+    services: [{ name: 'GP consultation', price: 35, duration: '20 min' }, { name: 'Medical certificate (residence)', price: 25, duration: '15 min' }, { name: 'Basic blood panel', price: 30, duration: '' }],
+    reviews: [{ userId: 'u7', rating: 5, text: 'Saw me within 2 hours for a nasty flu. Spoke perfect English.', time: '1w' }],
+  },
+  {
+    id: 's8', name: 'Nina Popović', avatar: 'pv49', profession: 'Psychotherapist', category: 'Wellness', country: 'rs', languages: ['sr', 'en', 'ru'],
+    rating: 5.0, reviewsCount: 61, priceFrom: 45, verified: true, availability: 'tomorrow', neighborhood: 'Vračar', lat: 44.8030, lng: 20.4800,
+    tags: ['wellness'],
+    about: 'Relocation stress, anxiety, couples therapy. CBT & integrative approach. In-person in Vračar or online.',
+    services: [{ name: 'Individual session', price: 45, duration: '50 min' }, { name: 'Couples session', price: 60, duration: '75 min' }, { name: 'Free intro call', price: 0, duration: '15 min' }],
+    reviews: [{ userId: 'u24', rating: 5, text: 'Helped me so much in my first hard months.', time: '2w' }],
+  },
+  {
+    id: 's9', name: 'Ahmet Kaya', avatar: 'pv52', profession: 'Barber', category: 'Beauty', country: 'tr', languages: ['tr', 'en', 'sr'],
+    rating: 4.7, reviewsCount: 203, priceFrom: 12, verified: false, availability: 'today', neighborhood: 'Zemun', lat: 44.8432, lng: 20.4135,
+    tags: ['wellness'],
+    about: 'Classic Turkish barber: hot towel shave, fade cuts and beard sculpting. Tea is on the house ☕',
+    services: [{ name: 'Haircut', price: 12, duration: '30 min' }, { name: 'Hot towel shave', price: 10, duration: '30 min' }, { name: 'Cut + beard', price: 18, duration: '45 min' }],
+    reviews: [{ userId: 'u2', rating: 5, text: 'Zemun’in en iyi berberi.', time: '1w' }],
+  },
+  {
+    id: 's10', name: 'Nikola Stanković', avatar: 'pv60', profession: 'Rental agent', category: 'Real estate', country: 'rs', languages: ['sr', 'en', 'ru'],
+    rating: 4.6, reviewsCount: 88, priceFrom: 0, verified: true, availability: 'this week', neighborhood: 'Stari Grad', lat: 44.8175, lng: 20.4625,
+    tags: ['business'],
+    about: 'Helps foreigners find long-term rentals without scams. Contract checks in English, help with white-card registration at the police.',
+    services: [{ name: 'Apartment search (fee = 50% of 1 month)', price: 0, duration: '' }, { name: 'Contract review', price: 30, duration: '' }],
+    reviews: [{ userId: 'u20', rating: 5, text: 'Found us a place in Savamala in 5 days.', time: '3w' }],
+  },
+]
+
+export const specialistById = Object.fromEntries(specialists.map((s) => [s.id, s]))
