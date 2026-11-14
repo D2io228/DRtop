@@ -131,7 +131,7 @@ export function Chip({ active, onClick, children, className = '', accent }) {
 }
 
 export function ChipRow({ children, className = '' }) {
-  return <div className={cx('no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4', className)}>{children}</div>
+  return <div className={cx('no-scrollbar flex gap-2 overflow-x-auto px-4', className)}>{children}</div>
 }
 
 export function ProgressRing({ value, size = 56, stroke = 6, color = '#6C47FF', children, track }) {

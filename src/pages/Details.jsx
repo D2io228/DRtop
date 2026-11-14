@@ -105,7 +105,7 @@ export function PlacePage() {
       <div className="relative">
         <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto md:rounded-b-[32px]">
           {p.photos.map((ph) => (
-            <Img key={ph} src={ph} w={1200} className="aspect-[16/10] w-full shrink-0 snap-center md:aspect-[2/1]" />
+            <Img key={ph} src={ph} w={1200} className="aspect-[16/10] max-h-[52vh] w-full shrink-0 snap-center md:aspect-[2/1]" />
           ))}
         </div>
         <span className="absolute bottom-3 right-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-white">1/{p.photos.length}</span>
@@ -220,13 +220,13 @@ export function PlacePage() {
             {placeEvents.length > 0 && (
               <section>
                 <h2 className="section-title mb-3">Upcoming events</h2>
-                <div className="grid gap-6 sm:grid-cols-2">{placeEvents.map((e) => <EventCard key={e.id} ev={e} />)}</div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">{placeEvents.map((e) => <EventCard key={e.id} ev={e} />)}</div>
               </section>
             )}
             {placeJobs.length > 0 && (
               <section>
                 <h2 className="section-title mb-3">Open jobs</h2>
-                <div className="grid gap-3 sm:grid-cols-2">{placeJobs.map((j) => <JobCard key={j.id} j={j} />)}</div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{placeJobs.map((j) => <JobCard key={j.id} j={j} />)}</div>
               </section>
             )}
           </>
@@ -455,7 +455,7 @@ export function HousingPage() {
     <div className="mx-auto max-w-3xl">
       <div className="relative">
         <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto md:rounded-b-[32px]">
-          {h.photos.map((p) => <Img key={p} src={p} w={1200} className="aspect-[4/3] w-full shrink-0 snap-center md:aspect-[16/9]" />)}
+          {h.photos.map((p) => <Img key={p} src={p} w={1200} className="aspect-[4/3] max-h-[52vh] w-full shrink-0 snap-center md:aspect-[16/9]" />)}
         </div>
         <FloatingBack right={<><RoundBtn label="Share" onClick={() => showToast('Link copied', '🔗')}><Share2 className="h-4 w-4" /></RoundBtn><RoundBtn label="Save" onClick={() => toggleSave(`housing:${h.id}`)}><Bookmark className={cx('h-4 w-4', saved.has(`housing:${h.id}`) && 'fill-current')} /></RoundBtn></>} />
       </div>

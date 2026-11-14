@@ -52,6 +52,11 @@
   .icon-btn {
     @apply inline-flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-neutral-100 active:scale-90 dark:hover:bg-neutral-800;
   }
+  @media (max-width: 359px) {
+    .icon-btn {
+      @apply h-9 w-9;
+    }
+  }
   .chip {
     @apply inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-neutral-200 bg-white px-3.5 py-1.5 text-sm font-medium text-ink-900 transition active:scale-95 dark:border-neutral-700 dark:bg-ink-800 dark:text-neutral-100;
   }

@@ -153,23 +153,23 @@ export function PostCard({ post, compact }) {
           </Link>
         )}
         <div className="-ml-2 mt-2 flex items-center gap-1 text-neutral-500">
-          <button onClick={() => (toggleLike(post.id), setBump((b) => b + 1))} className={cx('flex items-center gap-1 rounded-full px-2 py-1.5 transition hover:bg-rose-50 dark:hover:bg-rose-500/10', isLiked && 'text-rose-500')} aria-label="Like">
+          <button onClick={() => (toggleLike(post.id), setBump((b) => b + 1))} className={cx('flex items-center gap-1 rounded-full px-1.5 py-1.5 min-[360px]:px-2 transition hover:bg-rose-50 dark:hover:bg-rose-500/10', isLiked && 'text-rose-500')} aria-label="Like">
             <Heart key={bump} className={cx('h-[19px] w-[19px]', isLiked && 'fill-current', bump > 0 && 'animate-like-bump')} />
             <span className="text-[13px] tabular-nums">{fmtNum(likeCount)}</span>
           </button>
-          <button onClick={() => nav(`/post/${post.id}`)} className="flex items-center gap-1 rounded-full px-2 py-1.5 transition hover:bg-neutral-100 dark:hover:bg-neutral-800" aria-label="Comment">
+          <button onClick={() => nav(`/post/${post.id}`)} className="flex items-center gap-1 rounded-full px-1.5 py-1.5 min-[360px]:px-2 transition hover:bg-neutral-100 dark:hover:bg-neutral-800" aria-label="Comment">
             <MessageCircle className="h-[19px] w-[19px]" />
             <span className="text-[13px] tabular-nums">{post.comments.length || ''}</span>
           </button>
-          <button onClick={() => toggleRepost(post.id)} className={cx('flex items-center gap-1 rounded-full px-2 py-1.5 transition hover:bg-emerald-50 dark:hover:bg-emerald-500/10', isRe && 'text-emerald-500')} aria-label="Repost">
+          <button onClick={() => toggleRepost(post.id)} className={cx('flex items-center gap-1 rounded-full px-1.5 py-1.5 min-[360px]:px-2 transition hover:bg-emerald-50 dark:hover:bg-emerald-500/10', isRe && 'text-emerald-500')} aria-label="Repost">
             <Repeat2 className="h-[19px] w-[19px]" />
             <span className="text-[13px] tabular-nums">{fmtNum(post.reposts + (isRe ? 1 : 0)) || ''}</span>
           </button>
-          <button onClick={() => showToast('Link copied', '🔗')} className="rounded-full px-2 py-1.5 transition hover:bg-neutral-100 dark:hover:bg-neutral-800" aria-label="Share">
+          <button onClick={() => showToast('Link copied', '🔗')} className="rounded-full px-1.5 py-1.5 min-[360px]:px-2 transition hover:bg-neutral-100 dark:hover:bg-neutral-800" aria-label="Share">
             <Send className="h-[18px] w-[18px]" />
           </button>
           <div className="flex-1" />
-          <button onClick={() => toggleSave(`post:${post.id}`)} className={cx('rounded-full px-2 py-1.5 transition hover:bg-neutral-100 dark:hover:bg-neutral-800', saved.has(`post:${post.id}`) && 'text-ink-900 dark:text-white')} aria-label="Save">
+          <button onClick={() => toggleSave(`post:${post.id}`)} className={cx('rounded-full px-1.5 py-1.5 min-[360px]:px-2 transition hover:bg-neutral-100 dark:hover:bg-neutral-800', saved.has(`post:${post.id}`) && 'text-ink-900 dark:text-white')} aria-label="Save">
             <Bookmark className={cx('h-[19px] w-[19px]', saved.has(`post:${post.id}`) && 'fill-current')} />
           </button>
         </div>
@@ -281,7 +281,7 @@ export function PlaceCard({ p }) {
         <div className="muted truncate text-[13px]">
           {p.category} · {p.neighborhood}
         </div>
-        <div className="mt-1 flex items-center gap-2 text-[13px]">
+        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 whitespace-nowrap text-[13px]">
           <Rating value={p.rating} small />
           {p.priceFrom != null && <span className="font-semibold">from €{p.priceFrom}</span>}
           <span className={cx('text-xs font-semibold', open ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400')}>{open ? '● Open' : '○ Closed'}</span>
@@ -446,8 +446,8 @@ export function PersonCard({ u, onHi }) {
             <LangBadges langs={u.languages} />
           </div>
         </Link>
-        <button onClick={() => onHi(u)} className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-accent-50 px-3.5 text-[13px] font-bold text-accent transition hover:bg-accent-100 active:scale-95 dark:bg-accent/15 dark:text-accent-200">
-          <Hand className="h-4 w-4" strokeWidth={2.2} /> {t('Say hi').replace(' 👋', '')}
+        <button onClick={() => onHi(u)} aria-label="Say hi" className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-accent-50 px-2.5 min-[360px]:px-3.5 text-[13px] font-bold text-accent transition hover:bg-accent-100 active:scale-95 dark:bg-accent/15 dark:text-accent-200">
+          <Hand className="h-4 w-4" strokeWidth={2.2} /> <span className="max-[359px]:hidden">{t('Say hi').replace(' 👋', '')}</span>
         </button>
       </div>
       {u.bio && <p className="mt-3 line-clamp-2 text-[14px] leading-snug text-neutral-600 dark:text-neutral-300">{u.bio}</p>}

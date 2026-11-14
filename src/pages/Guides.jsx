@@ -67,7 +67,7 @@ export default function Guides() {
       </div>
 
       <div className="mt-10 flex items-center gap-2 px-4">
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
+        <div className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
           <Search className="h-4 w-4 text-neutral-400" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search guides & FAQ…" className="min-w-0 flex-1 bg-transparent text-[15px] outline-none" />
         </div>
@@ -240,7 +240,7 @@ export function GuideArticle() {
   return (
     <div className="mx-auto max-w-2xl pb-12">
       <div className="relative">
-        <Img src={g.cover} w={1200} className="aspect-[16/9] w-full md:rounded-b-[32px]" />
+        <Img src={g.cover} w={1200} className="aspect-[16/9] max-h-[52vh] w-full md:rounded-b-[32px]" />
         <FloatingBack right={<RoundBtn label="Save" onClick={() => toggleSave(`guide:${g.id}`)}><Bookmark className={cx('h-4 w-4', saved.has(`guide:${g.id}`) && 'fill-current')} /></RoundBtn>} />
       </div>
       <div className="px-4 pt-5">

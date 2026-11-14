@@ -89,7 +89,7 @@ export default function Events() {
           {list.length === 0 ? (
             <EmptyState emoji="📅" title="No events here yet" text="Why not host the first one?" action={<button onClick={() => nav('/events/new')} className="btn-accent">Create event</button>} />
           ) : (
-            <div className="grid gap-x-5 gap-y-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-5 gap-y-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
               {list.map((e) => (
                 <EventCard key={e.id} ev={e} />
               ))}
@@ -207,7 +207,7 @@ export function EventPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="relative">
-        <Img src={ev.cover} w={1400} className="aspect-[16/10] w-full md:aspect-[2/1] md:rounded-b-[32px]" />
+        <Img src={ev.cover} w={1400} className="aspect-[16/10] max-h-[52vh] w-full md:aspect-[2/1] md:rounded-b-[32px]" />
         <FloatingBack
           right={
             <>

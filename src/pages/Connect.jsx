@@ -71,7 +71,7 @@ function People() {
   return (
     <>
       <div className="flex gap-2 px-4 pt-4">
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
+        <div className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
           <Search className="h-4 w-4 text-neutral-400" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search people" className="min-w-0 flex-1 bg-transparent text-[15px] outline-none" />
         </div>
@@ -101,7 +101,7 @@ function People() {
       {list.length === 0 ? (
         <EmptyState emoji="🔭" title="No one matches yet" text="Try fewer filters — Belgrade is full of friendly people!" action={<button className="btn-ghost" onClick={reset}>Reset filters</button>} />
       ) : (
-        <div className="grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((u) => <PersonCard key={u.id} u={u} onHi={openHi} />)}
         </div>
       )}

@@ -86,7 +86,7 @@ export function Search() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="glass sticky top-0 z-20 flex items-center gap-2 px-4 py-3">
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
+        <div className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
           <SearchIcon className="h-4 w-4 text-neutral-400" />
           <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search places, people, events…" className="min-w-0 flex-1 bg-transparent text-[15px] outline-none" />
           {q && <X className="h-4 w-4 cursor-pointer text-neutral-400" onClick={() => setQ('')} />}

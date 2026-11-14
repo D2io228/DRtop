@@ -8,7 +8,7 @@ import { APP_NAME } from '../config'
 import { Avatar, Flag, Sheet, Toast } from './ui'
 import { cx } from '../lib/utils'
 import Composer from './Composer'
-import { HavenWordmark } from './HavenLogo'
+import { HavenMark, HavenWordmark } from './HavenLogo'
 
 export const NAV = [
   { to: '/', label: 'Explore', icon: Compass, end: true },
@@ -114,14 +114,14 @@ function TopBar({ floating }) {
   const icons = (
     <>
       <LangSwitcher />
-      <button className="icon-btn md:hidden" onClick={() => nav('/search')} aria-label="Search">
+      <button className={cx('icon-btn md:hidden', floating && 'hidden')} onClick={() => nav('/search')} aria-label="Search">
         <Search className="h-[21px] w-[21px]" strokeWidth={1.9} />
       </button>
       <button className="icon-btn relative" onClick={() => nav('/notifications')} aria-label="Notifications">
         <Bell className="h-[21px] w-[21px]" strokeWidth={1.9} />
         {unread > 0 && <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-white dark:ring-ink-800" />}
       </button>
-      <button className="icon-btn md:hidden" onClick={() => nav('/guides')} aria-label="Guides">
+      <button className="icon-btn max-[359px]:hidden md:hidden" onClick={() => nav('/guides')} aria-label="Guides">
         <BookOpen className="h-[21px] w-[21px]" strokeWidth={1.9} />
       </button>
       <button className="ml-0.5 rounded-full transition active:scale-90 md:hidden" onClick={() => nav('/profile')} aria-label="Profile">
@@ -141,8 +141,8 @@ function TopBar({ floating }) {
   return (
     <header className="glass z-40 flex h-14 shrink-0 items-center gap-1 border-b divider px-2 md:px-4">
       <CitySelector />
-      <button onClick={() => nav('/search')} className="ml-3 hidden h-10 max-w-md flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 text-sm text-neutral-400 md:flex dark:bg-neutral-900">
-        <Search className="h-4 w-4" /> Search places, people, events…
+      <button onClick={() => nav('/search')} className="ml-3 hidden h-10 min-w-0 max-w-md flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 text-sm text-neutral-400 md:flex dark:bg-neutral-900">
+        <Search className="h-4 w-4 shrink-0" /> <span className="truncate">Search places, people, events…</span>
       </button>
       <div className="flex-1" />
       {icons}
@@ -181,51 +181,47 @@ function Sidebar() {
     ...NAV,
     { to: '/guides', label: 'Guides', icon: BookOpen },
     { to: '/profile', label: 'Profile', icon: User },
+    ...(business ? [{ to: '/business', label: 'Business', icon: Briefcase }] : []),
   ]
+  // Tablets (md): compact icon rail. Laptops and up (lg): full sidebar with labels.
+  const row = 'flex items-center justify-center gap-3.5 rounded-2xl p-3 text-[15px] transition hover:bg-neutral-100 dark:hover:bg-neutral-900 lg:justify-start'
   return (
-    <aside className="hidden w-[248px] shrink-0 flex-col border-r divider px-3 py-5 md:flex lg:w-[272px]">
-      <div className="px-3 pb-6">
-        <Logo />
+    <aside className="no-scrollbar hidden w-[76px] shrink-0 flex-col overflow-y-auto border-r divider px-2.5 py-4 md:flex lg:w-[264px] lg:px-3 xl:w-[280px]">
+      <div className="flex justify-center pb-5 lg:justify-start lg:px-3">
+        <span className="lg:hidden">
+          <HavenMark size={38} rounded={12} />
+        </span>
+        <span className="hidden lg:block">
+          <Logo />
+        </span>
       </div>
       <nav className="flex flex-col gap-1">
         {items.map(({ to, label, icon: Icon, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }) =>
-              cx('flex items-center gap-3.5 rounded-2xl px-3 py-3 text-[15px] transition hover:bg-neutral-100 dark:hover:bg-neutral-900', isActive ? 'font-bold' : 'font-medium text-neutral-600 dark:text-neutral-300')
-            }
-          >
+          <NavLink key={to} to={to} end={end} title={t(label)} className={({ isActive }) => cx(row, isActive ? 'font-bold' : 'font-medium text-neutral-600 dark:text-neutral-300')}>
             {({ isActive }) => (
               <>
-                {to === '/profile' ? <Avatar src={me?.avatar} size={26} className={isActive ? 'ring-2 ring-accent rounded-full' : ''} /> : <Icon className="h-[26px] w-[26px]" strokeWidth={isActive ? 2.5 : 1.8} />}
-                <span className="flex-1">{t(label)}</span>
-                {to === '/connect' && unread > 0 && <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white">{unread}</span>}
+                <span className="relative shrink-0">
+                  {to === '/profile' ? (
+                    <Avatar src={me?.avatar} size={26} className={isActive ? 'rounded-full ring-2 ring-accent' : ''} />
+                  ) : (
+                    <Icon className="h-[26px] w-[26px]" strokeWidth={isActive ? 2.5 : 1.8} />
+                  )}
+                  {to === '/connect' && unread > 0 && <span className="absolute -right-1.5 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-white dark:ring-black lg:hidden" />}
+                </span>
+                <span className="hidden flex-1 lg:inline">{t(label)}</span>
+                {to === '/connect' && unread > 0 && <span className="hidden rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white lg:inline">{unread}</span>}
               </>
             )}
           </NavLink>
         ))}
-        {business && (
-          <NavLink
-            to="/business"
-            className={({ isActive }) => cx('flex items-center gap-3.5 rounded-2xl px-3 py-3 text-[15px] transition hover:bg-neutral-100 dark:hover:bg-neutral-900', isActive ? 'font-bold' : 'font-medium text-neutral-600 dark:text-neutral-300')}
-          >
-            <Briefcase className="h-[26px] w-[26px]" strokeWidth={1.8} />
-            Business
-          </NavLink>
-        )}
       </nav>
-      <button onClick={() => setComposer({ type: 'post' })} className="btn-accent mt-6 w-full py-3">
-        <Plus className="h-5 w-5" /> Create post
+      <button onClick={() => setComposer({ type: 'post' })} title="Create post" className="btn-accent mt-5 h-12 w-full !px-0 lg:!px-4">
+        <Plus className="h-5 w-5" /> <span className="hidden lg:inline">Create post</span>
       </button>
-      <div className="flex-1" />
-      <button
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        className="flex items-center gap-3.5 rounded-2xl px-3 py-3 text-[15px] font-medium text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
-      >
-        {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
-        {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+      <div className="min-h-4 flex-1" />
+      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} title={theme === 'dark' ? 'Light mode' : 'Dark mode'} className={cx(row, 'font-medium text-neutral-600 dark:text-neutral-300')}>
+        {theme === 'dark' ? <Sun className="h-6 w-6 shrink-0" /> : <Moon className="h-6 w-6 shrink-0" />}
+        <span className="hidden lg:inline">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
       </button>
     </aside>
   )

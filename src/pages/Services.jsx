@@ -98,7 +98,7 @@ export default function Services() {
         ]}
       />
       <div className="flex gap-2 px-4 pt-4">
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
+        <div className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-4 dark:bg-neutral-900">
           <Search className="h-4 w-4 text-neutral-400" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={{ places: 'Cafés, shops, dentists…', specialists: 'Doctor, lawyer, tutor…', jobs: 'Job title or company', housing: 'District or keyword' }[tab]} className="min-w-0 flex-1 bg-transparent text-[15px] outline-none" />
           {q && <X className="h-4 w-4 cursor-pointer text-neutral-400" onClick={() => setQ('')} />}
@@ -155,7 +155,7 @@ export default function Services() {
       {tab === 'specialists' && (
         <>
           {specs.length ? (
-            <div className="grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
               {specs.map((s) => <SpecialistCard key={s.id} s={s} />)}
             </div>
           ) : <EmptyState emoji="🩺" title="No specialists found" text="Try another category or language." action={<button className="btn-ghost" onClick={resetFilters}>Reset filters</button>} />}
@@ -165,7 +165,7 @@ export default function Services() {
       {tab === 'jobs' && (
         <>
           {jobList.length ? (
-            <div className="grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
               {jobList.map((j) => <JobCard key={j.id} j={j} />)}
             </div>
           ) : <EmptyState emoji="💼" title="No jobs match" text="Try a different language or remove the salary filter." action={<button className="btn-ghost" onClick={resetFilters}>Reset filters</button>} />}
@@ -174,7 +174,7 @@ export default function Services() {
       )}
       {tab === 'housing' && (
         homes.length ? (
-          <div className="grid gap-x-4 gap-y-7 px-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-4 gap-y-7 px-4 sm:grid-cols-2 lg:grid-cols-3">
             {homes.map((h) => <HousingCard key={h.id} h={h} />)}
           </div>
         ) : <EmptyState emoji="🏠" title="No listings here (yet)" text="New apartments are added every day." action={<button className="btn-ghost" onClick={resetFilters}>Reset filters</button>} />
