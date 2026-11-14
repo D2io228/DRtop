@@ -1,4 +1,5 @@
 import { TODAY } from '../config'
+import { asset } from './asset'
 
 export const cx = (...a) => a.filter(Boolean).join(' ')
 
@@ -81,7 +82,7 @@ export const matchScore = (item, me) => {
 export const sortByMatch = (arr, me) =>
   [...arr].map((x, i) => [x, matchScore(x, me), i]).sort((a, b) => b[1] - a[1] || a[2] - b[2]).map((x) => x[0])
 
-export const flagUrl = (code) => (import.meta.env.VITE_OFFLINE ? `flags/${code}.png` : `https://flagcdn.com/w40/${code}.png`)
+export const flagUrl = (code) => (import.meta.env.VITE_OFFLINE ? asset(`flags/${code}.png`) : `https://flagcdn.com/w40/${code}.png`)
 
 export const nowTime = () => {
   const d = new Date()

@@ -25,6 +25,14 @@ OFFLINE_ASSETS=/path/to/assets VITE_OFFLINE=1 npm run build   # → dist-offline
 
 This build loads no remote images or tiles. Photos, avatars and flags are read from `OFFLINE_ASSETS` (`img/<key>.jpg`, `av/pv<N>.jpg`, `flags/<cc>.png`). Instead of raster tiles, the map is drawn on a canvas from bundled OpenStreetMap data (`src/data/basemap-belgrade.json`: water, parks and main streets of central Belgrade, © OpenStreetMap contributors, ODbL). Routing stays in memory, so the page works inside sandboxed iframes.
 
+To get **one HTML file** you can send to anyone (opens with a double click, no server or internet needed), run after that build:
+
+```bash
+python3 scripts/singlefile.py dist-offline Kompas.html   # needs Pillow
+```
+
+It inlines the JS and CSS and embeds every image as a data URI.
+
 ## Tech
 
 - React 18 + Vite
