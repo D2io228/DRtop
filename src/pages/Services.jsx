@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Search, SlidersHorizontal, Star, X, Rocket, Languages } from 'lucide-react'
+import { Search, SlidersHorizontal, Star, X, Rocket, Languages, Globe } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Chip, ChipRow, EmptyState, Sheet, Tabs } from '../components/ui'
 import { HousingCard, JobCard, PlaceCard, SpecialistCard } from '../components/cards'
@@ -125,7 +125,7 @@ export default function Services() {
         {tab === 'jobs' && (
           <>
             {['all', 'Full-time', 'Part-time'].map((x) => <Chip key={x} active={jobType === x} onClick={() => setJobType(x)}>{x === 'all' ? 'All jobs' : x}</Chip>)}
-            <Chip active={remote} onClick={() => setRemote(!remote)}>🌍 Remote</Chip>
+            <Chip active={remote} onClick={() => setRemote(!remote)}><Globe className="h-3.5 w-3.5" /> Remote</Chip>
             {[1000, 2000].map((s) => <Chip key={s} active={minSalary === s} onClick={() => setMinSalary(minSalary === s ? 0 : s)}>€{s / 1000}k+</Chip>)}
           </>
         )}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, CalendarDays, Heart, MessageCircle, Search as SearchIcon, UserPlus, Users, X } from 'lucide-react'
+import { BookOpen, CalendarDays, Compass, Heart, MessageCircle, Search as SearchIcon, TrendingUp, UserPlus, Users, X } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, EmptyState, Flag, Img, PageHeader, Tabs } from '../components/ui'
 import { userById, users } from '../data/users'
@@ -34,7 +34,7 @@ export function Notifications() {
         return (
           <Link key={n.id} to={n.link} className={cx('flex items-center gap-3 px-4 py-3.5 transition hover:bg-neutral-50 dark:hover:bg-neutral-950', !n.read && 'bg-accent-50/60 dark:bg-accent/5')}>
             <div className="relative">
-              {u ? <Avatar src={u.avatar} size={44} /> : <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-100 text-xl dark:bg-neutral-800">{n.icon === 'event' ? '📅' : n.icon === 'guide' ? '🧭' : '👥'}</div>}
+              {u ? <Avatar src={u.avatar} size={44} /> : <div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent-50 text-accent dark:bg-accent/15">{n.icon === 'event' ? <CalendarDays className="h-5 w-5" /> : n.icon === 'guide' ? <Compass className="h-5 w-5" /> : <Users className="h-5 w-5" />}</div>}
               <span className={cx('absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full text-white ring-2 ring-white dark:ring-black', COLORS[n.icon])}>{ICONS[n.icon]}</span>
             </div>
             <div className="min-w-0 flex-1 text-[15px] leading-snug">
@@ -96,7 +96,7 @@ export function Search() {
         <div className="px-4 pt-4">
           <div className="text-sm font-bold">Trending in Belgrade</div>
           <div className="mt-3 flex flex-wrap gap-2">
-            {TRENDING.map((x) => <button key={x} onClick={() => setQ(x)} className="chip">🔥 {x}</button>)}
+            {TRENDING.map((x) => <button key={x} onClick={() => setQ(x)} className="chip"><TrendingUp className="h-3.5 w-3.5 text-accent" /> {x}</button>)}
           </div>
         </div>
       ) : (

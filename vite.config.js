@@ -7,5 +7,10 @@ export default defineConfig({
   server: { host: true },
   // OFFLINE_ASSETS=<dir> VITE_OFFLINE=1 builds a self-contained copy (images + map tiles bundled)
   publicDir: process.env.OFFLINE_ASSETS || 'public',
-  build: { chunkSizeWarningLimit: 900, outDir: process.env.VITE_OFFLINE ? 'dist-offline' : 'dist' },
+  build: {
+    chunkSizeWarningLimit: 900,
+    outDir: process.env.VITE_OFFLINE ? 'dist-offline' : 'dist',
+    // the self-contained build must stay a single script so it can be inlined into one HTML file
+    rollupOptions: process.env.VITE_OFFLINE ? { output: { inlineDynamicImports: true } } : {},
+  },
 })

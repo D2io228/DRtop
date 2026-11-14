@@ -294,7 +294,7 @@ export function EventPage() {
         </button>
 
         <h2 className="section-title mt-7 mb-3">Location</h2>
-        <MiniMap lat={ev.lat} lng={ev.lng} img={ev.cover} color="#EC4899" height={200} />
+        <MiniMap lat={ev.lat} lng={ev.lng} img={ev.cover} color="#EC4899" height={200} to={`/?focus=${ev.id}`} />
         <a href={`https://www.openstreetmap.org/directions?to=${ev.lat}%2C${ev.lng}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold text-accent">
           Get directions →
         </a>
@@ -405,7 +405,7 @@ export function CreateEvent() {
           <div className="relative h-56 overflow-hidden rounded-3xl border divider">
             <MapView pick={f.pick} onMapClick={(ll) => set('pick', ll)} zoom={13} />
             {!f.pick && (
-              <div className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit rounded-full bg-ink-900 px-3 py-1.5 text-xs font-semibold text-white">👆 Tap the map to drop a pin</div>
+              <div className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit rounded-full bg-ink-900 px-3 py-1.5 text-xs font-semibold text-white">Tap the map to drop a pin</div>
             )}
           </div>
         </div>

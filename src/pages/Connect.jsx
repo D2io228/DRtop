@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Paperclip, Search, Send, SlidersHorizontal, FileText, Users, Info, Languages } from 'lucide-react'
+import { Paperclip, Search, Send, SlidersHorizontal, FileText, Users, Info, Languages, Lock } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, Chip, ChipRow, EmptyState, Flag, Img, PageHeader, Sheet, Tabs } from '../components/ui'
 import { PersonCard } from '../components/cards'
@@ -106,7 +106,7 @@ function People() {
         </div>
       )}
 
-      <Sheet open={!!hi} onClose={() => setHi(null)} title="Say hi 👋">
+      <Sheet open={!!hi} onClose={() => setHi(null)} title="Say hi">
         {hi && (
           <div className="px-5 pb-6">
             <div className="flex items-center gap-3">
@@ -199,7 +199,7 @@ function ChatList() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={cx('truncate text-sm', c.unread ? 'font-medium text-ink-900 dark:text-white' : 'text-neutral-500')}>
-                    {typing[c.id] ? <span className="text-accent">typing…</span> : last ? `${sender}${last.attachment ? '📎 ' : ''}${last.text}` : m.subtitle}
+                    {typing[c.id] ? <span className="text-accent">typing…</span> : last ? `${sender}${last.attachment ? `${last.attachment.name} ` : ''}${last.text}` : m.subtitle}
                   </span>
                   {c.unread > 0 && <span className="ml-auto flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-bold text-white">{c.unread}</span>}
                 </div>
@@ -255,7 +255,7 @@ export function ChatPage() {
       />
       <div className="flex-1 space-y-1 px-3 py-4">
         <div className="muted mb-4 text-center text-xs">
-          {m.group ? '🔒 Group chat · be kind and helpful' : '🔒 Messages are private between you two'}
+          <Lock className="-mt-0.5 mr-1 inline h-3 w-3" />{m.group ? 'Group chat · be kind and helpful' : 'Messages are private between you two'}
         </div>
         {chat.messages.map((msg, i) => {
           const mine = msg.from === 'me'
@@ -319,7 +319,7 @@ export function ChatPage() {
           onKeyDown={(e) => e.key === 'Enter' && send()}
           placeholder="Message…"
           className="h-10 flex-1 rounded-full bg-neutral-100 px-4 text-[15px] outline-none dark:bg-neutral-900"
-          autoFocus
+          autoFocus={window.matchMedia?.('(pointer: fine)').matches}
         />
         <button onClick={send} disabled={!text.trim()} className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-white transition active:scale-90 disabled:opacity-30" aria-label="Send">
           <Send className="h-4 w-4" />

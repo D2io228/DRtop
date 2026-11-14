@@ -83,7 +83,7 @@ export default function Explore() {
 
   return (
     <div className="absolute inset-0 isolate overflow-hidden">
-      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe cluster />
+      <MapView items={mapItems} onSelect={select} flyTarget={fly} showMe cluster onMapClick={() => selected && close()} />
 
       {/* Top overlay (sits under the floating top bar) */}
       <div className="pointer-events-none absolute inset-x-0 top-[60px] z-[500] space-y-2.5 px-3 md:max-w-xl">
@@ -256,7 +256,7 @@ export function Toggle({ on, onChange }) {
 
 function nextStep(done) {
   for (const g of goals) for (const s of g.steps) if (!done.has(s.id)) return s
-  return { title: 'All done — you’re a local now! 🎉' }
+  return { title: 'All done — you’re a local now!' }
 }
 
 function Preview({ it, onClose, nav, me, saved, toggleSave, joinedEvents, toggleEvent, joinedCommunities, toggleCommunity, t }) {

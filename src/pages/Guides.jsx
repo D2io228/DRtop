@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Check, ChevronDown, ChevronRight, HelpCircle, MapPin, MessageCircle, PenLine, Search, ThumbsUp, BookOpen } from 'lucide-react'
+import { Check, ChevronDown, ChevronRight, HelpCircle, MapPin, MessageCircle, PenLine, Search, ThumbsUp, BookOpen, Bookmark } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, Chip, ChipRow, EmptyState, Flag, FloatingBack, Img, PageHeader, ProgressRing, RoundBtn } from '../components/ui'
 import { faq, goals, guideById, guides, GUIDE_TOPICS } from '../data/guides'
@@ -40,7 +40,7 @@ export default function Guides() {
           <span className="text-xl font-extrabold">{Math.round(pct * 100)}%</span>
         </ProgressRing>
         <div className="flex-1">
-          <div className="text-lg font-extrabold leading-tight">{pct < 0.5 ? 'Great start!' : pct < 1 ? 'You’re getting there 💪' : 'You’re a local now 🎉'}</div>
+          <div className="text-lg font-extrabold leading-tight">{pct < 0.5 ? 'Great start!' : pct < 1 ? 'You’re getting there' : 'You’re a local now!'}</div>
           <div className="mt-1 text-sm text-white/70">
             {doneCount} of {total} steps done. {pct < 1 && 'Tick steps off as you go — we’ll suggest what’s next.'}
           </div>
@@ -241,7 +241,7 @@ export function GuideArticle() {
     <div className="mx-auto max-w-2xl pb-12">
       <div className="relative">
         <Img src={g.cover} w={1200} className="aspect-[16/9] w-full md:rounded-b-[32px]" />
-        <FloatingBack right={<RoundBtn label="Save" onClick={() => toggleSave(`guide:${g.id}`)}><BookOpen className={cx('h-4 w-4', saved.has(`guide:${g.id}`) && 'fill-current')} /></RoundBtn>} />
+        <FloatingBack right={<RoundBtn label="Save" onClick={() => toggleSave(`guide:${g.id}`)}><Bookmark className={cx('h-4 w-4', saved.has(`guide:${g.id}`) && 'fill-current')} /></RoundBtn>} />
       </div>
       <div className="px-4 pt-5">
         <div className="text-xs font-bold uppercase tracking-wide text-accent">{g.topic}</div>

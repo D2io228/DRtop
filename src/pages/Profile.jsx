@@ -244,7 +244,7 @@ export function BusinessDashboard() {
               </div>
             ))}
           </div>
-          <div className="muted mt-3 text-xs">Top audiences: 🇷🇺 Russian speakers 41% · 🇺🇸 English 27% · 🇹🇷 Turkish 12%</div>
+          <div className="muted mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">Top audiences: <span className="flex items-center gap-1"><Flag code="ru" /> Russian speakers 41%</span>· <span className="flex items-center gap-1"><Flag code="us" /> English 27%</span>· <span className="flex items-center gap-1"><Flag code="tr" /> Turkish 12%</span></div>
         </div>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-3">

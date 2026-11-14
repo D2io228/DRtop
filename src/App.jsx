@@ -1,18 +1,49 @@
+import { lazy, Suspense } from 'react'
 import { HashRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider, useApp } from './store/AppContext'
 import Layout from './components/Layout'
 import Onboarding from './pages/Onboarding'
 import Explore from './pages/Explore'
-import Community, { CommunityPage, CommunitiesList } from './pages/Community'
-import PostPage from './pages/PostPage'
-import Events, { CreateEvent, EventPage } from './pages/Events'
-import Services from './pages/Services'
-import { HousingPage, JobPage, PlacePage, SpecialistPage } from './pages/Details'
-import Guides, { GoalPage, GuideArticle } from './pages/Guides'
-import Connect, { ChatPage } from './pages/Connect'
-import Profile, { BusinessDashboard } from './pages/Profile'
-import { Notifications, Search } from './pages/Misc'
 import { Toast } from './components/ui'
+
+// Every screen except the map (home) is loaded on demand
+const page = (load, name = 'default') => lazy(() => load().then((m) => ({ default: m[name] })))
+const community = () => import('./pages/Community')
+const events = () => import('./pages/Events')
+const details = () => import('./pages/Details')
+const guides = () => import('./pages/Guides')
+const connect = () => import('./pages/Connect')
+const profile = () => import('./pages/Profile')
+const misc = () => import('./pages/Misc')
+const Community = page(community)
+const CommunityPage = page(community, 'CommunityPage')
+const CommunitiesList = page(community, 'CommunitiesList')
+const PostPage = page(() => import('./pages/PostPage'))
+const Events = page(events)
+const CreateEvent = page(events, 'CreateEvent')
+const EventPage = page(events, 'EventPage')
+const Services = page(() => import('./pages/Services'))
+const PlacePage = page(details, 'PlacePage')
+const SpecialistPage = page(details, 'SpecialistPage')
+const JobPage = page(details, 'JobPage')
+const HousingPage = page(details, 'HousingPage')
+const Guides = page(guides)
+const GoalPage = page(guides, 'GoalPage')
+const GuideArticle = page(guides, 'GuideArticle')
+const Connect = page(connect)
+const ChatPage = page(connect, 'ChatPage')
+const Profile = page(profile)
+const BusinessDashboard = page(profile, 'BusinessDashboard')
+const Notifications = page(misc, 'Notifications')
+const Search = page(misc, 'Search')
+
+function PageSpinner() {
+  return (
+    <div className="flex h-64 items-center justify-center">
+      <span className="h-7 w-7 animate-spin rounded-full border-[3px] border-accent/20 border-t-accent" />
+    </div>
+  )
+}
 
 function Shell() {
   const { me } = useApp()
@@ -25,6 +56,7 @@ function Shell() {
     )
   return (
     <Layout>
+      <Suspense fallback={<PageSpinner />}>
       <Routes>
         <Route path="/" element={<Explore />} />
         <Route path="/community" element={<Community />} />
@@ -51,12 +83,21 @@ function Shell() {
         <Route path="/search" element={<Search />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </Layout>
   )
 }
 
-// The self-contained build runs inside an embedded frame, so routing stays in memory there
-const Router = import.meta.env.VITE_OFFLINE ? MemoryRouter : HashRouter
+// Inside an embedded frame (e.g. a claude.ai artifact) the URL can't be used, so routing stays in memory there.
+// Everywhere else (site, single HTML file) hash routing keeps the phone's Back gesture working.
+const inFrame = (() => {
+  try {
+    return window.self !== window.top
+  } catch {
+    return true
+  }
+})()
+const Router = inFrame ? MemoryRouter : HashRouter
 
 export default function App() {
   return (

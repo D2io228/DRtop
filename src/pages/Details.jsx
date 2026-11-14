@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
-  Bookmark, Languages, CalendarDays, Check, ChevronRight, Clock, Globe, MapPin, MessageCircle, Navigation, Phone, Share2, Briefcase, Wifi, BedDouble, Ruler, Layers, PawPrint, Sofa, FileText, ShieldCheck,
+  Bookmark, Languages, AlertTriangle, CheckCircle2, CalendarDays, Check, ChevronRight, Clock, Globe, MapPin, MessageCircle, Navigation, Phone, Share2, Briefcase, Wifi, BedDouble, Ruler, Layers, PawPrint, Sofa, FileText, ShieldCheck,
 } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import { Avatar, EmptyState, Flag, FloatingBack, Img, LangBadges, PageHeader, Rating, RoundBtn, Sheet, Stars, Tabs, Verified, Chip } from '../components/ui'
@@ -192,7 +192,7 @@ export function PlacePage() {
             <section>
               <h2 className="section-title mb-1">Location</h2>
               <p className="muted mb-3 text-sm">{p.address}, Belgrade</p>
-              <MiniMap lat={p.lat} lng={p.lng} img={p.cover} color={mapCat[p.kind].color} />
+              <MiniMap lat={p.lat} lng={p.lng} img={p.cover} color={mapCat[p.kind].color} to={`/?focus=${p.id}`} />
             </section>
             <section>
               <h2 className="section-title mb-3">Photos</h2>
@@ -333,7 +333,7 @@ export function SpecialistPage() {
         </section>
         <section>
           <h2 className="section-title mb-3">Location</h2>
-          <MiniMap lat={s.lat} lng={s.lng} avatar={s.avatar} color="#22C55E" />
+          <MiniMap lat={s.lat} lng={s.lng} avatar={s.avatar} color="#22C55E" to={`/?focus=${s.id}`} />
         </section>
         <Reviews reviews={s.reviews} rating={s.rating} count={s.reviewsCount} />
       </div>
@@ -420,7 +420,8 @@ export function JobPage() {
           ))}
         </div>
         <div className={cx('rounded-2xl p-3 text-sm font-semibold', missing.length ? 'bg-amber-50 text-amber-800 dark:bg-amber-500/10 dark:text-amber-300' : 'bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300')}>
-          {missing.length ? `⚠️ Requires ${missing.map((l) => LANGUAGES[l]).join(', ')} — not in your profile` : '✅ You speak all required languages'}
+          {missing.length ? <AlertTriangle className="-mt-0.5 mr-1.5 inline h-4 w-4" /> : <CheckCircle2 className="-mt-0.5 mr-1.5 inline h-4 w-4" />}
+          {missing.length ? `Requires ${missing.map((l) => LANGUAGES[l]).join(', ')} — not in your profile` : 'You speak all required languages'}
           {j.niceToHave.length > 0 && <span className="font-normal"> · Nice to have: {j.niceToHave.map((l) => LANGUAGES[l]).join(', ')}</span>}
         </div>
         <section>

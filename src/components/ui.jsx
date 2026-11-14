@@ -20,6 +20,7 @@ export function Img({ src, w = 800, alt = '', className = '', style, ...rest }) 
       src={url}
       alt={alt}
       loading="lazy"
+      decoding="async"
       onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
       className={cx('bg-neutral-100 object-cover transition-opacity duration-500 dark:bg-neutral-900', loaded ? 'opacity-100' : 'opacity-0', className)}
